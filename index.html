@@ -81,15 +81,16 @@
             display: flex;
             flex-wrap: wrap;
             justify-content: center;
-            gap: 20px;
-            max-width: 1000px;
+            gap: 25px; /* Tăng khoảng cách giữa các lá bài */
+            max-width: 1200px; /* Nới rộng bàn để chứa bài to */
             margin: 0 auto;
         }
 
+        /* ĐÃ SỬA: Kích thước lá bài to hơn (từ 150x260 lên 220x380) */
         .card-slot {
             perspective: 1000px;
-            width: 150px;
-            height: 260px;
+            width: 220px; 
+            height: 380px;
             cursor: pointer;
         }
 
@@ -110,8 +111,8 @@
             height: 100%;
             position: absolute;
             backface-visibility: hidden;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.5);
+            border-radius: 12px;
+            box-shadow: 0 6px 12px rgba(0,0,0,0.6);
             border: 2px solid #c29d59;
         }
 
@@ -123,7 +124,7 @@
             width: 100%;
             height: 100%;
             object-fit: cover;
-            border-radius: 8px;
+            border-radius: 10px;
         }
 
         .card-back {
@@ -134,7 +135,7 @@
 </head>
 <body>
     <div class="container">
-        <h1>🔮 WELLCOME TO NGUYEN842 FREE TAROT READING PAGE 🔮</h1>
+        <h1>🔮 Tarot Đón Tương Lai 🔮</h1>
         
         <div class="controls">
             <label for="spread-type">Chọn kiểu trải bài:</label>
@@ -155,7 +156,7 @@
     </div>
 
     <script>
-        // Mảng chứa tên 78 lá bài (Đã đổi pentacle thành pen)
+        // Mảng chứa tên 78 lá bài
         const tarotDeck = [
             "0thefool", "1themagician", "2thehighpriestess", "3theempress", "4theemperor", 
             "5thehierophant", "6thelovers", "7thechariot", "8strength", "9thehermit", 
@@ -167,9 +168,11 @@
             "1pen", "2pen", "3pen", "4pen", "5pen", "6pen", "7pen", "8pen", "9pen", "10pen", "pagepen", "knightpen", "queenpen", "kingpen"
         ];
 
-        // Đường dẫn chuẩn
+        // ĐƯỜNG DẪN ẢNH CỦA BẠN
         const folderPath = "assets/images/new_folder/";
-        const cardBackImg = folderPath + "card-back.PNG"; // Đuôi .PNG viết hoa
+        
+        // ĐÃ SỬA: Dùng link ảnh online làm mặt lưng, khỏi cần quan tâm mất file hay không!
+        const cardBackImg = "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d4/Rider-Waite_Tarot_Card_Back.jpg/440px-Rider-Waite_Tarot_Card_Back.jpg"; 
 
         let currentDeck = []; 
 
@@ -208,14 +211,14 @@
                 const cardSlot = document.createElement("div");
                 cardSlot.classList.add("card-slot");
                 
-                // Load ảnh đuôi .PNG (viết hoa)
+                // Gọi ảnh mặt lưng online và mặt trước với đuôi .PNG
                 cardSlot.innerHTML = `
                     <div class="card-inner">
                         <div class="card-front">
-                            <img src="${cardBackImg}" alt="Mặt sau" onerror="this.src='https://via.placeholder.com/150x260/2a164d/ffffff?text=Card+Back'">
+                            <img src="${cardBackImg}" alt="Mặt sau" onerror="this.src='https://via.placeholder.com/220x380/2a164d/ffffff?text=Card+Back'">
                         </div>
                         <div class="card-back">
-                            <img src="${folderPath}${drawnCard}.PNG" alt="${drawnCard}" onerror="this.src='https://via.placeholder.com/150x260/fff/000?text=${drawnCard}'">
+                            <img src="${folderPath}${drawnCard}.PNG" alt="${drawnCard}" onerror="this.src='https://via.placeholder.com/220x380/fff/000?text=${drawnCard}'">
                         </div>
                     </div>
                 `;
