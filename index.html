@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Trải Bài Tarot Online - All In One</title>
+    <title>Trải Bài Tarot Online</title>
     <style>
         /* ================= CSS (TRANG TRÍ GIAO DIỆN) ================= */
         * {
@@ -13,8 +13,8 @@
         }
 
         body {
-            background-color: #1a0b2e; /* Màu nền tím đen huyền bí */
-            color: #e5d3b3; /* Chữ màu vàng nhạt */
+            background-color: #1a0b2e;
+            color: #e5d3b3;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             text-align: center;
             padding: 20px;
@@ -115,7 +115,6 @@
             border: 2px solid #c29d59;
         }
 
-        /* Mặt sau (chưa lật) hiển thị card-back.png */
         .card-front {
             background-color: #2a164d; 
         }
@@ -127,7 +126,6 @@
             border-radius: 8px;
         }
 
-        /* Mặt trước (đã lật) chứa hình lá bài Tarot */
         .card-back {
             transform: rotateY(180deg);
             background-color: #fff;
@@ -136,7 +134,7 @@
 </head>
 <body>
     <div class="container">
-        <h1>🔮 Tarot Đón Tương Lai 🔮</h1>
+        <h1>🔮 WELLCOME TO NGUYEN842 FREE TAROT READING PAGE 🔮</h1>
         
         <div class="controls">
             <label for="spread-type">Chọn kiểu trải bài:</label>
@@ -157,28 +155,23 @@
     </div>
 
     <script>
-        // Khai báo bộ bài (Dựa đúng trên cách bạn đặt tên)
+        // Mảng chứa tên 78 lá bài (Đã đổi pentacle thành pen)
         const tarotDeck = [
-            // Major Arcana
             "0thefool", "1themagician", "2thehighpriestess", "3theempress", "4theemperor", 
             "5thehierophant", "6thelovers", "7thechariot", "8strength", "9thehermit", 
             "10wheeloffortune", "11justice", "12thehangedman", "13death", "14temperance", 
             "15thedevil", "16thetower", "17thestar", "18themoon", "19thesun", "20judgement", "21theworld",
-            // Cups
             "1cup", "2cup", "3cup", "4cup", "5cup", "6cup", "7cup", "8cup", "9cup", "10cup", "pagecup", "knightcup", "queencup", "kingcup",
-            // Wands
             "1wand", "2wand", "3wand", "4wand", "5wand", "6wand", "7wand", "8wand", "9wand", "10wand", "pagewand", "knightwand", "queenwand", "kingwand",
-            // Swords
             "1sword", "2sword", "3sword", "4sword", "5sword", "6sword", "7sword", "8sword", "9sword", "10sword", "pagesword", "knightsword", "queensword", "kingsword",
-            // Pentacles
-            "1pentacle", "2pentacle", "3pentacle", "4pentacle", "5pentacle", "6pentacle", "7pentacle", "8pentacle", "9pentacle", "10pentacle", "pagepentacle", "knightpentacle", "queenpentacle", "kingpentacle"
+            "1pen", "2pen", "3pen", "4pen", "5pen", "6pen", "7pen", "8pen", "9pen", "10pen", "pagepen", "knightpen", "queenpen", "kingpen"
         ];
 
-        // ĐƯỜNG DẪN TỚI THƯ MỤC ẢNH CỦA BẠN (Cần chính xác)
+        // Đường dẫn chuẩn
         const folderPath = "assets/images/new_folder/";
-        const cardBackImg = folderPath + "card-back.png"; // Nhớ có file mặt úp này nhé!
+        const cardBackImg = folderPath + "card-back.PNG"; // Đuôi .PNG viết hoa
 
-        let currentDeck = []; // Bộ bài dùng để thao tác
+        let currentDeck = []; 
 
         const btnShuffle = document.getElementById("btn-shuffle");
         const btnDraw = document.getElementById("btn-draw");
@@ -186,7 +179,6 @@
         const statusMsg = document.getElementById("status-message");
         const spreadSelect = document.getElementById("spread-type");
 
-        // Thuật toán Xào Bài (Fisher-Yates)
         function shuffleDeck() {
             currentDeck = [...tarotDeck]; 
             for (let i = currentDeck.length - 1; i > 0; i--) {
@@ -203,7 +195,6 @@
             }, 1000);
         }
 
-        // Logic bốc bài và hiển thị lên bàn
         function drawCards() {
             board.innerHTML = ""; 
             const numCards = parseInt(spreadSelect.value); 
@@ -217,18 +208,18 @@
                 const cardSlot = document.createElement("div");
                 cardSlot.classList.add("card-slot");
                 
+                // Load ảnh đuôi .PNG (viết hoa)
                 cardSlot.innerHTML = `
                     <div class="card-inner">
                         <div class="card-front">
                             <img src="${cardBackImg}" alt="Mặt sau" onerror="this.src='https://via.placeholder.com/150x260/2a164d/ffffff?text=Card+Back'">
                         </div>
                         <div class="card-back">
-                            <img src="${folderPath}${drawnCard}.png" alt="${drawnCard}" onerror="this.src='https://via.placeholder.com/150x260/fff/000?text=${drawnCard}'">
+                            <img src="${folderPath}${drawnCard}.PNG" alt="${drawnCard}" onerror="this.src='https://via.placeholder.com/150x260/fff/000?text=${drawnCard}'">
                         </div>
                     </div>
                 `;
 
-                // Thêm sự kiện click để lật bài
                 cardSlot.addEventListener("click", function() {
                     if (!this.classList.contains("flipped")) {
                         this.classList.add("flipped");
@@ -239,11 +230,9 @@
             }
         }
 
-        // Gắn sự kiện cho các nút
         btnShuffle.addEventListener("click", shuffleDeck);
         btnDraw.addEventListener("click", drawCards);
 
-        // Reset nếu người dùng đổi kiểu trải
         spreadSelect.addEventListener("change", () => {
             btnDraw.disabled = true;
             board.innerHTML = "";
