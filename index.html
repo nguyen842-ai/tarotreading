@@ -170,7 +170,7 @@
         
         <div class="controls">
             <div class="ai-inputs">
-                <input type="password" id="api-key" placeholder="Nhập mã để kết nối với vũ trụ ^-^...">
+                <input type="password" id="api-key" placeholder="Nhập mã khóa để kết nối với vũ trụ ^-^...">
                 <input type="text" id="user-question" placeholder="Bạn đang băn khoăn điều gì? (VD: Tình duyên tháng này ra sao?)">
             </div>
 
@@ -227,7 +227,7 @@
             readingBox.style.display = "block";
 
             if (!apiKey) {
-                readingBox.innerHTML = "⚠️ Vui lòng điền API Key ở phía trên để Pháp sư giải nghĩa toàn bộ trải bài!";
+                readingBox.innerHTML = "⚠️ Vui lòng điền mã khóa ở phía trên để Pháp sư giải nghĩa toàn bộ trải bài!";
                 return;
             }
 
@@ -268,7 +268,7 @@
                     readingBox.innerHTML = `✨ <b>BÀI LUẬN GIẢI TAROT TỪ VŨ TRỤ:</b><br><br>${aiResponse}`;
                 }
             } catch (error) {
-                readingBox.innerHTML = "⚠️ Mất kết nối với vũ trụ. Vui lòng kiểm tra lại mạng hoặc API Key!";
+                readingBox.innerHTML = "⚠️ Mất kết nối với vũ trụ. Vui lòng kiểm tra lại mạng hoặc mã khóa!";
             }
         }
 
