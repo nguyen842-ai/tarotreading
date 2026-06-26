@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trải Bài Tarot Online - All In One</title>
+    <style>
+        /* ================= CSS (TRANG TRÍ GIAO DIỆN) ================= */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: #1a0b2e; /* Màu nền tím đen huyền bí */
+            color: #e5d3b3; /* Chữ màu vàng nhạt */
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            text-align: center;
+            padding: 20px;
+        }
+
+        h1 {
+            margin-bottom: 20px;
+            font-size: 2.5rem;
+            text-shadow: 0 0 10px #c29d59;
+        }
+
+        .controls {
+            margin-bottom: 20px;
+            background: rgba(0, 0, 0, 0.4);
+            padding: 20px;
+            border-radius: 10px;
+            display: inline-block;
+        }
+
+        select {
+            padding: 10px;
+            font-size: 1rem;
+            border-radius: 5px;
+            background: #2a164d;
+            color: white;
+            border: 1px solid #c29d59;
+            margin-right: 10px;
+            cursor: pointer;
+        }
+
+        .mystic-btn {
+            padding: 10px 20px;
+            font-size: 1rem;
+            font-weight: bold;
+            color: #1a0b2e;
+            background-color: #c29d59;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: 0.3s;
+            margin: 0 5px;
+        }
+
+        .mystic-btn:hover:not(:disabled) {
+            background-color: #e5d3b3;
+            box-shadow: 0 0 15px #c29d59;
+        }
+
+        .mystic-btn:disabled {
+            background-color: #555;
+            color: #888;
+            cursor: not-allowed;
+        }
+
+        #status-message {
+            font-size: 1.2rem;
+            margin-bottom: 30px;
+            font-style: italic;
+            color: #a78bfa;
+        }
+
+        /* Khu vực hiển thị lá bài */
+        .tarot-board {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .card-slot {
+            perspective: 1000px;
+            width: 150px;
+            height: 260px;
+            cursor: pointer;
+        }
+
+        .card-inner {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            transition: transform 0.6s;
+            transform-style: preserve-3d;
+        }
+
+        .card-slot.flipped .card-inner {
+            transform: rotateY(180deg);
+        }
+
+        .card-front, .card-back {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            backface-visibility: hidden;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.5);
+            border: 2px solid #c29d59;
+        }
+
+        /* Mặt sau (chưa lật) hiển thị card-back.png */
+        .card-front {
+            background-color: #2a164d; 
+        }
+
+        .card-front img, .card-back img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 8px;
+        }
+
+        /* Mặt trước (đã lật) chứa hình lá bài Tarot */
+        .card-back {
+            transform: rotateY(180deg);
+            background-color: #fff;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔮 Tarot Đón Tương Lai 🔮</h1>
+        
+        <div class="controls">
+            <label for="spread-type">Chọn kiểu trải bài:</label>
+            <select id="spread-type">
+                <option value="1">1 Lá (Yes/No - Thông điệp ngày)</option>
+                <option value="3">3 Lá (Quá khứ - Hiện tại - Tương lai)</option>
+                <option value="5">5 Lá (Chữ thập - Mở rộng vấn đề)</option>
+                <option value="9">9 Lá (Bức tranh toàn cảnh 3x3)</option>
+            </select>
+            
+            <button id="btn-shuffle" class="mystic-btn">Xào Bài</button>
+            <button id="btn-draw" class="mystic-btn" disabled>Bốc Bài</button>
+        </div>
+
+        <div id="status-message">Hãy ấn "Xào Bài" để bắt đầu...</div>
+
+        <div id="tarot-board" class="tarot-board"></div>
+    </div>
+
+    <script>
+        // Khai báo bộ bài (Dựa đúng trên cách bạn đặt tên)
+        const tarotDeck = [
+            // Major Arcana
+            "0thefool", "1themagician", "2thehighpriestess", "3theempress", "4theemperor", 
+            "5thehierophant", "6thelovers", "7thechariot", "8strength", "9thehermit", 
+            "10wheeloffortune", "11justice", "12thehangedman", "13death", "14temperance", 
+            "15thedevil", "16thetower", "17thestar", "18themoon", "19thesun", "20judgement", "21theworld",
+            // Cups
+            "1cup", "2cup", "3cup", "4cup", "5cup", "6cup", "7cup", "8cup", "9cup", "10cup", "pagecup", "knightcup", "queencup", "kingcup",
+            // Wands
+            "1wand", "2wand", "3wand", "4wand", "5wand", "6wand", "7wand", "8wand", "9wand", "10wand", "pagewand", "knightwand", "queenwand", "kingwand",
+            // Swords
+            "1sword", "2sword", "3sword", "4sword", "5sword", "6sword", "7sword", "8sword", "9sword", "10sword", "pagesword", "knightsword", "queensword", "kingsword",
+            // Pentacles
+            "1pentacle", "2pentacle", "3pentacle", "4pentacle", "5pentacle", "6pentacle", "7pentacle", "8pentacle", "9pentacle", "10pentacle", "pagepentacle", "knightpentacle", "queenpentacle", "kingpentacle"
+        ];
+
+        // ĐƯỜNG DẪN TỚI THƯ MỤC ẢNH CỦA BẠN (Cần chính xác)
+        const folderPath = "assets/images/new_folder/";
+        const cardBackImg = folderPath + "card-back.png"; // Nhớ có file mặt úp này nhé!
+
+        let currentDeck = []; // Bộ bài dùng để thao tác
+
+        const btnShuffle = document.getElementById("btn-shuffle");
+        const btnDraw = document.getElementById("btn-draw");
+        const board = document.getElementById("tarot-board");
+        const statusMsg = document.getElementById("status-message");
+        const spreadSelect = document.getElementById("spread-type");
+
+        // Thuật toán Xào Bài (Fisher-Yates)
+        function shuffleDeck() {
+            currentDeck = [...tarotDeck]; 
+            for (let i = currentDeck.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [currentDeck[i], currentDeck[j]] = [currentDeck[j], currentDeck[i]]; 
+            }
+            
+            statusMsg.innerText = "✨ Vũ trụ đã nhận thông điệp. Đang xào bài... ✨";
+            board.innerHTML = ""; 
+            btnDraw.disabled = false; 
+            
+            setTimeout(() => {
+                statusMsg.innerText = "Bộ bài đã sẵn sàng. Hãy tập trung vào câu hỏi và Bốc Bài!";
+            }, 1000);
+        }
+
+        // Logic bốc bài và hiển thị lên bàn
+        function drawCards() {
+            board.innerHTML = ""; 
+            const numCards = parseInt(spreadSelect.value); 
+            
+            statusMsg.innerText = "Nhấp vào từng lá bài để lật mở định mệnh của bạn...";
+            btnDraw.disabled = true; 
+
+            for (let i = 0; i < numCards; i++) {
+                const drawnCard = currentDeck.pop(); 
+                
+                const cardSlot = document.createElement("div");
+                cardSlot.classList.add("card-slot");
+                
+                cardSlot.innerHTML = `
+                    <div class="card-inner">
+                        <div class="card-front">
+                            <img src="${cardBackImg}" alt="Mặt sau" onerror="this.src='https://via.placeholder.com/150x260/2a164d/ffffff?text=Card+Back'">
+                        </div>
+                        <div class="card-back">
+                            <img src="${folderPath}${drawnCard}.png" alt="${drawnCard}" onerror="this.src='https://via.placeholder.com/150x260/fff/000?text=${drawnCard}'">
+                        </div>
+                    </div>
+                `;
+
+                // Thêm sự kiện click để lật bài
+                cardSlot.addEventListener("click", function() {
+                    if (!this.classList.contains("flipped")) {
+                        this.classList.add("flipped");
+                    }
+                });
+
+                board.appendChild(cardSlot);
+            }
+        }
+
+        // Gắn sự kiện cho các nút
+        btnShuffle.addEventListener("click", shuffleDeck);
+        btnDraw.addEventListener("click", drawCards);
+
+        // Reset nếu người dùng đổi kiểu trải
+        spreadSelect.addEventListener("change", () => {
+            btnDraw.disabled = true;
+            board.innerHTML = "";
+            statusMsg.innerText = "Bạn đã đổi kiểu trải bài. Vui lòng xào bài lại!";
+        });
+    </script>
+</body>
+</html>
