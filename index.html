@@ -238,7 +238,7 @@
             const promptText = `Bạn là một Reader Tarot huyền bí, đồng cảm và thông thái. Người dùng vừa hỏi câu hỏi: "${question}" và bốc được lá bài có tên là "${cardName}". Hãy giải nghĩa lá bài này ngắn gọn trong khoảng 4-5 câu, đưa ra lời khuyên tích cực và phù hợp với câu hỏi. Hãy xưng hô là "mình" và gọi người dùng là "bạn". Không được nhắc đến cụm từ "tên file", hãy gọi đúng tên lá bài.`;
 
            // Lựa chọn 1: Dùng bản Gemini Pro (Hoạt động ổn định ở mọi nơi)
-const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
+const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`;
 
             try {
                 const response = await fetch(apiUrl, {
