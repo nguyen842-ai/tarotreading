@@ -32,6 +32,26 @@
             padding: 20px;
             border-radius: 10px;
             display: inline-block;
+            max-width: 800px;
+            width: 100%;
+        }
+
+        /* Khung nhập liệu cho AI */
+        .ai-inputs {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        input[type="text"], input[type="password"] {
+            padding: 10px;
+            font-size: 1rem;
+            border-radius: 5px;
+            background: #2a164d;
+            color: white;
+            border: 1px solid #c29d59;
+            width: 100%;
         }
 
         select {
@@ -55,7 +75,7 @@
             border-radius: 5px;
             cursor: pointer;
             transition: 0.3s;
-            margin: 0 5px;
+            margin: 5px;
         }
 
         .mystic-btn:hover:not(:disabled) {
@@ -71,19 +91,19 @@
 
         #status-message {
             font-size: 1.2rem;
-            margin-bottom: 30px;
+            margin-bottom: 20px;
             font-style: italic;
             color: #a78bfa;
         }
 
-        /* Khu vực hiển thị lá bài */
+        /* Khu vực hiển thị lá bài (Size nhỏ) */
         .tarot-board {
             display: flex;
             flex-wrap: wrap;
             justify-content: center;
             gap: 20px;
             max-width: 1000px;
-            margin: 0 auto;
+            margin: 0 auto 30px auto;
         }
 
         .card-slot {
@@ -130,32 +150,53 @@
             transform: rotateY(180deg);
             background-color: #fff;
         }
+
+        /* Khu vực hiển thị lời giải */
+        #reading-result {
+            background: rgba(42, 22, 77, 0.8);
+            border: 1px solid #c29d59;
+            padding: 20px;
+            border-radius: 10px;
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: left;
+            line-height: 1.6;
+            font-size: 1.1rem;
+            display: none; /* Ẩn đi khi chưa có nội dung */
+        }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>🔮 Tarot Đón Tương Lai 🔮</h1>
+        <h1>🔮 FREE READING TAROT 🔮</h1>
         
         <div class="controls">
-            <label for="spread-type">Chọn kiểu trải bài:</label>
-            <select id="spread-type">
-                <option value="1">1 Lá (Yes/No - Thông điệp ngày)</option>
-                <option value="3">3 Lá (Quá khứ - Hiện tại - Tương lai)</option>
-                <option value="5">5 Lá (Chữ thập - Mở rộng vấn đề)</option>
-                <option value="9">9 Lá (Bức tranh toàn cảnh 3x3)</option>
-            </select>
-            
-            <button id="btn-shuffle" class="mystic-btn">Xào Bài</button>
-            <button id="btn-draw" class="mystic-btn" disabled>Bốc Bài</button>
+            <div class="ai-inputs">
+                <input type="password" id="api-key" placeholder="Nhập đoạn mã để kết nốt với vũ trụ nhé :)...">
+                <input type="text" id="user-question" placeholder="Bạn đang băn khoăn điều gì? (VD: Tình duyên tháng này ra sao?)">
+            </div>
+
+            <div>
+                <label for="spread-type">Chọn kiểu trải bài:</label>
+                <select id="spread-type">
+                    <option value="1">1 Lá (Yes/No - Thông điệp ngày)</option>
+                    <option value="3">3 Lá (Quá khứ - Hiện tại - Tương lai)</option>
+                    <option value="5">5 Lá (Chữ thập - Mở rộng vấn đề)</option>
+                </select>
+                
+                <button id="btn-shuffle" class="mystic-btn">Xào Bài</button>
+                <button id="btn-draw" class="mystic-btn" disabled>Bốc Bài</button>
+            </div>
         </div>
 
-        <div id="status-message">Hãy ấn "Xào Bài" để bắt đầu...</div>
+        <div id="status-message">Hãy nhập Key, đặt câu hỏi và ấn "Xào Bài"...</div>
 
         <div id="tarot-board" class="tarot-board"></div>
+
+        <div id="reading-result"></div>
     </div>
 
     <script>
-        // Mảng chứa tên 78 lá bài (Đã đổi pentacle thành pen)
         const tarotDeck = [
             "0thefool", "1themagician", "2thehighpriestess", "3theempress", "4theemperor", 
             "5thehierophant", "6thelovers", "7thechariot", "8strength", "9thehermit", 
@@ -167,9 +208,8 @@
             "1pen", "2pen", "3pen", "4pen", "5pen", "6pen", "7pen", "8pen", "9pen", "10pen", "pagepen", "knightpen", "queenpen", "kingpen"
         ];
 
-        // Đường dẫn chuẩn
         const folderPath = "assets/images/new_folder/";
-        const cardBackImg = folderPath + "card-back.PNG"; // Đuôi .PNG viết hoa
+        const cardBackImg = folderPath + "card-back.PNG"; 
 
         let currentDeck = []; 
 
@@ -178,7 +218,52 @@
         const board = document.getElementById("tarot-board");
         const statusMsg = document.getElementById("status-message");
         const spreadSelect = document.getElementById("spread-type");
+        const readingBox = document.getElementById("reading-result");
 
+        // HÀM GỌI GEMINI API ĐỂ ĐỌC BÀI
+        async function getTarotReading(cardName) {
+            const apiKey = document.getElementById("api-key").value.trim();
+            const question = document.getElementById("user-question").value.trim() || "Thông điệp chung cho tôi hôm nay là gì?";
+            
+            readingBox.style.display = "block";
+
+            if (!apiKey) {
+                readingBox.innerHTML = "⚠️ Vui lòng nhập API Key ở phía trên để Pháp sư có thể giải mã lá bài!";
+                return;
+            }
+
+            readingBox.innerHTML = `⏳ Pháp sư đang kết nối với vũ trụ để giải mã lá bài <b>${cardName}</b>...`;
+
+            // Prompt hướng dẫn AI đóng vai Reader
+            const promptText = `Bạn là một Reader Tarot huyền bí, đồng cảm và thông thái. Người dùng vừa hỏi câu hỏi: "${question}" và bốc được lá bài có tên là "${cardName}". Hãy giải nghĩa lá bài này ngắn gọn trong khoảng 4-5 câu, đưa ra lời khuyên tích cực và phù hợp với câu hỏi. Hãy xưng hô là "mình" và gọi người dùng là "bạn". Không được nhắc đến cụm từ "tên file", hãy gọi đúng tên lá bài.`;
+
+            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
+
+            try {
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        contents: [{ parts: [{ text: promptText }] }]
+                    })
+                });
+                
+                const data = await response.json();
+                
+                if (data.error) {
+                    readingBox.innerHTML = `⚠️ Vũ trụ báo lỗi: ${data.error.message}`;
+                } else {
+                    let aiResponse = data.candidates[0].content.parts[0].text;
+                    // Chuyển đổi định dạng in đậm của Markdown (**text**) sang HTML (<b>text</b>)
+                    aiResponse = aiResponse.replace(/\*\*(.*?)\*\*/g, '<b>$1</b>');
+                    readingBox.innerHTML = `✨ <b>Thông điệp từ lá ${cardName}:</b><br><br>${aiResponse}`;
+                }
+            } catch (error) {
+                readingBox.innerHTML = "⚠️ Mất kết nối với vũ trụ. Vui lòng kiểm tra lại mạng hoặc API Key!";
+            }
+        }
+
+        // Logic Xào Bài
         function shuffleDeck() {
             currentDeck = [...tarotDeck]; 
             for (let i = currentDeck.length - 1; i > 0; i--) {
@@ -188,6 +273,7 @@
             
             statusMsg.innerText = "✨ Vũ trụ đã nhận thông điệp. Đang xào bài... ✨";
             board.innerHTML = ""; 
+            readingBox.style.display = "none";
             btnDraw.disabled = false; 
             
             setTimeout(() => {
@@ -195,8 +281,10 @@
             }, 1000);
         }
 
+        // Logic Bốc Bài
         function drawCards() {
             board.innerHTML = ""; 
+            readingBox.style.display = "none";
             const numCards = parseInt(spreadSelect.value); 
             
             statusMsg.innerText = "Nhấp vào từng lá bài để lật mở định mệnh của bạn...";
@@ -208,7 +296,6 @@
                 const cardSlot = document.createElement("div");
                 cardSlot.classList.add("card-slot");
                 
-                // Load ảnh đuôi .PNG (viết hoa)
                 cardSlot.innerHTML = `
                     <div class="card-inner">
                         <div class="card-front">
@@ -220,9 +307,12 @@
                     </div>
                 `;
 
+                // Sự kiện lật bài và gọi AI
                 cardSlot.addEventListener("click", function() {
                     if (!this.classList.contains("flipped")) {
                         this.classList.add("flipped");
+                        // Khi lật lá bài nào, tự động gọi API giải nghĩa lá đó
+                        getTarotReading(drawnCard);
                     }
                 });
 
@@ -236,6 +326,7 @@
         spreadSelect.addEventListener("change", () => {
             btnDraw.disabled = true;
             board.innerHTML = "";
+            readingBox.style.display = "none";
             statusMsg.innerText = "Bạn đã đổi kiểu trải bài. Vui lòng xào bài lại!";
         });
     </script>
