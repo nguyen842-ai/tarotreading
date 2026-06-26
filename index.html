@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Trải Bài Tarot Online</title>
+    <title>Trải Bài Tarot Online - Đọc Tổng Quan Trải Bài</title>
     <style>
         /* ================= CSS (TRANG TRÍ GIAO DIỆN) ================= */
         * {
@@ -36,7 +36,6 @@
             width: 100%;
         }
 
-        /* Khung nhập liệu cho AI */
         .ai-inputs {
             display: flex;
             flex-direction: column;
@@ -96,7 +95,6 @@
             color: #a78bfa;
         }
 
-        /* Khu vực hiển thị lá bài (Size nhỏ) */
         .tarot-board {
             display: flex;
             flex-wrap: wrap;
@@ -151,28 +149,28 @@
             background-color: #fff;
         }
 
-        /* Khu vực hiển thị lời giải */
         #reading-result {
-            background: rgba(42, 22, 77, 0.8);
+            background: rgba(42, 22, 77, 0.9);
             border: 1px solid #c29d59;
-            padding: 20px;
+            padding: 25px;
             border-radius: 10px;
             max-width: 800px;
-            margin: 0 auto;
+            margin: 0 auto 40px auto;
             text-align: left;
-            line-height: 1.6;
+            line-height: 1.7;
             font-size: 1.1rem;
-            display: none; /* Ẩn đi khi chưa có nội dung */
+            display: none;
+            box-shadow: 0 0 20px rgba(194, 157, 89, 0.2);
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>🔮 FREE READING TAROT 🔮</h1>
+        <h1>🔮 Tarot Đón Tương Lai 🔮</h1>
         
         <div class="controls">
             <div class="ai-inputs">
-                <input type="password" id="api-key" placeholder="Nhập đoạn mã để kết nốt với vũ trụ nhé :)...">
+                <input type="password" id="api-key" placeholder="Dán Gemini API Key (đầu AQ.) vào đây...">
                 <input type="text" id="user-question" placeholder="Bạn đang băn khoăn điều gì? (VD: Tình duyên tháng này ra sao?)">
             </div>
 
@@ -190,9 +188,7 @@
         </div>
 
         <div id="status-message">Hãy nhập Key, đặt câu hỏi và ấn "Xào Bài"...</div>
-
         <div id="tarot-board" class="tarot-board"></div>
-
         <div id="reading-result"></div>
     </div>
 
@@ -212,6 +208,8 @@
         const cardBackImg = folderPath + "card-back.PNG"; 
 
         let currentDeck = []; 
+        let drawnCardsList = []; // Mảng lưu danh sách các lá bài đã được bốc theo thứ tự
+        let flippedCount = 0;    // Biến đếm xem người dùng đã lật bao nhiêu lá
 
         const btnShuffle = document.getElementById("btn-shuffle");
         const btnDraw = document.getElementById("btn-draw");
@@ -220,25 +218,35 @@
         const spreadSelect = document.getElementById("spread-type");
         const readingBox = document.getElementById("reading-result");
 
-        // HÀM GỌI GEMINI API ĐỂ ĐỌC BÀI
-        async function getTarotReading(cardName) {
+        // HÀM GỌI AI ĐỂ GIẢI TỔNG QUAN TOÀN BỘ TRẢI BÀI
+        async function getFullTarotReading() {
             const apiKey = document.getElementById("api-key").value.trim();
             const question = document.getElementById("user-question").value.trim() || "Thông điệp chung cho tôi hôm nay là gì?";
+            const spreadType = parseInt(spreadSelect.value);
             
             readingBox.style.display = "block";
 
             if (!apiKey) {
-                readingBox.innerHTML = "⚠️ Vui lòng nhập API Key ở phía trên để Pháp sư có thể giải mã lá bài!";
+                readingBox.innerHTML = "⚠️ Vui lòng điền API Key ở phía trên để Pháp sư giải nghĩa toàn bộ trải bài!";
                 return;
             }
 
-            readingBox.innerHTML = `⏳ Pháp sư đang kết nối với vũ trụ để giải mã lá bài <b>${cardName}</b>...`;
+            readingBox.innerHTML = `⏳ Bạn đã lật mở tất cả các lá bài. Pháp sư đang định tâm để giải mã toàn bộ quẻ bài này cho bạn...`;
 
-            // Prompt hướng dẫn AI đóng vai Reader
-            const promptText = `Bạn là một Reader Tarot huyền bí, đồng cảm và thông thái. Người dùng vừa hỏi câu hỏi: "${question}" và bốc được lá bài có tên là "${cardName}". Hãy giải nghĩa lá bài này ngắn gọn trong khoảng 4-5 câu, đưa ra lời khuyên tích cực và phù hợp với câu hỏi. Hãy xưng hô là "mình" và gọi người dùng là "bạn". Không được nhắc đến cụm từ "tên file", hãy gọi đúng tên lá bài.`;
+            // Tự động tạo Prompt thông minh tùy theo số lượng lá bài người dùng bốc
+            let spreadContext = "";
+            if (spreadType === 1) {
+                spreadContext = `người dùng bốc được 1 lá duy nhất là: ${drawnCardsList[0]}. Hãy trả lời trực tiếp vấn đề theo dạng Yes/No hoặc thông điệp cốt lõi.`;
+            } else if (spreadType === 3) {
+                spreadContext = `người dùng bốc trải bài 3 lá (Quá khứ - Hiện tại - Tương lai). Thứ tự các lá bài lần lượt là: Lá 1 (Quá khứ): ${drawnCardsList[0]}, Lá 2 (Hiện tại): ${drawnCardsList[1]}, Lá 3 (Tương lai): ${drawnCardsList[2]}. Hãy luận giải chi tiết từng lá tương ứng với từng mốc thời gian và xâu chuỗi chúng lại để trả lời câu hỏi.`;
+            } else if (spreadType === 5) {
+                spreadContext = `người dùng bốc trải bài 5 lá hình chữ thập đại diện cho: Tổng quan, Thử thách, Quá khứ, Tương lai gần và Lời khuyên. Danh sách 5 lá lần lượt là: ${drawnCardsList.join(", ")}. Hãy phân tích toàn bộ bức tranh này.`;
+            }
 
-           // Lựa chọn 1: Dùng bản Gemini Pro (Hoạt động ổn định ở mọi nơi)
-const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`;
+            const promptText = `Bạn là một Reader Tarot huyền bí, thấu hiểu tâm lý học và sâu sắc. Người dùng đặt câu hỏi: "${question}". Trong kiểu trải bài này, ${spreadContext} Hãy viết một bài luận giải chi tiết bằng tiếng Việt, phân tách các phần rõ ràng, ngôn từ có tính chữa lành, định hướng và đưa ra lời khuyên tích cực. Hãy xưng hô là "mình" và gọi người dùng là "bạn". Tuyệt đối không nhắc đến các từ kỹ thuật như "tên file", "mảng", "array".`;
+
+            // Đã sửa đổi gọi trực tiếp core model xịn nhất của bạn: gemini-2.5-flash
+            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`;
 
             try {
                 const response = await fetch(apiUrl, {
@@ -255,9 +263,9 @@ const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2
                     readingBox.innerHTML = `⚠️ Vũ trụ báo lỗi: ${data.error.message}`;
                 } else {
                     let aiResponse = data.candidates[0].content.parts[0].text;
-                    // Chuyển đổi định dạng in đậm của Markdown (**text**) sang HTML (<b>text</b>)
-                    aiResponse = aiResponse.replace(/\*\*(.*?)\*\*/g, '<b>$1</b>');
-                    readingBox.innerHTML = `✨ <b>Thông điệp từ lá ${cardName}:</b><br><br>${aiResponse}`;
+                    aiResponse = aiResponse.replace(/\*\*(.*?)\*\*/g, '<b>$1</b>'); // Format chữ đậm
+                    aiResponse = aiResponse.replace(/\n/g, '<br>'); // Giữ nguyên xuống hàng cho đẹp
+                    readingBox.innerHTML = `✨ <b>BÀI LUẬN GIẢI TAROT TỪ VŨ TRỤ:</b><br><br>${aiResponse}`;
                 }
             } catch (error) {
                 readingBox.innerHTML = "⚠️ Mất kết nối với vũ trụ. Vui lòng kiểm tra lại mạng hoặc API Key!";
@@ -275,6 +283,8 @@ const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2
             statusMsg.innerText = "✨ Vũ trụ đã nhận thông điệp. Đang xào bài... ✨";
             board.innerHTML = ""; 
             readingBox.style.display = "none";
+            drawnCardsList = []; // Reset danh sách bài bốc
+            flippedCount = 0;    // Reset bộ đếm lật bài
             btnDraw.disabled = false; 
             
             setTimeout(() => {
@@ -286,13 +296,16 @@ const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2
         function drawCards() {
             board.innerHTML = ""; 
             readingBox.style.display = "none";
+            drawnCardsList = [];
+            flippedCount = 0;
             const numCards = parseInt(spreadSelect.value); 
             
-            statusMsg.innerText = "Nhấp vào từng lá bài để lật mở định mệnh của bạn...";
+            statusMsg.innerText = `Hãy lật mở lần lượt cả ${numCards} lá bài để nghe Pháp sư luận giải...`;
             btnDraw.disabled = true; 
 
             for (let i = 0; i < numCards; i++) {
                 const drawnCard = currentDeck.pop(); 
+                drawnCardsList.push(drawnCard); // Lưu tên lá bài vào danh sách bốc theo thứ tự
                 
                 const cardSlot = document.createElement("div");
                 cardSlot.classList.add("card-slot");
@@ -308,12 +321,19 @@ const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2
                     </div>
                 `;
 
-                // Sự kiện lật bài và gọi AI
+                // Sự kiện lật bài
                 cardSlot.addEventListener("click", function() {
                     if (!this.classList.contains("flipped")) {
                         this.classList.add("flipped");
-                        // Khi lật lá bài nào, tự động gọi API giải nghĩa lá đó
-                        getTarotReading(drawnCard);
+                        flippedCount++; // Tăng số lá bài đã lật lên 1
+                        
+                        // Kiểm tra xem người dùng đã lật mở HẾT tất cả các lá trên bàn chưa
+                        if (flippedCount === numCards) {
+                            statusMsg.innerText = "🔮 Toàn bộ định mệnh đã mở ra. Đang luận quẻ bài...";
+                            getFullTarotReading(); // Gọi AI giải nghĩa toàn bộ trải bài
+                        } else {
+                            statusMsg.innerText = `Bạn đã lật ${flippedCount}/${numCards} lá. Hãy lật tiếp những lá còn lại!`;
+                        }
                     }
                 });
 
