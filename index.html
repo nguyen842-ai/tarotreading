@@ -288,8 +288,9 @@
                         if (currentKeyIndex < apiKeyArray.length) {
                             getFullTarotReading(); // Còn Key dự phòng thì gọi tiếp
                         } else {
-                            // THÔNG BÁO LỖI: HẾT QUOTA TẤT CẢ CÁC KEY
-                            readingBox.innerHTML = `🌙 Các vì sao đã đi ngủ mất rồi! Năng lượng vũ trụ hôm nay đã cạn, bạn hãy quay lại tâm tình vào ngày mai nhé! 💖`;
+                            // THÔNG BÁO LỖI: HIỂN THỊ LỖI THỰC TẾ ĐỂ BẮT BỆNH
+readingBox.innerHTML = `🌙 Các vì sao đã đi ngủ mất rồi! (Lỗi kỹ thuật báo về: <b>${data.error.message}</b>)`;
+
                             currentKeyIndex = 0; 
                         }
                     } else {
