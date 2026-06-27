@@ -262,15 +262,31 @@
                 if (data.error) {
                     readingBox.innerHTML = `⚠️ Vũ trụ báo lỗi: ${data.error.message}`;
                 } else {
-                    let aiResponse = data.candidates[0].content.parts[0].text;
-                    aiResponse = aiResponse.replace(/\*\*(.*?)\*\*/g, '<b>$1</b>'); // Format chữ đậm
-                    aiResponse = aiResponse.replace(/\n/g, '<br>'); // Giữ nguyên xuống hàng cho đẹp
-                    readingBox.innerHTML = `✨ <b>BÀI LUẬN GIẢI TAROT TỪ VŨ TRỤ:</b><br><br>${aiResponse}`;
+                            // NẾU CÓ LỖI TỪ API
+        if (data.error) {
+            // Kiểm tra xem có phải lỗi hết Quota không (Mã 429 hoặc có chứa chữ 'quota')
+            const isQuotaError = data.error.code === 429 || 
+                                 data.error.status === "RESOURCE_EXHAUSTED" || 
+                                 (data.error.message && data.error.message.toLowerCase().includes("quota"));
+
+            if (isQuotaError) {
+                console.log(`Key số ${currentKeyIndex + 1} hết hạn. Đang thử Key tiếp theo...`);
+                
+                currentKeyIndex++; // Chuyển sang Key tiếp theo
+                
+                if (currentKeyIndex < apiKeyArray.length) {
+                    getFullTarotReading(); // Còn Key thì gọi lại AI
+                } else {
+                    // KHI TẤT CẢ CÁC KEY ĐỀU ĐÃ HẾT QUOTA
+                    readingBox.innerHTML = `⚠️ Hôm nay đã hết lượt liên kết với vũ trụ, xin hãy thử lại sau.`;
+                    currentKeyIndex = 0; // Reset lại vòng lặp Key
                 }
-            } catch (error) {
-                readingBox.innerHTML = "⚠️ Mất kết nối với vũ trụ. Vui lòng kiểm tra lại mạng hoặc mã khóa!";
+            } else {
+                // Các lỗi lặt vặt khác (ví dụ: mất mạng, model bị lỗi, sai cú pháp)
+                readingBox.innerHTML = `⚠️ Tín hiệu vũ trụ bị nhiễu: ${data.error.message}`;
             }
-        }
+        } 
+
 
         // Logic Xào Bài
         function shuffleDeck() {
