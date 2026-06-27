@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Trải Bài Tarot Online - Đọc Tổng Quan Trải Bài</title>
+    <title>🪐✨Lắng Nghe Vũ Trụ✨🪐</title>
     <style>
         /* ================= CSS (TRANG TRÍ GIAO DIỆN) ================= */
         * {
@@ -23,45 +23,53 @@
         h1 {
             margin-bottom: 20px;
             font-size: 2.5rem;
-            text-shadow: 0 0 10px #c29d59;
+            text-shadow: 0 0 15px #c29d59;
         }
 
         .controls {
             margin-bottom: 20px;
             background: rgba(0, 0, 0, 0.4);
             padding: 20px;
-            border-radius: 10px;
+            border-radius: 12px;
             display: inline-block;
             max-width: 800px;
             width: 100%;
+            border: 1px solid #4a2b7d;
         }
 
         .ai-inputs {
             display: flex;
             flex-direction: column;
-            gap: 10px;
+            gap: 12px;
             margin-bottom: 15px;
         }
 
         input[type="text"], input[type="password"] {
-            padding: 10px;
+            padding: 12px;
             font-size: 1rem;
-            border-radius: 5px;
+            border-radius: 8px;
             background: #2a164d;
             color: white;
             border: 1px solid #c29d59;
             width: 100%;
+            outline: none;
+        }
+        
+        input::placeholder {
+            color: #a78bfa;
+            opacity: 0.7;
         }
 
         select {
             padding: 10px;
             font-size: 1rem;
-            border-radius: 5px;
+            border-radius: 8px;
             background: #2a164d;
             color: white;
             border: 1px solid #c29d59;
             margin-right: 10px;
             cursor: pointer;
+            outline: none;
         }
 
         .mystic-btn {
@@ -71,7 +79,7 @@
             color: #1a0b2e;
             background-color: #c29d59;
             border: none;
-            border-radius: 5px;
+            border-radius: 8px;
             cursor: pointer;
             transition: 0.3s;
             margin: 5px;
@@ -86,13 +94,14 @@
             background-color: #555;
             color: #888;
             cursor: not-allowed;
+            box-shadow: none;
         }
 
         #status-message {
             font-size: 1.2rem;
             margin-bottom: 20px;
             font-style: italic;
-            color: #a78bfa;
+            color: #c4b5fd;
         }
 
         .tarot-board {
@@ -115,7 +124,7 @@
             width: 100%;
             height: 100%;
             position: relative;
-            transition: transform 0.6s;
+            transition: transform 0.6s cubic-bezier(0.4, 0.2, 0.2, 1);
             transform-style: preserve-3d;
         }
 
@@ -129,7 +138,7 @@
             position: absolute;
             backface-visibility: hidden;
             border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.5);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.4);
             border: 2px solid #c29d59;
         }
 
@@ -150,36 +159,36 @@
         }
 
         #reading-result {
-            background: rgba(42, 22, 77, 0.9);
+            background: rgba(42, 22, 77, 0.95);
             border: 1px solid #c29d59;
-            padding: 25px;
-            border-radius: 10px;
+            padding: 25px 30px;
+            border-radius: 12px;
             max-width: 800px;
             margin: 0 auto 40px auto;
             text-align: left;
-            line-height: 1.7;
+            line-height: 1.8;
             font-size: 1.1rem;
             display: none;
-            box-shadow: 0 0 20px rgba(194, 157, 89, 0.2);
+            box-shadow: 0 0 25px rgba(194, 157, 89, 0.15);
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>🔮 Free Reading Tarot 🔮</h1>
+        <h1>🔮 Trạm Lắng Nghe Vũ Trụ 🔮</h1>
         
         <div class="controls">
             <div class="ai-inputs">
-                <input type="password" id="api-key" placeholder="Nhập mã khóa để kết nối với vũ trụ ^-^...">
-                <input type="text" id="user-question" placeholder="Bạn đang băn khoăn điều gì? (VD: Tình duyên tháng này ra sao?)">
+                <input type="password" id="api-key" placeholder="🗝️ Gửi vào đây một chiếc chìa khóa (API Key) để mở cửa vũ trụ...">
+                <input type="text" id="user-question" placeholder="💭 Trái tim bạn đang băn khoăn điều gì lúc này?">
             </div>
 
             <div>
-                <label for="spread-type">Chọn kiểu trải bài:</label>
+                <label for="spread-type">Cách thỉnh bài:</label>
                 <select id="spread-type">
-                    <option value="1">1 Lá (Yes/No - Thông điệp ngày)</option>
+                    <option value="1">1 Lá (Thông điệp chớp nhoáng)</option>
                     <option value="3">3 Lá (Quá khứ - Hiện tại - Tương lai)</option>
-                    <option value="5">5 Lá (Chữ thập - Mở rộng vấn đề)</option>
+                    <option value="5">5 Lá (Chữ thập - Bức tranh toàn cảnh)</option>
                 </select>
                 
                 <button id="btn-shuffle" class="mystic-btn">Xào Bài</button>
@@ -187,7 +196,7 @@
             </div>
         </div>
 
-        <div id="status-message">Hãy nhập Key, đặt câu hỏi và ấn "Xào Bài"...</div>
+        <div id="status-message">✨ Hãy đặt câu hỏi và ấn "Xào Bài" để kết nối...</div>
         <div id="tarot-board" class="tarot-board"></div>
         <div id="reading-result"></div>
     </div>
@@ -208,8 +217,9 @@
         const cardBackImg = folderPath + "card-back.PNG"; 
 
         let currentDeck = []; 
-        let drawnCardsList = []; // Mảng lưu danh sách các lá bài đã được bốc theo thứ tự
-        let flippedCount = 0;    // Biến đếm xem người dùng đã lật bao nhiêu lá
+        let drawnCardsList = []; 
+        let flippedCount = 0;    
+        let currentKeyIndex = 0; // Biến xoay vòng Key
 
         const btnShuffle = document.getElementById("btn-shuffle");
         const btnDraw = document.getElementById("btn-draw");
@@ -218,35 +228,43 @@
         const spreadSelect = document.getElementById("spread-type");
         const readingBox = document.getElementById("reading-result");
 
-        // HÀM GỌI AI ĐỂ GIẢI TỔNG QUAN TOÀN BỘ TRẢI BÀI
+        // HÀM GỌI AI ĐỂ GIẢI TỔNG QUAN
         async function getFullTarotReading() {
-            const apiKey = document.getElementById("api-key").value.trim();
-            const question = document.getElementById("user-question").value.trim() || "Thông điệp chung cho tôi hôm nay là gì?";
+            const rawKeys = document.getElementById("api-key").value.trim();
+            const apiKeyArray = rawKeys.split(",").map(key => key.trim()).filter(key => key.length > 0);
+            
+            const question = document.getElementById("user-question").value.trim() || "Vũ trụ muốn gửi gắm thông điệp gì cho mình hôm nay?";
             const spreadType = parseInt(spreadSelect.value);
             
             readingBox.style.display = "block";
 
-            if (!apiKey) {
-                readingBox.innerHTML = "⚠️ Vui lòng điền mã khóa ở phía trên để Pháp sư giải nghĩa toàn bộ trải bài!";
+            // THÔNG BÁO LỖI: CHƯA NHẬP KEY
+            if (apiKeyArray.length === 0) {
+                readingBox.innerHTML = "✨ Vũ trụ cần một chiếc chìa khóa để mở cửa. Bạn gắn chìa khoá vào ô bên trên nhé! 🗝️";
                 return;
             }
 
-            readingBox.innerHTML = `⏳ Bạn đã lật mở tất cả các lá bài. Pháp sư đang định tâm để giải mã toàn bộ quẻ bài này cho bạn...`;
-
-            // Tự động tạo Prompt thông minh tùy theo số lượng lá bài người dùng bốc
-            let spreadContext = "";
-            if (spreadType === 1) {
-                spreadContext = `người dùng bốc được 1 lá duy nhất là: ${drawnCardsList[0]}. Hãy trả lời trực tiếp vấn đề theo dạng Yes/No hoặc thông điệp cốt lõi.`;
-            } else if (spreadType === 3) {
-                spreadContext = `người dùng bốc trải bài 3 lá (Quá khứ - Hiện tại - Tương lai). Thứ tự các lá bài lần lượt là: Lá 1 (Quá khứ): ${drawnCardsList[0]}, Lá 2 (Hiện tại): ${drawnCardsList[1]}, Lá 3 (Tương lai): ${drawnCardsList[2]}. Hãy luận giải chi tiết từng lá tương ứng với từng mốc thời gian và xâu chuỗi chúng lại để trả lời câu hỏi.`;
-            } else if (spreadType === 5) {
-                spreadContext = `người dùng bốc trải bài 5 lá hình chữ thập đại diện cho: Tổng quan, Thử thách, Quá khứ, Tương lai gần và Lời khuyên. Danh sách 5 lá lần lượt là: ${drawnCardsList.join(", ")}. Hãy phân tích toàn bộ bức tranh này.`;
+            if (currentKeyIndex >= apiKeyArray.length) {
+                currentKeyIndex = 0;
             }
 
-            const promptText = `Bạn là một Reader Tarot huyền bí, thấu hiểu tâm lý học và sâu sắc. Người dùng đặt câu hỏi: "${question}". Trong kiểu trải bài này, ${spreadContext} Hãy viết một bài luận giải chi tiết bằng tiếng Việt, phân tách các phần rõ ràng, ngôn từ có tính chữa lành, định hướng và đưa ra lời khuyên tích cực. Hãy xưng hô là "mình" và gọi người dùng là "bạn". Tuyệt đối không nhắc đến các từ kỹ thuật như "tên file", "mảng", "array".`;
+            const currentApiKey = apiKeyArray[currentKeyIndex];
+            
+            // THÔNG BÁO: ĐANG CHỜ PHẢN HỒI TỪ AI
+            readingBox.innerHTML = `🔮 Trải bài đã sẵn sàng! Xin vui lòng chờ trong giây lát để nhận thông điệp từ vũ trụ...💫💫💫<br><span style="font-size: 0.9em; color: #a78bfa;">(Đang dùng cổng năng lượng số ${currentKeyIndex + 1})</span>`;
 
-            // Đã sửa đổi gọi trực tiếp core model xịn nhất của bạn: gemini-2.5-flash
-            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`;
+            let spreadContext = "";
+            if (spreadType === 1) {
+                spreadContext = `người dùng bốc được 1 lá duy nhất là: ${drawnCardsList[0]}. Hãy trả lời trực tiếp vấn đề, ngắn gọn nhưng sâu sắc.`;
+            } else if (spreadType === 3) {
+                spreadContext = `người dùng bốc trải bài 3 lá (Quá khứ - Hiện tại - Tương lai). Thứ tự: Lá 1 (Quá khứ): ${drawnCardsList[0]}, Lá 2 (Hiện tại): ${drawnCardsList[1]}, Lá 3 (Tương lai): ${drawnCardsList[2]}. Hãy luận giải chi tiết từng mốc thời gian và xâu chuỗi chúng lại. Hãy đưa ra thông điệp dẫn dắt về tâm trí cho lá này`;
+            } else if (spreadType === 5) {
+                spreadContext = `người dùng bốc trải bài 5 lá hình chữ thập (Tổng quan, Thử thách, Quá khứ, Tương lai gần, Lời khuyên). Danh sách 5 lá lần lượt là: ${drawnCardsList.join(", ")}. Hãy phân tích toàn bộ bức tranh này. Liên kết tất cả các lá bài và đưa ra vị thế hiện tại của người xem`;
+            }
+
+            const promptText = `Bạn là một Reader Tarot huyền bí, vô cùng ấm áp, thấu hiểu và sâu sắc. Người dùng đặt câu hỏi: "${question}". Trong trải bài này, ${spreadContext} Hãy viết một bài luận giải bằng tiếng Việt, phân tách các phần rõ ràng sau đó hãy làm phần tổng quan, nếu người dùng hỏi cho bản thân họ, hãy đọc bài theo hướng luận giải về người hỏi, nếu người hỏi hỏi về người khác, hãy luận giải theo người đang được hỏi, ngôn từ có tính chữa lành, động viên và đưa ra lời khuyên thiết thực. Hãy xưng hô là "mình" và gọi người dùng là "bạn". Tuyệt đối không nhắc đến các từ kỹ thuật như "tên file", "mảng", "hệ thống".`;
+
+            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${currentApiKey}`;
 
             try {
                 const response = await fetch(apiUrl, {
@@ -260,33 +278,38 @@
                 const data = await response.json();
                 
                 if (data.error) {
-                    readingBox.innerHTML = `⚠️ Vũ trụ báo lỗi: ${data.error.message}`;
-                } else {
-                            // NẾU CÓ LỖI TỪ API
-        if (data.error) {
-            // Kiểm tra xem có phải lỗi hết Quota không (Mã 429 hoặc có chứa chữ 'quota')
-            const isQuotaError = data.error.code === 429 || 
-                                 data.error.status === "RESOURCE_EXHAUSTED" || 
-                                 (data.error.message && data.error.message.toLowerCase().includes("quota"));
+                    const isQuotaError = data.error.code === 429 || 
+                                         data.error.status === "RESOURCE_EXHAUSTED" || 
+                                         (data.error.message && data.error.message.toLowerCase().includes("quota"));
 
-            if (isQuotaError) {
-                console.log(`Key số ${currentKeyIndex + 1} hết hạn. Đang thử Key tiếp theo...`);
-                
-                currentKeyIndex++; // Chuyển sang Key tiếp theo
-                
-                if (currentKeyIndex < apiKeyArray.length) {
-                    getFullTarotReading(); // Còn Key thì gọi lại AI
+                    if (isQuotaError) {
+                        currentKeyIndex++; 
+                        
+                        if (currentKeyIndex < apiKeyArray.length) {
+                            getFullTarotReading(); // Còn Key dự phòng thì gọi tiếp
+                        } else {
+                            // THÔNG BÁO LỖI: HẾT QUOTA TẤT CẢ CÁC KEY
+                            readingBox.innerHTML = `🌙 Các vì sao đã đi ngủ mất rồi! Năng lượng vũ trụ hôm nay đã cạn, bạn hãy quay lại tâm tình vào ngày mai nhé! 💖`;
+                            currentKeyIndex = 0; 
+                        }
+                    } else {
+                        // THÔNG BÁO LỖI: LỖI HỆ THỐNG KHÁC TỪ GOOGLE
+                        readingBox.innerHTML = `🌠 Tín hiệu từ vũ trụ đang bị chập chờn một chút xíu! Bạn thử xào bài và bốc lại nhé! ✨`;
+                    }
                 } else {
-                    // KHI TẤT CẢ CÁC KEY ĐỀU ĐÃ HẾT QUOTA
-                    readingBox.innerHTML = `⚠️ Hôm nay đã hết lượt liên kết với vũ trụ, xin hãy thử lại sau.`;
-                    currentKeyIndex = 0; // Reset lại vòng lặp Key
+                    // KHI THÀNH CÔNG
+                    let aiResponse = data.candidates[0].content.parts[0].text;
+                    aiResponse = aiResponse.replace(/\*\*(.*?)\*\*/g, '<b>$1</b>'); 
+                    aiResponse = aiResponse.replace(/\n/g, '<br>'); 
+                    readingBox.innerHTML = `✨ <b>THÔNG ĐIỆP TỪ VŨ TRỤ:</b><br><br>${aiResponse}`;
+                    
+                    currentKeyIndex = (currentKeyIndex + 1) % apiKeyArray.length; // Xoay vòng Key
                 }
-            } else {
-                // Các lỗi lặt vặt khác (ví dụ: mất mạng, model bị lỗi, sai cú pháp)
-                readingBox.innerHTML = `⚠️ Tín hiệu vũ trụ bị nhiễu: ${data.error.message}`;
+            } catch (error) {
+                // THÔNG BÁO LỖI: RỚT MẠNG / KHÔNG GỌI ĐƯỢC FETCH
+                readingBox.innerHTML = "📡 Trạm thu phát sóng tâm linh báo rớt mạng mất rồi! Bạn kiểm tra lại Wi-Fi hoặc 4G rồi thử lại nha! 🧚‍♀️";
             }
-        } 
-
+        }
 
         // Logic Xào Bài
         function shuffleDeck() {
@@ -296,15 +319,15 @@
                 [currentDeck[i], currentDeck[j]] = [currentDeck[j], currentDeck[i]]; 
             }
             
-            statusMsg.innerText = "✨ Vũ trụ đã nhận thông điệp. Đang xào bài... ✨";
+            statusMsg.innerText = "✨ Đang tráo bài... Hãy thả lỏng tâm trí! ✨";
             board.innerHTML = ""; 
             readingBox.style.display = "none";
-            drawnCardsList = []; // Reset danh sách bài bốc
-            flippedCount = 0;    // Reset bộ đếm lật bài
+            drawnCardsList = []; 
+            flippedCount = 0;    
             btnDraw.disabled = false; 
             
             setTimeout(() => {
-                statusMsg.innerText = "Bộ bài đã sẵn sàng. Hãy tập trung vào câu hỏi và Bốc Bài!";
+                statusMsg.innerText = "Bài đã sẵn sàng. Hãy hít một hơi sâu, nghĩ về câu hỏi và Bốc Bài!";
             }, 1000);
         }
 
@@ -316,12 +339,12 @@
             flippedCount = 0;
             const numCards = parseInt(spreadSelect.value); 
             
-            statusMsg.innerText = `Hãy lật mở lần lượt cả ${numCards} lá bài để nghe Pháp sư luận giải...`;
+            statusMsg.innerText = `Hãy lần lượt lật mở ${numCards} lá bài bằng trực giác của bạn...`;
             btnDraw.disabled = true; 
 
             for (let i = 0; i < numCards; i++) {
                 const drawnCard = currentDeck.pop(); 
-                drawnCardsList.push(drawnCard); // Lưu tên lá bài vào danh sách bốc theo thứ tự
+                drawnCardsList.push(drawnCard); 
                 
                 const cardSlot = document.createElement("div");
                 cardSlot.classList.add("card-slot");
@@ -337,18 +360,16 @@
                     </div>
                 `;
 
-                // Sự kiện lật bài
                 cardSlot.addEventListener("click", function() {
                     if (!this.classList.contains("flipped")) {
                         this.classList.add("flipped");
-                        flippedCount++; // Tăng số lá bài đã lật lên 1
+                        flippedCount++; 
                         
-                        // Kiểm tra xem người dùng đã lật mở HẾT tất cả các lá trên bàn chưa
                         if (flippedCount === numCards) {
-                            statusMsg.innerText = "🔮 Toàn bộ định mệnh đã mở ra. Đang luận quẻ bài...";
-                            getFullTarotReading(); // Gọi AI giải nghĩa toàn bộ trải bài
+                            statusMsg.innerText = "🔮 Định mệnh đã mở ra. Đang luận giải...";
+                            getFullTarotReading(); 
                         } else {
-                            statusMsg.innerText = `Bạn đã lật ${flippedCount}/${numCards} lá. Hãy lật tiếp những lá còn lại!`;
+                            statusMsg.innerText = `Lật tiếp đi bạn, còn ${numCards - flippedCount} lá nữa thôi!`;
                         }
                     }
                 });
@@ -364,7 +385,7 @@
             btnDraw.disabled = true;
             board.innerHTML = "";
             readingBox.style.display = "none";
-            statusMsg.innerText = "Bạn đã đổi kiểu trải bài. Vui lòng xào bài lại!";
+            statusMsg.innerText = "Bạn đã đổi ý định. Xin hãy xào bài lại nhé!";
         });
     </script>
 </body>
