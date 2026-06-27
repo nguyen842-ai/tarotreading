@@ -179,16 +179,16 @@
         
         <div class="controls">
             <div class="ai-inputs">
-                <input type="password" id="api-key" placeholder="🗝️ Gửi vào đây các chiếc chìa khoá 🔑">
+                <input type="password" id="api-key" placeholder="🔑 Gửi vào đây các chiếc chìa khoá 🔑">
                 <input type="text" id="user-question" placeholder="💭 Bạn đang băn khoăn điều gì?">
             </div>
 
             <div>
-                <label for="spread-type">Cách thỉnh bài:</label>
+                <label for="spread-type">Chọn cách xem:</label>
                 <select id="spread-type">
                     <option value="1">1 Lá (Thông điệp chớp nhoáng)</option>
                     <option value="3">3 Lá (Quá khứ - Hiện tại - Tương lai)</option>
-                    <option value="5">5 Lá (Chữ thập - Bức tranh toàn cảnh)</option>
+                    <option value="5">5 Lá (Bức tranh toàn cảnh)</option>
                 </select>
                 
                 <button id="btn-shuffle" class="mystic-btn">Xào Bài</button>
@@ -196,7 +196,7 @@
             </div>
         </div>
 
-        <div id="status-message">✨ Hãy đặt câu hỏi và ấn "Xào Bài" để kết nối...</div>
+        <div id="status-message">✨ Hãy đặt câu hỏi và ấn "Xào Bài" để kết nối...✨</div>
         <div id="tarot-board" class="tarot-board"></div>
         <div id="reading-result"></div>
     </div>
@@ -245,7 +245,7 @@
                     clearInterval(cooldownTimer);
                     btnShuffle.innerText = "Xào Bài";
                     btnShuffle.disabled = false; 
-                    statusMsg.innerText = "✨ Năng lượng đã phục hồi. Bạn có thể thỉnh quẻ mới!";
+                    statusMsg.innerText = "✨ Năng lượng đã phục hồi. Bạn có thể tiếp tục đặt câu hỏi!✨";
                 }
             }, 1000);
         }
@@ -316,11 +316,11 @@
                             getFullTarotReading(); // Đổi Key gọi lại AI ngay
                             return; 
                         } else {
-                            readingBox.innerHTML = `🌙 Các vì sao đang nghỉ ngơi một chút! Năng lượng vũ trụ đang nạp lại, bạn đợi khoảng 1 phút rồi thử bốc lại nhé! 💖`;
+                            readingBox.innerHTML = `🌙 ⭐️ Các vì sao đang nghỉ ngơi một chút! Năng lượng vũ trụ đang nạp lại, bạn đợi khoảng 1 phút rồi thử bốc lại nhé! 💖`;
                             currentKeyIndex = 0; 
                         }
                     } else {
-                        readingBox.innerHTML = `🌠 Tín hiệu từ vũ trụ đang bị chập chờn! Bạn thử xào bài và bốc lại nhé! ✨`;
+                        readingBox.innerHTML = `🌝 Tín hiệu từ vũ trụ đang bị chập chờn! Bạn thử xào bài và bốc lại nhé! ✨`;
                     }
                 } else {
                     let aiResponse = data.candidates[0].content.parts[0].text;
