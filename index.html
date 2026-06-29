@@ -291,12 +291,16 @@
                     <div class="spread-row">
                         <label for="spread-type">Bạn muốn vũ trụ làm rõ điều gì?</label>
                         <select id="spread-type">
-                            <option value="intent_all">TOÀN DIỆN (Năng lượng cốt lõi & Sự kiện đời thực)</option>
-                            <option value="intent_what">WHAT / YES-NO (Lời khuyên hành động nhanh & Định hướng)</option>
-                            <option value="intent_why">WHY / HOW (Gốc rễ tâm lý, Nhân quả & Xu hướng sắp tới)</option>
-                            <option value="intent_when">WHEN / WHO (Sự kiện cụ thể, Thời gian & Con người thực tế)</option>
+                            <option value="intent_all"> TOÀN DIỆN (What, Why, When, Who, How?)</option>
+                            <option value="intent_what">WHAT / YES-NO ( 1 lá Tarot thông điệp ngay lập tức)</option>
+                            <option value="intent_why">WHY / HOW (Gốc rễ, nhân quả & Xu hướng sắp tới)</option>
+                            <option value="intent_when">WHEN / WHO (Sự kiện, Thời gian & Con người cụ thể)</option>
                             <option value="intent_mbs">✦ M.B.S (Tâm linh - Tâm lý - Đời thực)</option>
                             <option value="intent_healing">✦ CHỮA LÀNH (Điểm nghẽn năng lượng & Giải pháp)</option>
+                            <option value="intent_crossroads">NGÃ RẼ CUỘC ĐỜI (Công việc/Tình cảm: Hướng A hay B?)</option>
+                            <option value="intent_flow">DÒNG CHẢY SỰ KIỆN (Tiên tri diễn biến sự kiện thực)</option>
+                            <option value="intent_relationship">✦ GƯƠNG SOI NHÂN DUYÊN (Tâm lý, Sự kiện & Bài học)</option>
+                            <option value="intent_dream">✦ GIẢI MÃ GIẤC MƠ / TIỀM THỨC</option>
                         </select>
                     </div>
                     <div class="btn-row">
@@ -377,7 +381,7 @@
                 }
             } catch (error) {
                 console.error("Lỗi Sheets API:", error);
-                loadingDiv.innerHTML = "📡 Trạm không thể tải thông tin giới thiệu. Bạn vui lòng kiểm tra lại kết nối mạng hoặc API Key!";
+                loadingDiv.innerHTML = "📡 Trạm không thể tải thông tin giới thiệu. Bạn vui lòng kiểm tra lại kết nối mạng hoặc liên hệ bên cung cấp dịch vụ!";
             }
         }
 
@@ -508,6 +512,16 @@
                 spreadContext = `Trải bài M.B.S (Tâm linh - Tâm lý - Đời thực). - Spirit (Gốc rễ năng lượng - Chakra Oracle): ${drawnCardsList[0].name}. - Mind (Tâm lý/Bài học - Tarot): ${drawnCardsList[1].name}${getReversedStr(drawnCardsList[1])}. - Body (Sự kiện thực tế - Lenormand): ${drawnCardsList[2].name}. YÊU CẦU: Hãy liên kết sự rung động của Luân Xa dẫn đến trạng thái tâm lý của Tarot, và cuối cùng nó biểu hiện ra đời thực qua lá Lenormand như thế nào. Đưa ra lời khuyên để cân bằng.Trong quá trình luận giải, hãy lưu ý đến pip Inserts để phân loại "Sắc thái năng lượng". Nếu xuất hiện các quân Court, hãy xác định nhân vật xuất hiện trong sự kiện. Trường hợp xuất hiện mâu thuẫn, ứng dụng pip Inserts để gỡ rối`;
             } else if (spreadMode === "intent_healing") {
                 spreadContext = `Trải bài CHỮA LÀNH ĐIỂM NGHẼN. - Vết thương/Góc khuất (Chakra Oracle): ${drawnCardsList[0].name}. - Nguyên nhân kìm hãm (Tarot): ${drawnCardsList[1].name}${getReversedStr(drawnCardsList[1])}. - Giải pháp hành động (2 lá Lenormand): ${drawnCardsList[2].name} và ${drawnCardsList[3].name}. YÊU CẦU: Phân tích tổn thương năng lượng qua lá Chakra, phải nói được đây là luân xa gì, chủ về vấn đề gì, bệnh tật thực tế trên cơ thể có thể biểu hiện ra là gì, giải mã nguyên nhân sâu xa từ Tarot. Đặc biệt, hãy ghép 2 lá Lenormand lại thành MỘT hành động cụ thể ở đời thực mà họ CẦN LÀM NGAY để khơi thông điểm nghẽn.Trong quá trình luận giải, hãy lưu ý đến pip Inserts để phân loại "Sắc thái năng lượng". Nếu xuất hiện các quân Court, hãy xác định nhân vật xuất hiện trong sự kiện. Trường hợp xuất hiện mâu thuẫn, ứng dụng pip Inserts để gỡ rối`;
+            } 
+            // CÁC TRẢI BÀI MỚI
+            else if (spreadMode === "intent_crossroads") {
+                spreadContext = `Trải bài Ngã rẽ cuộc đời (3 lá Tarot). Lá 1 (Kết quả nếu chọn hướng A): ${drawnCardsList[0].name}${getReversedStr(drawnCardsList[0])}. Lá 2 (Kết quả nếu chọn hướng B): ${drawnCardsList[1].name}${getReversedStr(drawnCardsList[1])}. Lá 3 (Lời khuyên tổng quan từ vũ trụ): ${drawnCardsList[2].name}${getReversedStr(drawnCardsList[2])}. Phân tích và so sánh rõ ràng sự khác biệt giữa hai con đường, sau đó đưa ra lời khuyên cuối cùng.`;
+            } else if (spreadMode === "intent_flow") {
+                spreadContext = `Trải bài Dòng chảy sự kiện (5 lá Lenormand). Quá khứ xa: ${drawnCardsList[0].name}, Quá khứ gần: ${drawnCardsList[1].name}, Trọng tâm sự kiện: ${drawnCardsList[2].name}, Tương lai gần: ${drawnCardsList[3].name}, Kết quả cuối cùng: ${drawnCardsList[4].name}. Đọc theo chuỗi liên kết các lá bài từ trái sang phải để kể lại một diễn biến sự kiện cụ thể, logic và có kết quả rõ ràng. Áp dụng pip Inserts nếu cần thiết.`;
+            } else if (spreadMode === "intent_relationship") {
+                spreadContext = `Trải bài Gương soi nhân duyên (5 lá hỗn hợp). Tâm lý của bạn (Tarot): ${drawnCardsList[0].name}${getReversedStr(drawnCardsList[0])}. Tâm lý của người ấy (Tarot): ${drawnCardsList[1].name}${getReversedStr(drawnCardsList[1])}. Sự kiện thực tế sắp tới (2 lá Lenormand): ${drawnCardsList[2].name} và ${drawnCardsList[3].name}. Bài học tâm linh/nghiệp quả (Chakra): ${drawnCardsList[4].name}. Phân tích cảm xúc hai bên, sự kiện sẽ xảy đến ở đời thực và chốt lại bằng bài học cốt lõi từ luân xa.`;
+            } else if (spreadMode === "intent_dream") {
+                spreadContext = `Trải bài Giải mã giấc mơ / Thông điệp tiềm thức (3 lá hỗn hợp). Điểm nghẽn năng lượng trong tiềm thức (Chakra): ${drawnCardsList[0].name}. Thông điệp linh hồn / Higher Self muốn nhắn nhủ (Tarot): ${drawnCardsList[1].name}${getReversedStr(drawnCardsList[1])}. Manh mối/Dấu hiệu ở đời thực để nhận biết (Lenormand): ${drawnCardsList[2].name}. Kết nối sự cảnh báo của tiềm thức với thông điệp cao trào và hướng dẫn người xem chú ý đến dấu hiệu vật lý nào.`;
             }
 
             const promptText = `${roleContext} Người dùng đặt câu hỏi: "${question}". Trong quẻ này, ${spreadContext} Hãy viết bài luận giải bằng tiếng việt, phân tách các phần rõ ràng, ngôn từ thực tế (20% nội tâm, 80% lời khuyên hành động thực tế). Xưng hô là "mình" và "bạn". Tuyệt đối không nhắc đến % và các từ ngữ lập trình.`;
@@ -528,7 +542,7 @@
                     if (isQuotaError) {
                         readingContent.innerHTML = `🌙 Các vì sao đang nghỉ ngơi! Năng lượng vũ trụ đang nạp lại, bạn đợi 1 phút rồi thử bốc lại nhé! 💖`;
                     } else {
-                        readingContent.innerHTML = `🌠 Tín hiệu chập chờn! Hãy thử xào bài và bốc lại nhé! ✨<br><br><small style="opacity:0.5;">Lỗi: ${data.error.message || 'Network Error'}</small>`;
+                        readingContent.innerHTML = `🌠 Tín hiệu chập chờn! Hãy thử xào bài và bốc lại nhé! ✨`;
                     }
                 } else {
                     let aiResponse = data.candidates[0].content.parts[0].text;
@@ -592,6 +606,16 @@
                 setupPlan.push(chakraPop()); setupPlan.push(tarotPop()); setupPlan.push(lenormandPop());
             } else if (spreadMode === "intent_healing") {
                 setupPlan.push(chakraPop()); setupPlan.push(tarotPop()); setupPlan.push(lenormandPop()); setupPlan.push(lenormandPop());
+            } 
+            // CẤU HÌNH BỐC BÀI MỚI
+            else if (spreadMode === "intent_crossroads") {
+                setupPlan.push(tarotPop()); setupPlan.push(tarotPop()); setupPlan.push(tarotPop());
+            } else if (spreadMode === "intent_flow") {
+                setupPlan.push(lenormandPop()); setupPlan.push(lenormandPop()); setupPlan.push(lenormandPop()); setupPlan.push(lenormandPop()); setupPlan.push(lenormandPop());
+            } else if (spreadMode === "intent_relationship") {
+                setupPlan.push(tarotPop()); setupPlan.push(tarotPop()); setupPlan.push(lenormandPop()); setupPlan.push(lenormandPop()); setupPlan.push(chakraPop());
+            } else if (spreadMode === "intent_dream") {
+                setupPlan.push(chakraPop()); setupPlan.push(tarotPop()); setupPlan.push(lenormandPop());
             }
 
             drawnCardsList = setupPlan;
@@ -628,6 +652,16 @@
                     labelText = ["Spirit (Luân Xa)", "Mind (Tâm Trí)", "Body (Hành Động)"][index];
                 } else if (spreadMode === "intent_healing") {
                     labelText = ["Vết Thương", "Nguyên Nhân", "Giải Pháp", "Bổ Trợ"][index];
+                }
+                // NHÃN CHO BÀI MỚI
+                else if (spreadMode === "intent_crossroads") {
+                    labelText = ["Hướng A", "Hướng B", "Lời Khuyên"][index];
+                } else if (spreadMode === "intent_flow") {
+                    labelText = ["Quá Khứ Xa", "Quá Khứ Gần", "Trọng Tâm", "Tương Lai Gần", "Kết Quả"][index];
+                } else if (spreadMode === "intent_relationship") {
+                    labelText = ["Tâm Lý Bạn", "Tâm Lý Họ", "Sự Kiện 1", "Sự Kiện 2", "Bài Học Chakra"][index];
+                } else if (spreadMode === "intent_dream") {
+                    labelText = ["Tiềm Thức", "Higher Self", "Dấu Hiệu"][index];
                 }
 
                 cardSlot.innerHTML = `
@@ -669,7 +703,7 @@
             hideReading();
             document.body.classList.add("shuffling");
             setTimeout(() => document.body.classList.remove("shuffling"), 1200);
-            statusMsg.innerText = "Bạn đã thay đổi câu hỏi. Xin hãy xào bài lại nhé!";
+            statusMsg.innerText = "Bạn đã thay đổi câu hỏi. Hãy xào bài lại nhé!";
         });
     </script>
 </body>
