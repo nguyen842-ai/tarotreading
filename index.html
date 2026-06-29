@@ -6,235 +6,192 @@
     <title>Trạm kết nối Vũ Trụ - Tarot & Lenormand</title>
     <style>
         /* ================= CSS (TRANG TRÍ GIAO DIỆN) ================= */
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
 
-        body {
-            background-color: #1a0b2e;
-            color: #e5d3b3;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            text-align: center;
-            padding: 20px;
-        }
+body {
+    background-color: #1a0b2e;
+    color: #e5d3b3;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    text-align: center;
+    padding: 20px;
+}
 
-        h1 {
-            margin-bottom: 20px;
-            font-size: 2.5rem;
-            text-shadow: 0 0 15px #c29d59;
-        }
+h1 {
+    margin-bottom: 20px;
+    font-size: 2.5rem;
+    text-shadow: 0 0 15px #c29d59;
+}
 
-        .controls {
-            margin-bottom: 20px;
-            background: rgba(0, 0, 0, 0.4);
-            padding: 20px;
-            border-radius: 12px;
-            display: inline-block;
-            max-width: 800px;
-            width: 100%;
-            border: 1px solid #4a2b7d;
-        }
+.controls {
+    margin-bottom: 20px;
+    background: rgba(0, 0, 0, 0.4);
+    padding: 20px;
+    border-radius: 12px;
+    display: inline-block;
+    max-width: 800px;
+    width: 100%;
+    border: 1px solid #4a2b7d;
+}
 
-        .ai-inputs {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-            margin-bottom: 15px;
-        }
+.ai-inputs {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-bottom: 15px;
+}
 
-        input[type="text"], input[type="password"] {
-            padding: 12px;
-            font-size: 1rem;
-            border-radius: 8px;
-            background: #2a164d;
-            color: white;
-            border: 1px solid #c29d59;
-            width: 100%;
-            outline: none;
-        }
-        
-        input::placeholder {
-            color: #a78bfa;
-            opacity: 0.7;
-        }
+input[type="text"], input[type="password"] {
+    padding: 12px;
+    font-size: 1rem;
+    border-radius: 8px;
+    background: #2a164d;
+    color: white;
+    border: 1px solid #c29d59;
+    width: 100%;
+    outline: none;
+}
 
-        select {
-            padding: 10px;
-            font-size: 1rem;
-            border-radius: 8px;
-            background: #2a164d;
-            color: white;
-            border: 1px solid #c29d59;
-            margin-right: 10px;
-            cursor: pointer;
-            outline: none;
-        }
+input::placeholder {
+    color: #a78bfa;
+    opacity: 0.7;
+}
 
-        .mystic-btn {
-            padding: 10px 20px;
-            font-size: 1rem;
-            font-weight: bold;
-            color: #1a0b2e;
-            background-color: #c29d59;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: 0.3s;
-            margin: 5px;
-        }
+select {
+    padding: 10px;
+    font-size: 1rem;
+    border-radius: 8px;
+    background: #2a164d;
+    color: white;
+    border: 1px solid #c29d59;
+    margin-right: 10px;
+    cursor: pointer;
+    outline: none;
+}
 
-        .mystic-btn:hover:not(:disabled) {
-            background-color: #e5d3b3;
-            box-shadow: 0 0 15px #c29d59;
-        }
+.mystic-btn {
+    padding: 10px 20px;
+    font-size: 1rem;
+    font-weight: bold;
+    color: #1a0b2e;
+    background-color: #c29d59;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: 0.3s;
+    margin: 5px;
+}
 
-        .mystic-btn:disabled {
-            background-color: #555;
-            color: #888;
-            cursor: not-allowed;
-            box-shadow: none;
-        }
+.mystic-btn:hover:not(:disabled) {
+    background-color: #e5d3b3;
+    box-shadow: 0 0 15px #c29d59;
+}
 
-        #status-message {
-            font-size: 1.2rem;
-            margin-bottom: 20px;
-            font-style: italic;
-            color: #c4b5fd;
-        }
+.mystic-btn:disabled {
+    background-color: #555;
+    color: #888;
+    cursor: not-allowed;
+    box-shadow: none;
+}
 
-        /* --- HOẠT ẢNH TRÁO BÀI --- */
-        .tarot-deck-visual-wrapper {
-            display: none; 
-        }
-        
-        body.shuffling .tarot-deck-visual-wrapper {
-            display: block; 
-        }
+#status-message {
+    font-size: 1.2rem;
+    margin-bottom: 20px;
+    font-style: italic;
+    color: #c4b5fd;
+}
 
-        .tarot-deck-visual {
-            width: 150px;
-            height: 260px;
-            background: rgba(0, 0, 0, 0.4);
-            border: 2px solid #c29d59;
-            border-radius: 10px;
-            display: inline-flex;
-            justify-content: center;
-            align-items: center;
-            position: relative;
-            margin-bottom: 30px;
-            cursor: default;
-        }
+/* --- BÀN BỐC BÀI & LÁ BÀI --- */
+.tarot-board {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 25px;
+    max-width: 1100px;
+    /* THAY ĐỔI QUAN TRỌNG: Đã tăng lề trên lên 45px để tạo khoảng cách an toàn với dòng chữ trạng thái */
+    margin: 45px auto 30px auto; 
+}
 
-        .tarot-deck-visual img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            border-radius: 8px;
-            transition: transform 0.5s cubic-bezier(0.4, 0.2, 0.2, 1);
-        }
+.card-slot {
+    perspective: 1000px;
+    width: 150px;
+    height: 260px;
+    cursor: pointer;
+    position: relative;
+}
 
-        @keyframes shuffleDeckFanning {
-            0% { transform: scale(1) rotate(0deg) translateX(0); }
-            20% { transform: scale(1.1) rotate(-8deg) translateX(-15px); }
-            40% { transform: scale(1.15) rotate(8deg) translateX(15px); }
-            60% { transform: scale(1.1) rotate(-8deg) translateX(-15px); }
-            80% { transform: scale(1.05) rotate(8deg) translateX(10px); }
-            100% { transform: scale(1) rotate(0deg) translateX(0); }
-        }
+.card-label {
+    position: absolute;
+    top: -25px;
+    left: 0;
+    width: 100%;
+    font-size: 0.85rem;
+    color: #c29d59;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    text-shadow: 0 0 5px rgba(0,0,0,0.8);
+}
 
-        .shuffling .tarot-deck-visual img {
-            animation: shuffleDeckFanning 0.8s ease-in-out infinite;
-        }
+.card-inner {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    transition: transform 0.7s cubic-bezier(0.4, 0.2, 0.2, 1);
+    transform-style: preserve-3d;
+}
 
-        /* --- BÀN BỐC BÀI & LÁ BÀI --- */
-        .tarot-board {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 25px;
-            max-width: 1100px;
-            margin: 30 auto 30px auto;
-        }
+.card-slot.flipped .card-inner {
+    transform: rotateY(180deg);
+}
 
-        .card-slot {
-            perspective: 1000px;
-            width: 150px;
-            height: 260px;
-            cursor: pointer;
-            position: relative;
-        }
+.card-front, .card-back {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    backface-visibility: hidden;
+    border-radius: 10px;
+    box-shadow: 0 6px 12px rgba(0,0,0,0.5);
+    border: 2px solid #c29d59;
+}
 
-        .card-label {
-            position: absolute;
-            top: -25px;
-            left: 0;
-            width: 100%;
-            font-size: 0.85rem;
-            color: #c29d59;
-            font-weight: bold;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            text-shadow: 0 0 5px rgba(0,0,0,0.8);
-        }
+.card-front {
+    background-color: #2a164d; 
+}
 
-        .card-inner {
-            width: 100%;
-            height: 100%;
-            position: relative;
-            transition: transform 0.7s cubic-bezier(0.4, 0.2, 0.2, 1);
-            transform-style: preserve-3d;
-        }
+.card-front img, .card-back img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 8px;
+}
 
-        .card-slot.flipped .card-inner {
-            transform: rotateY(180deg);
-        }
+.card-back {
+    transform: rotateY(180deg);
+    background-color: #fff;
+}
 
-        .card-front, .card-back {
-            width: 100%;
-            height: 100%;
-            position: absolute;
-            backface-visibility: hidden;
-            border-radius: 10px;
-            box-shadow: 0 6px 12px rgba(0,0,0,0.5);
-            border: 2px solid #c29d59;
-        }
+/* HIỆU ỨNG LÁ BÀI NGƯỢC */
+.card-slot .card-inner .card-back img.card-reversed {
+    transform: rotate(180deg);
+}
 
-        .card-front {
-            background-color: #2a164d; 
-        }
-
-        .card-front img, .card-back img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            border-radius: 8px;
-        }
-
-        .card-back {
-            transform: rotateY(180deg);
-            background-color: #fff;
-        }
-
-        /* LÁ BÀI NGƯỢC */
-        .card-slot .card-inner .card-back img.card-reversed {
-            transform: rotate(180deg);
-        }
-
-        #reading-result {
-            background: rgba(42, 22, 77, 0.95);
-            border: 1px solid #c29d59;
-            padding: 30px;
-            border-radius: 12px;
-            max-width: 800px;
-            margin: 0 auto 40px auto;
-            text-align: left;
-            line-height: 1.8;
-            font-size: 1.1rem;
-            display: none;
-            box-shadow: 0 0 30px rgba(194, 157, 89, 0.2);
-        }
+#reading-result {
+    background: rgba(42, 22, 77, 0.95);
+    border: 1px solid #c29d59;
+    padding: 30px;
+    border-radius: 12px;
+    max-width: 800px;
+    margin: 0 auto 40px auto;
+    text-align: left;
+    line-height: 1.8;
+    font-size: 1.1rem;
+    display: none;
+    box-shadow: 0 0 30px rgba(194, 157, 89, 0.2);
+}
     </style>
 </head>
 <body>
