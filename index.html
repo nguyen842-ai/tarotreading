@@ -238,7 +238,7 @@ select {
         ];
 
         const lenormandDeck = [
-            "1rider", "2clover", "3ship", "4house", "5tree", "6clover", "7snake", "8coffin",
+            "1rider", "2clover", "3ship", "4house", "5tree", "6clouds", "7snake", "8coffin",
             "9bouquet", "10scythe", "11whip", "12birds", "13child", "14fox", "15bear", "16stars",
             "17stork", "18dog", "19tower", "20garden", "21mountain", "22crossroads", "23mice", "24heart",
             "25ring", "26book", "27letter", "28man", "29woman", "30lilies", "31sun", "32moon",
@@ -314,7 +314,7 @@ select {
             }
 
             const currentApiKey = apiKeyArray[currentKeyIndex];
-            readingBox.innerHTML = `🔮 Trải bài đã sẵn sàng! Thông điệp đang được gửi đến bạn... 💫`;
+            readingBox.innerHTML = `🔮 <span class="loading-dots">Thông điệp đang được gửi đến bạn</span>`;
 
             // XÂY DỰNG NHÂN VẬT & TƯ DUY LUẬN GIẢI CHO AI
             let spreadContext = "";
@@ -538,6 +538,7 @@ select {
             board.innerHTML = "";
             readingBox.style.display = "none";
             document.body.classList.add("shuffling");
+            setTimeout(() => document.body.classList.remove("shuffling"), 1200);
             statusMsg.innerText = "Bạn đã thay đổi câu hỏi. Xin hãy xào bài lại nhé!";
         });
     </script>
