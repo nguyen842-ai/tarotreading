@@ -56,17 +56,17 @@
             margin: 0 auto;
         }
 
-        /* Cột trái (Mới): Đặt câu hỏi + bốc bài */
+        /* Cột trái: Đặt câu hỏi + bốc bài */
         .panel-left {
             flex: 0 0 42%;
             max-width: 42%;
             display: flex;
             flex-direction: column;
             padding: 0 16px 24px 0;
-            border-right: 1px solid var(--border-color); /* Kẻ viền bên phải để ngăn cách */
+            border-right: 1px solid var(--border-color);
         }
 
-        /* Cột phải (Mới): Kết quả luận quẻ */
+        /* Cột phải: Kết quả luận quẻ */
         .panel-right {
             flex: 1 1 58%;
             display: flex;
@@ -86,7 +86,7 @@
                 max-width: 100%;
                 padding: 0 0 24px 0;
                 border-right: none;
-                border-bottom: 1px solid var(--border-color); /* Kẻ viền phía dưới cho Mobile */
+                border-bottom: 1px solid var(--border-color);
                 margin-bottom: 24px;
             }
             .panel-right {
@@ -439,7 +439,6 @@
             text-align: left;
         }
         
-        /* Chỉnh lại padding do đã đổi cột */
         .panel-left-label { padding-left: 2px; }
         .panel-right-label { padding-left: 18px; }
 
@@ -492,6 +491,7 @@
 
         <div class="panel-right">
             <div class="panel-right-label">✦ Thông điệp vũ trụ</div>
+            
             <div class="reading-placeholder" id="reading-placeholder">
                 <div class="placeholder-icon">🔮</div>
                 <div>Thông điệp từ vũ trụ sẽ hiện ra ở đây<br>sau khi bạn lật đủ các lá bài...</div>
@@ -510,34 +510,6 @@
 
     </div>
 
-        <div class="panel-right">
-            <div class="panel-right-label">✦ Đặt câu hỏi &amp; bốc bài</div>
-            <div class="controls">
-                <div class="ai-inputs">
-                    <input type="password" id="api-key" placeholder="🗝️ Nhập chìa khóa để mở cổng liên kết 🗝️.">
-                    <input type="text" id="user-question" placeholder="💭 Bạn đang băn khoăn điều gì lúc này?">
-                </div>
-
-                <div class="spread-row">
-                    <label for="spread-type">Bạn muốn vũ trụ làm rõ điều gì?</label>
-                    <select id="spread-type">
-                        <option value="intent_all">TOÀN DIỆN (Năng lượng cốt lõi & Sự kiện đời thực)</option>
-                        <option value="intent_what">WHAT / YES-NO (Lời khuyên hành động nhanh & Định hướng)</option>
-                        <option value="intent_why">WHY / HOW (Gốc rễ tâm lý, Nhân quả & Xu hướng sắp tới)</option>
-                        <option value="intent_when">WHEN / WHO (Sự kiện cụ thể, Thời gian & Con người thực tế)</option>
-                    </select>
-                </div>
-                <div class="btn-row">
-                    <button id="btn-shuffle" class="mystic-btn">🔀 Xào Bài</button>
-                    <button id="btn-draw" class="mystic-btn" disabled>✨ Bốc Bài</button>
-                </div>
-            </div>
-
-            <div id="status-message">✨ Đặt câu hỏi và ấn "Xào Bài"... ✨</div>
-            <div id="tarot-board" class="tarot-board"></div>
-        </div>
-
-    </div>
     <script>
         // HỆ THỐNG BÀI
         const tarotDeck = [
@@ -589,6 +561,23 @@
         const readingBox = document.getElementById("reading-result");
         const readingContent = document.getElementById("reading-content");
         const btnCopy = document.getElementById("btn-copy");
+        const readingPlaceholder = document.getElementById("reading-placeholder");
+
+        // HÀM ẨN/HIỆN GIAO DIỆN KẾT QUẢ VÀ PLACEHOLDER
+        function showReading() {
+            readingBox.style.display = "flex";
+            readingBox.style.flexDirection = "column";
+            if (readingPlaceholder) {
+                readingPlaceholder.style.display = "none";
+            }
+        }
+
+        function hideReading() {
+            readingBox.style.display = "none";
+            if (readingPlaceholder) {
+                readingPlaceholder.style.display = "flex";
+            }
+        }
 
         // NÚT COPY KẾT QUẢ
         btnCopy.addEventListener("click", () => {
@@ -604,7 +593,6 @@
                     document.getElementById("copy-label").textContent = "Sao chép";
                 }, 2500);
             }).catch(() => {
-                // Fallback cho trình duyệt cũ
                 const range = document.createRange();
                 range.selectNodeContents(readingContent);
                 const sel = window.getSelection();
@@ -646,7 +634,7 @@
             const question = document.getElementById("user-question").value.trim() || "Vũ trụ muốn gửi gắm thông điệp gì cho mình hôm nay?";
             const spreadMode = spreadSelect.value;
             
-            readingBox.style.display = "block";
+            showReading();
 
             if (apiKeyArray.length === 0) {
                 readingContent.innerHTML = "✨ Vũ trụ cần một chiếc chìa khóa để mở cửa! 🗝️";
@@ -673,7 +661,7 @@
 
             if (spreadMode === "intent_what") {
                 const cardReversedStr = getReversedStr(drawnCardsList[0]);
-                spreadContext = `người xem đang cần một câu trả lời nhanh gọn dạng WHAT hoặc YES/NO. Lá bài bốc được là 1 lá Tarot: ${drawnCardsList[0].name}${cardReversedStr}. Hãy tập trung giải quyết thẳng thắn, ngắn gọn nhưng định hướng tốt cho họ.`;
+                spreadContext = `người xem đang cần một câu trả lời nhanh gọn dạng WHAT hoặc YES/NO. Lá bài bốc được là 1 lá Tarot: ${drawnCardsList[0].name}${cardReversedStr}. Liên kết giữ một số lá ẩn chính và cung hoàng đạo và các nhà trong bản đồ sao, liên kết giữa một số lá ẩn chính với hành tinh và nguyên tố, và sự áp đảo của các nguyên tố (Cốc, Gậy, Kiếm, Tiền). Hãy tập trung giải quyết thẳng thắn, ngắn gọn nhưng định hướng tốt cho họ.`;
                 
             } else if (spreadMode === "intent_why") {
                 const r1 = getReversedStr(drawnCardsList[0]);
@@ -724,7 +712,7 @@
                         currentKeyIndex++; 
                         if (currentKeyIndex < apiKeyArray.length) {
                             isProcessing = false; 
-                            getFullTarotReading(); // Xoay tua Key dự phòng
+                            getFullTarotReading(); 
                             return; 
                         } else {
                             readingContent.innerHTML = `🌙 Các vì sao đang nghỉ ngơi một chút! Năng lượng vũ trụ đang nạp lại, bạn đợi khoảng 1 phút rồi thử bốc lại nhé! 💖`;
@@ -745,7 +733,6 @@
             } finally {
                 isProcessing = false;
                 startCooldown(15);
-                // Cuộn mượt xuống kết quả trên mobile
                 readingBox.scrollIntoView({ behavior: 'smooth', block: 'start' });
             }
         }
@@ -756,7 +743,7 @@
 
             document.body.classList.add("shuffling");
             board.innerHTML = ""; 
-            readingBox.style.display = "none";
+            hideReading();
             btnDraw.disabled = true;
 
             currentTarotDeck = [...tarotDeck]; 
@@ -785,7 +772,7 @@
         // BỐC BÀI & PHÂN PHỐI BÀI NGƯỢC
         function drawCards() {
             board.innerHTML = ""; 
-            readingBox.style.display = "none";
+            hideReading();
             drawnCardsList = [];
             flippedCount = 0;
             
@@ -864,7 +851,7 @@
                         flippedCount++; 
                         
                         if (flippedCount === totalCardsToDraw) {
-                            statusMsg.innerText = "🔮 Vũ trụ đang gửi tín hiệu xuống cho bạn nè...🔮";
+                            statusMsg.innerText = "🔮 Vũ trụ đang gửi tín hiệu xuống cho bạn ...🔮";
                             getFullTarotReading(); 
                         } else {
                             statusMsg.innerText = `Lật tiếp đi bạn, còn ${totalCardsToDraw - flippedCount} lá nữa thôi!`;
@@ -883,7 +870,7 @@
             if (isProcessing) return; 
             btnDraw.disabled = true;
             board.innerHTML = "";
-            readingBox.style.display = "none";
+            hideReading();
             document.body.classList.add("shuffling");
             setTimeout(() => document.body.classList.remove("shuffling"), 1200);
             statusMsg.innerText = "Bạn đã thay đổi câu hỏi. Xin hãy xào bài lại nhé!";
