@@ -527,7 +527,7 @@ select {
                 3. Đan cài sự kiện Lenormand này với năng lượng gốc của lá Tarot để tạo thành bài luận quẻ liền mạch.`;
             }
 
-            const promptText = `${roleContext} Người dùng đặt câu hỏi: "${question}". Trong quẻ này, ${spreadContext} Hãy viết bài luận giải bằng tiếng việt, phân tách các phần rõ ràng bằng tiêu đề in đậm, ngôn từ thực tế và đưa ra lời khuyên bao gồm 20% nội tâm, 80% lời khuyên hành động thực tế ( Không được nhắc đến tỷ lệ % này trong phần trả lời). Hãy xưng hô là "mình" và gọi người dùng là "bạn". Tuyệt đối không nhắc đến các từ kỹ thuật lập trình.`;
+            const promptText = `${roleContext} Người dùng đặt câu hỏi: "${question}". Trong quẻ này, ${spreadContext} Hãy viết bài luận giải bằng tiếng việt, phân tách các phần rõ ràng bằng tiêu đề in đậm, ngôn từ thực tế và đưa ra lời khuyên bao gồm 20% nội tâm, 80% lời khuyên hành động thực tế ( Không được nhắc đến tỷ lệ % này trong phần trả lời, không nhắc đến bất kỳ cách thức đọc bài nào mà hãy trả lời câu hỏi một cách tự nhiên). Hãy xưng hô là "mình" và gọi người dùng là "bạn". Tuyệt đối không nhắc đến các từ kỹ thuật lập trình.`;
 
             const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${currentApiKey}`;
 
