@@ -514,7 +514,7 @@ select {
                 roleContext = "Bạn là một bậc thầy bài Lenormand cổ điển Pháp. Bạn KHÔNG BAO GIỜ đọc rời rạc từng lá. Khả năng của bạn là KIẾN TẠO MỘT CÂU CHUYỆN LIỀN MẠCH bằng cách tổ hợp, ghép nghĩa các lá bài lại với nhau.";
                 
                 spreadContext = `người xem hỏi về sự kiện thực tế (WHEN, WHAT, WHO). 3 lá Lenormand được rút theo thứ tự: ${drawnCardsList[0].name}, ${drawnCardsList[1].name}, và ${drawnCardsList[2].name}. 
-                YÊU CẦU BẮT BUỘC: Tuyệt đối không giải thích riêng lẻ từng lá. Hãy áp dụng quy tắc cốt lõi của Lenormand: coi lá ở giữa (${drawnCardsList[1].name}) làm trọng tâm sự kiện, hai lá hai bên làm tính từ bổ nghĩa. Hãy hòa trộn, ghép nghĩa 3 lá này lại thành MỘT sự kiện/hành động thực tế, cụ thể sắp xảy ra trong đời thực.`;
+                YÊU CẦU BẮT BUỘC: Tuyệt đối không giải thích riêng lẻ từng lá. Hãy áp dụng quy tắc cốt lõi của Lenormand: coi lá ở giữa (${drawnCardsList[1].name}) làm trọng tâm sự kiện, hai lá hai bên làm tính từ bổ nghĩa. Giải nghĩa các lá bài trước, liên kết nó với từng lá bên trái và bên phải và giải mã tuần tự. Sau cùng, hãy hòa trộn, ghép nghĩa 3 lá này lại thành MỘT sự kiện thực tế, cụ thể sắp xảy ra trong đời thực. Lưu ý kết hợp với mốc thời gian cụ thể, nếu có khả năng hãy trả lời sự kiện này có thành hay không.`;
                 
             } else if (spreadMode === "intent_all") {
                 const rootReversedStr = getReversedStr(drawnCardsList[0]);
