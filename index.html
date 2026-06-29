@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🪐✨Lắng Nghe Vũ Trụ✨🪐</title>
+    <title>Trạm Lắng Nghe Vũ Trụ - Tarot & Lenormand</title>
     <style>
         /* ================= CSS (TRANG TRÍ GIAO DIỆN) ================= */
         * {
@@ -108,8 +108,8 @@
             display: flex;
             flex-wrap: wrap;
             justify-content: center;
-            gap: 20px;
-            max-width: 1000px;
+            gap: 25px;
+            max-width: 1100px;
             margin: 0 auto 30px auto;
         }
 
@@ -118,6 +118,19 @@
             width: 150px;
             height: 260px;
             cursor: pointer;
+            position: relative;
+        }
+
+        .card-label {
+            position: absolute;
+            top: -22px;
+            left: 0;
+            width: 100%;
+            font-size: 0.8rem;
+            color: #c29d59;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }
 
         .card-inner {
@@ -179,16 +192,17 @@
         
         <div class="controls">
             <div class="ai-inputs">
-                <input type="password" id="api-key" placeholder="🔑 Gửi vào đây các chiếc chìa khoá 🔑">
+                <input type="password" id="api-key" placeholder="🗝️ Nhập mật mã để bắt đầu 🗝️ ...">
                 <input type="text" id="user-question" placeholder="💭 Bạn đang băn khoăn điều gì?">
             </div>
 
             <div>
-                <label for="spread-type">Chọn cách xem:</label>
+                <label for="spread-type">Bạn muốn làm rõ điều gì?</label>
                 <select id="spread-type">
-                    <option value="1">1 Lá (Thông điệp chớp nhoáng)</option>
-                    <option value="3">3 Lá (Quá khứ - Hiện tại - Tương lai)</option>
-                    <option value="5">5 Lá (Bức tranh toàn cảnh)</option>
+                    <option value="intent_what">WHAT / YES-NO (Thông điệp nhanh, gỡ rối ngay lập tức)</option>
+                    <option value="intent_why">WHY / HOW (Mổ xẻ diễn biến tâm lý & Xu hướng sắp tới)</option>
+                    <option value="intent_when">WHEN / WHO (Soi chi tiết sự kiện thực tế, con người, thời gian)</option>
+                    <option value="intent_all">TOÀN DIỆN (Kết hợp cả Gốc rễ nội tâm lẫn Sự kiện đời thực)</option>
                 </select>
                 
                 <button id="btn-shuffle" class="mystic-btn">Xào Bài</button>
@@ -196,12 +210,13 @@
             </div>
         </div>
 
-        <div id="status-message">✨ Hãy đặt câu hỏi và ấn "Xào Bài" để kết nối...✨</div>
+        <div id="status-message">✨ Hãy đặt câu hỏi và ấn "Xào Bài" ✨...</div>
         <div id="tarot-board" class="tarot-board"></div>
         <div id="reading-result"></div>
     </div>
 
     <script>
+        // Hệ thống bài Tarot (78 lá)
         const tarotDeck = [
             "0thefool", "1themagician", "2thehighpriestess", "3theempress", "4theemperor", 
             "5thehierophant", "6thelovers", "7thechariot", "8strength", "9thehermit", 
@@ -213,15 +228,29 @@
             "1pen", "2pen", "3pen", "4pen", "5pen", "6pen", "7pen", "8pen", "9pen", "10pen", "pagepen", "knightpen", "queenpen", "kingpen"
         ];
 
-        const folderPath = "assets/images/new_folder/";
-        const cardBackImg = folderPath + "card-back.PNG"; 
+        // Hệ thống bài Lenormand (36 lá)
+        const lenormandDeck = [
+            "1rider", "2clover", "3ship", "4house", "5tree", "6clover", "7snake", "8coffin",
+            "9bouquet", "10scythe", "11whip", "12birds", "13child", "14fox", "15bear", "16stars",
+            "17stork", "18dog", "19tower", "20garden", "21mountain", "22crossroads", "23mice", "24heart",
+            "25ring", "26book", "27letter", "28man", "29woman", "30lilies", "31sun", "32moon",
+            "33key", "34fish", "35anchor", "36cross"
+        ];
 
-        let currentDeck = []; 
+        const pathTarot = "assets/images/new_folder/";
+        const pathLenormand = "assets/images/lenormand/";
+        
+        const backTarot = pathTarot + "card-back.PNG";
+        const backLenormand = pathLenormand + "card-back-L.jpg"; 
+
+        let currentTarotDeck = [];
+        let currentLenormandDeck = [];
+        
         let drawnCardsList = []; 
+        let totalCardsToDraw = 0;
         let flippedCount = 0;    
         let currentKeyIndex = 0; 
         
-        // BIẾN KIỂM SOÁT SPAM VÀ COOLDOWN
         let isProcessing = false; 
         let cooldownTimer = null; 
 
@@ -232,42 +261,36 @@
         const spreadSelect = document.getElementById("spread-type");
         const readingBox = document.getElementById("reading-result");
 
-        // HÀM ÉP TĨNH TÂM (CHỐNG RATE LIMIT 20 REQ/MIN)
         function startCooldown(seconds) {
             let timeLeft = seconds;
             btnShuffle.disabled = true; 
-            
             cooldownTimer = setInterval(() => {
                 btnShuffle.innerText = `Chờ tĩnh tâm (${timeLeft}s)`;
                 timeLeft--;
-                
                 if (timeLeft < 0) {
                     clearInterval(cooldownTimer);
                     btnShuffle.innerText = "Xào Bài";
                     btnShuffle.disabled = false; 
-                    statusMsg.innerText = "✨ Năng lượng đã phục hồi. Bạn có thể tiếp tục đặt câu hỏi!✨";
+                    statusMsg.innerText = "✨ Năng lượng đã phục hồi. Bạn có thể đặt câu hỏi mới!✨";
                 }
             }, 1000);
         }
 
-        // HÀM GỌI AI ĐỂ GIẢI TỔNG QUAN
         async function getFullTarotReading() {
             if (isProcessing) return;
             
             const rawKeys = document.getElementById("api-key").value.trim();
             const apiKeyArray = rawKeys.split(",").map(key => key.trim()).filter(key => key.length > 0);
-            
             const question = document.getElementById("user-question").value.trim() || "Vũ trụ muốn gửi gắm thông điệp gì cho mình hôm nay?";
-            const spreadType = parseInt(spreadSelect.value);
+            const spreadMode = spreadSelect.value;
             
             readingBox.style.display = "block";
 
             if (apiKeyArray.length === 0) {
-                readingBox.innerHTML = "✨ Vũ trụ cần một chiếc chìa khóa để mở cửa. Bạn gắn vào ô bên trên nhé! 🔑";
+                readingBox.innerHTML = "✨ Vũ trụ cần một chiếc chìa khóa để mở cửa. Bạn giúp Pháp sư dán vào ô bên trên nhé! 🗝️";
                 return;
             }
 
-            // BẬT CỜ KHÓA HỆ THỐNG
             isProcessing = true;
             btnShuffle.disabled = true; 
 
@@ -276,19 +299,27 @@
             }
 
             const currentApiKey = apiKeyArray[currentKeyIndex];
-            
-            readingBox.innerHTML = `🔮 Trải bài đã sẵn sàng! Thông điệp đang được hé mở... 💫<br><span style="font-size: 0.9em; color: #a78bfa;">(Đang dùng năng lượng số ${currentKeyIndex + 1})</span>`;
+            readingBox.innerHTML = `🔮 Trải bài đã sẵn sàng! Thông điệp đang được gửi đến bạn... 💫`;
 
+            // DỰA VÀO INTENT ĐỂ CẤU HÌNH PROMPT CHO AI HIỂU SÂU SẮC Ý ĐỊNH NGƯỜI XEM
             let spreadContext = "";
-            if (spreadType === 1) {
-                spreadContext = `người dùng bốc được 1 lá duy nhất là: ${drawnCardsList[0]}. Hãy trả lời trực tiếp vấn đề, ngắn gọn nhưng sâu sắc.`;
-            } else if (spreadType === 3) {
-                spreadContext = `người dùng bốc trải bài 3 lá (Quá khứ - Hiện tại - Tương lai). Thứ tự: Lá 1 (Quá khứ): ${drawnCardsList[0]}, Lá 2 (Hiện tại): ${drawnCardsList[1]}, Lá 3 (Tương lai): ${drawnCardsList[2]}. Hãy luận giải chi tiết từng mốc thời gian và xâu chuỗi chúng lại.`;
-            } else if (spreadType === 5) {
-                spreadContext = `người dùng bốc trải bài 5 lá hình chữ thập (Tổng quan, Thử thách, Quá khứ, Tương lai gần, Lời khuyên). Danh sách 5 lá lần lượt là: ${drawnCardsList.join(", ")}. Hãy phân tích toàn bộ bức tranh này.`;
+            let roleContext = "Bạn là một Tarot và Lenormand reader hiểu biết rộng. Hãy chia sẻ thẳng thắn vấn đề";
+
+            if (spreadMode === "intent_what") {
+                spreadContext = `người xem đang cần một câu trả lời nhanh gọn dạng WHAT hoặc YES/NO. Lá bài bốc được là 1 lá Tarot: ${drawnCardsList[0].name}. Hãy tập trung giải quyết thẳng thắn, ngắn gọn, trả lời được có, không, hoặc chưa rõ và giải thích lá bài, giải thích vì sao họ đang hỏi.`;
+            } else if (spreadMode === "intent_why") {
+                spreadContext = `người xem đang muốn đào sâu nguyên nhân (WHY) và cách thức diễn biến (HOW). Trải bài gồm 3 lá Tarot đại diện cho Quá khứ, Hiện tại và Tương lai phát triển xu hướng: Lá 1: ${drawnCardsList[0].name}, Lá 2: ${drawnCardsList[1].name}, Lá 3: ${drawnCardsList[2].name}. Hãy phân tích sâu sắc tâm lý học, nhân quả vấn đề và xu hướng sắp tới.`;
+            } else if (spreadMode === "intent_when") {
+                roleContext = "Bạn là một bậc thầy đoán điềm giải sự kiện thông qua bài cổ điển Pháp Lenormand, cực kỳ nhạy bén, thực tế và chính xác.";
+                spreadContext = `người xem quan tâm mạnh mẽ đến câu hỏi khi nào (WHEN), cái gì cụ thể (WHAT) hoặc ai dự phần (WHO). Bộ bài được rút ra là chuỗi 3 lá bài sự kiện Lenormand: ${drawnCardsList[0].name}, ${drawnCardsList[1].name}, và ${drawnCardsList[2].name}. Hãy xâu chuỗi chúng lại như một câu nói hoàn chỉnh, chỉ ra con người thực tế, hành động cụ thể hoặc thời điểm có thể xảy ra trong đời thực. Không nói triết lý hay tâm lý chung chung.`;
+            } else if (spreadMode === "intent_all") {
+                spreadContext = `người xem muốn có cái nhìn TOÀN DIỆN nhất cả về gốc rễ ẩn sâu lẫn sự việc hiển hiện bên ngoài. Quẻ bài kết hợp đặc biệt gồm:
+                - 1 Lá Tarot làm Tâm (Giải mã động cơ nội tâm, năng lượng bản chất tại sao lại thế): ${drawnCardsList[0].name}.
+                - 2 Lá Lenormand làm Cánh (Chỉ đích danh sự kiện đời thực, con người hoặc hành động cụ thể sẽ diễn ra xoay quanh năng lượng đó): ${drawnCardsList[1].name} và ${drawnCardsList[2].name}.
+                Hãy đan cài hài hòa giữa hai thế giới: tinh thần (Tarot) và thực tế (Lenormand) để tạo nên bài luận quẻ có chiều sâu và tính ứng dụng cao nhất cho họ.`;
             }
 
-            const promptText = `Bạn là một Reader Tarot huyền bí, vô cùng ấm áp, thấu hiểu và sâu sắc. Người dùng đặt câu hỏi: "${question}". Trong trải bài này, ${spreadContext} Hãy viết một bài luận giải bằng ngôn ngữ nhận diện được từ câu hỏi, phân tách các phần rõ ràng sau đó xem sự liên kết giữa các lá bài, ngôn từ có tính chữa lành, động viên và đưa ra lời khuyên thiết thực. Hãy xưng hô là "mình" và gọi người dùng là "bạn". Tuyệt đối không nhắc đến các từ kỹ thuật như "tên file", "mảng", "hệ thống".`;
+            const promptText = `${roleContext} Người dùng đặt câu hỏi: "${question}". Trong quẻ này, ${spreadContext} Hãy viết bài luận giải bằng ngôn ngữ đặt câu hỏi, phân tách các phần rõ ràng bằng tiêu đề in đậm, ngôn từ chữa lành và đưa ra lời khuyên thiết thực. Hãy xưng hô là "mình" và gọi người dùng là "bạn". Tuyệt đối không nhắc đến các từ kỹ thuật lập trình.`;
 
             const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${currentApiKey}`;
 
@@ -296,60 +327,58 @@
                 const response = await fetch(apiUrl, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        contents: [{ parts: [{ text: promptText }] }]
-                    })
+                    body: JSON.stringify({ contents: [{ parts: [{ text: promptText }] }] })
                 });
                 
                 const data = await response.json();
                 
                 if (data.error) {
-                    const isQuotaError = data.error.code === 429 || 
-                                         data.error.status === "RESOURCE_EXHAUSTED" || 
-                                         (data.error.message && data.error.message.toLowerCase().includes("quota"));
-
+                    const isQuotaError = data.error.code === 429 || data.error.status === "RESOURCE_EXHAUSTED" || (data.error.message && data.error.message.toLowerCase().includes("quota"));
                     if (isQuotaError) {
                         currentKeyIndex++; 
-                        
                         if (currentKeyIndex < apiKeyArray.length) {
                             isProcessing = false; 
-                            getFullTarotReading(); // Đổi Key gọi lại AI ngay
+                            getFullTarotReading(); 
                             return; 
                         } else {
-                            readingBox.innerHTML = `🌙 ⭐️ Các vì sao đang nghỉ ngơi một chút! Năng lượng vũ trụ đang nạp lại, bạn đợi khoảng 1 phút rồi thử bốc lại nhé! 💖`;
+                            readingBox.innerHTML = `🌙 Các vì sao đang nghỉ ngơi một chút! Năng lượng vũ trụ đang nạp lại, bạn đợi khoảng 1 phút rồi thử bốc lại nhé! 💖`;
                             currentKeyIndex = 0; 
                         }
                     } else {
-                        readingBox.innerHTML = `🌝 Tín hiệu từ vũ trụ đang bị chập chờn! Bạn thử xào bài và bốc lại nhé! ✨`;
+                        readingBox.innerHTML = `🌠 Tín hiệu từ vũ trụ đang bị chập chờn! Bạn thử xào bài và bốc lại giúp Pháp sư nhé! ✨`;
                     }
                 } else {
                     let aiResponse = data.candidates[0].content.parts[0].text;
+                    aiResponse = aiResponse.replace(/\*\*(.*?)\*\?/g, '<b>$1</b>'); 
                     aiResponse = aiResponse.replace(/\*\*(.*?)\*\*/g, '<b>$1</b>'); 
                     aiResponse = aiResponse.replace(/\n/g, '<br>'); 
                     readingBox.innerHTML = `✨ <b>THÔNG ĐIỆP TỪ VŨ TRỤ:</b><br><br>${aiResponse}`;
-                    
                     currentKeyIndex = (currentKeyIndex + 1) % apiKeyArray.length; 
                 }
             } catch (error) {
                 readingBox.innerHTML = "📡 Trạm thu phát sóng tâm linh báo rớt mạng mất rồi! Bạn kiểm tra lại Wi-Fi hoặc 4G rồi thử lại nha! 🧚‍♀️";
             } finally {
-                // TẮT CỜ VÀ BẮT ĐẦU ĐẾM NGƯỢC 15 GIÂY
                 isProcessing = false;
                 startCooldown(15); 
             }
         }
 
-        // Logic Xào Bài
         function shuffleDeck() {
             if (isProcessing || btnShuffle.disabled) return;
 
-            currentDeck = [...tarotDeck]; 
-            for (let i = currentDeck.length - 1; i > 0; i--) {
+            currentTarotDeck = [...tarotDeck]; 
+            for (let i = currentTarotDeck.length - 1; i > 0; i--) {
                 const j = Math.floor(Math.random() * (i + 1));
-                [currentDeck[i], currentDeck[j]] = [currentDeck[j], currentDeck[i]]; 
+                [currentTarotDeck[i], currentTarotDeck[j]] = [currentTarotDeck[j], currentTarotDeck[i]]; 
+            }
+
+            currentLenormandDeck = [...lenormandDeck];
+            for (let i = currentLenormandDeck.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [currentLenormandDeck[i], currentLenormandDeck[j]] = [currentLenormandDeck[j], currentLenormandDeck[i]]; 
             }
             
-            statusMsg.innerText = "✨ Đang tráo bài... Hãy thả lỏng tâm trí nhé! ✨";
+            statusMsg.innerText = "✨ Đang kết nối dòng chảy năng lượng... Hãy thả lỏng tâm trí nhé! ✨";
             board.innerHTML = ""; 
             readingBox.style.display = "none";
             drawnCardsList = []; 
@@ -357,35 +386,71 @@
             btnDraw.disabled = false; 
             
             setTimeout(() => {
-                statusMsg.innerText = "Bài đã sẵn sàng. Hãy hít một hơi sâu và Bốc Bài!";
+                statusMsg.innerText = "Năng lượng đã được gửi tới vũ trụ. Hãy hít một hơi thật sâu và ấn Bốc Bài!";
             }, 1000);
         }
 
-        // Logic Bốc Bài
         function drawCards() {
             board.innerHTML = ""; 
             readingBox.style.display = "none";
             drawnCardsList = [];
             flippedCount = 0;
-            const numCards = parseInt(spreadSelect.value); 
             
-            statusMsg.innerText = `Hãy lần lượt lật mở ${numCards} lá bài bằng trực giác của bạn...`;
+            const spreadMode = spreadSelect.value; 
+            let setupPlan = []; 
+
+            // ĐẰNG SAU HẬU TRƯỜNG: TỰ ĐỘNG PHÂN PHỐI BÀI THEO Ý ĐỊNH CỦA NGƯỜI XEM
+            if (spreadMode === "intent_what") {
+                setupPlan.push({ type: 'tarot', name: currentTarotDeck.pop() });
+            } else if (spreadMode === "intent_why") {
+                setupPlan.push({ type: 'tarot', name: currentTarotDeck.pop() });
+                setupPlan.push({ type: 'tarot', name: currentTarotDeck.pop() });
+                setupPlan.push({ type: 'tarot', name: currentTarotDeck.pop() });
+            } else if (spreadMode === "intent_when") {
+                setupPlan.push({ type: 'lenormand', name: currentLenormandDeck.pop() });
+                setupPlan.push({ type: 'lenormand', name: currentLenormandDeck.pop() });
+                setupPlan.push({ type: 'lenormand', name: currentLenormandDeck.pop() });
+            } else if (spreadMode === "intent_all") {
+                setupPlan.push({ type: 'tarot', name: currentTarotDeck.pop() });
+                setupPlan.push({ type: 'lenormand', name: currentLenormandDeck.pop() });
+                setupPlan.push({ type: 'lenormand', name: currentLenormandDeck.pop() });
+            }
+
+            drawnCardsList = setupPlan;
+            totalCardsToDraw = setupPlan.length;
+            
+            statusMsg.innerText = `Hãy chọn lật mở ${totalCardsToDraw} chương định mệnh đang hiển hiện...`;
             btnDraw.disabled = true; 
 
-            for (let i = 0; i < numCards; i++) {
-                const drawnCard = currentDeck.pop(); 
-                drawnCardsList.push(drawnCard); 
-                
+            setupPlan.forEach((cardObj, index) => {
                 const cardSlot = document.createElement("div");
                 cardSlot.classList.add("card-slot");
                 
+                const isTarot = cardObj.type === 'tarot';
+                const backImg = isTarot ? backTarot : backLenormand;
+                const frontImg = isTarot 
+                    ? `${pathTarot}${cardObj.name}.PNG` 
+                    : `${pathLenormand}${cardObj.name}.png`;
+                
+                // Hiển thị nhãn tâm linh tinh tế thay cho tên bộ bài khô khan
+                let labelText = "Thấu Thị";
+                if (spreadMode === "intent_why") {
+                    const mốc = ["Quá Khứ", "Hiện Tại", "Tương Lai"];
+                    labelText = mốc[index];
+                } else if (spreadMode === "intent_when") {
+                    labelText = `Sự Kiện ${index + 1}`;
+                } else if (spreadMode === "intent_all") {
+                    labelText = isTarot ? "Nội Tâm" : `Thực Tế ${index}`;
+                }
+
                 cardSlot.innerHTML = `
+                    <div class="card-label">${labelText}</div>
                     <div class="card-inner">
                         <div class="card-front">
-                            <img src="${cardBackImg}" alt="Mặt sau" onerror="this.src='https://via.placeholder.com/150x260/2a164d/ffffff?text=Card+Back'">
+                            <img src="${backImg}" alt="Mặt sau" onerror="this.src='${backTarot}'">
                         </div>
                         <div class="card-back">
-                            <img src="${folderPath}${drawnCard}.PNG" alt="${drawnCard}" onerror="this.src='https://via.placeholder.com/150x260/fff/000?text=${drawnCard}'">
+                            <img src="${frontImg}" alt="${cardObj.name}" onerror="this.src='https://via.placeholder.com/150x260/fff/000?text=${cardObj.name}'">
                         </div>
                     </div>
                 `;
@@ -397,17 +462,17 @@
                         this.classList.add("flipped");
                         flippedCount++; 
                         
-                        if (flippedCount === numCards) {
-                            statusMsg.innerText = "🔮 Định mệnh đã mở ra. Đang luận giải...";
+                        if (flippedCount === totalCardsToDraw) {
+                            statusMsg.innerText = "🔮 Cửa thông đạo đã mở. Đang đón nhận tín hiệu...";
                             getFullTarotReading(); 
                         } else {
-                            statusMsg.innerText = `Lật tiếp đi bạn, còn ${numCards - flippedCount} lá nữa thôi!`;
+                            statusMsg.innerText = `Lật tiếp đi bạn, còn ${totalCardsToDraw - flippedCount} lá nữa thôi!`;
                         }
                     }
                 });
 
                 board.appendChild(cardSlot);
-            }
+            });
         }
 
         btnShuffle.addEventListener("click", shuffleDeck);
@@ -418,7 +483,7 @@
             btnDraw.disabled = true;
             board.innerHTML = "";
             readingBox.style.display = "none";
-            statusMsg.innerText = "Bạn đã đổi ý định. Xin hãy xào bài lại nhé!";
+            statusMsg.innerText = "Bạn đã thay đổi ý niệm hỏi. Xin hãy xào bài lại nhé!";
         });
     </script>
 </body>
