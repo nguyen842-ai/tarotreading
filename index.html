@@ -301,6 +301,8 @@
                             <option value="intent_flow">DÒNG CHẢY SỰ KIỆN (Tiên tri diễn biến sự kiện thực)</option>
                             <option value="intent_relationship">✦ GƯƠNG SOI NHÂN DUYÊN (Tâm lý, Sự kiện & Bài học)</option>
                             <option value="intent_dream">✦ GIẢI MÃ GIẤC MƠ / TIỀM THỨC</option>
+                            <option value="intent_mirror">✦ BẢN NGÃ (Vị thế & Sự thật )</option>
+
                         </select>
                     </div>
                     <div class="btn-row">
@@ -523,6 +525,9 @@
             } else if (spreadMode === "intent_dream") {
                 spreadContext = `Trải bài Giải mã giấc mơ / Thông điệp tiềm thức (3 lá hỗn hợp). Điểm nghẽn năng lượng trong tiềm thức (Chakra): ${drawnCardsList[0].name}. Thông điệp linh hồn / Higher Self muốn nhắn nhủ (Tarot): ${drawnCardsList[1].name}${getReversedStr(drawnCardsList[1])}. Manh mối/Dấu hiệu ở đời thực để nhận biết (Lenormand): ${drawnCardsList[2].name}. Kết nối sự cảnh báo của tiềm thức với thông điệp cao trào và hướng dẫn người xem chú ý đến dấu hiệu vật lý nào.`;
             }
+            else if (spreadMode === "intent_mirror") {
+                spreadContext = `Trải bài Tấm Gương Bản Ngã (5 lá Tarot). Bản ngã/Cái tôi bên trong: ${drawnCardsList[0].name}${getReversedStr(drawnCardsList[0])}. Soi chiếu nhìn bản thân: ${drawnCardsList[1].name}${getReversedStr(drawnCardsList[1])}. Vị thế thực tế hiện tại: ${drawnCardsList[2].name}${getReversedStr(drawnCardsList[2])}. Bạn trong mắt công chúng/người khác: ${drawnCardsList[3].name}${getReversedStr(drawnCardsList[3])}. Sự thật cốt lõi & Lời khuyên: ${drawnCardsList[4].name}${getReversedStr(drawnCardsList[4])}. YÊU CẦU: Hãy phân tích sự đối chiếu (và mâu thuẫn nếu có) giữa cách nhìn nhận bản thân, thực tế đang ở vị thế nào, và cách người khác đánh giá. Hãy lưu ý đến các yếu tố lặp số ở bộ ẩn phụ, cung hoàng đạo,The Three Primitives,The Seven Sacred Planets và houses như một nhà chiêm tinh học kiêm tarot reader linh hoạt`;
+            }
 
             const promptText = `${roleContext} Người dùng đặt câu hỏi: "${question}". Trong quẻ này, ${spreadContext} Hãy viết bài luận giải bằng tiếng việt, phân tách các phần rõ ràng, ngôn từ thực tế (20% nội tâm, 80% lời khuyên hành động thực tế, không nhắc đến % khi giải bài). Xưng hô là "mình" và "bạn". Tuyệt đối không nhắc đến các từ ngữ lập trình.`;
 
@@ -617,6 +622,10 @@
             } else if (spreadMode === "intent_dream") {
                 setupPlan.push(chakraPop()); setupPlan.push(tarotPop()); setupPlan.push(lenormandPop());
             }
+              else if (spreadMode === "intent_mirror") {
+                setupPlan.push(tarotPop()); setupPlan.push(tarotPop()); setupPlan.push(tarotPop()); setupPlan.push(tarotPop()); setupPlan.push(tarotPop());
+            }
+
 
             drawnCardsList = setupPlan;
             totalCardsToDraw = setupPlan.length;
@@ -659,10 +668,14 @@
                 } else if (spreadMode === "intent_flow") {
                     labelText = ["Quá Khứ Xa", "Quá Khứ Gần", "Trọng Tâm", "Tương Lai Gần", "Kết Quả"][index];
                 } else if (spreadMode === "intent_relationship") {
-                    labelText = ["Tâm Lý Bạn", "Tâm Lý Họ", "Sự Kiện 1", "Sự Kiện 2", "Bài Học Chakra"][index];
+                    labelText = ["Tâm Lý Bạn", "Tâm Lý Họ", "Sự Kiện 1", "Sự Kiện 2", "Bài Học"][index];
                 } else if (spreadMode === "intent_dream") {
                     labelText = ["Tiềm Thức", "Higher Self", "Dấu Hiệu"][index];
                 }
+                  else if (spreadMode === "intent_mirror") {
+                    labelText = ["Bản Ngã", "Tầm Nhìn", "Vị Thế", "Công Chúng", "Sự Thật"][index];
+                }
+
 
                 cardSlot.innerHTML = `
                     <div class="card-label">${labelText}</div>
