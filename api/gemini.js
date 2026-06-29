@@ -1,26 +1,32 @@
 export default async function handler(req, res) {
-    // Chỉ chấp nhận phương thức POST
+    // 1. CẤP QUYỀN CORS (Giấy thông hành để giao diện ở Github gọi được sang Vercel)
+    res.setHeader('Access-Control-Allow-Credentials', true);
+    res.setHeader('Access-Control-Allow-Origin', '*'); 
+    res.setHeader('Access-Control-Allow-Methods', 'GET,OPTIONS,PATCH,DELETE,POST,PUT');
+    res.setHeader('Access-Control-Allow-Headers', 'X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version');
+
+    // 2. Xử lý kịch bản "hỏi đường" (Preflight) của trình duyệt
+    if (req.method === 'OPTIONS') {
+        return res.status(200).end();
+    }
+
+    // 3. Chỉ chấp nhận POST
     if (req.method !== 'POST') {
         return res.status(405).json({ error: 'Chỉ chấp nhận phương thức POST' });
     }
 
     try {
         const { prompt } = req.body;
-        
-        // Lấy danh sách các key từ Vercel
         const keysString = process.env.GEMINI_API_KEYS; 
 
         if (!keysString) {
             return res.status(500).json({ error: 'Chưa cài đặt API Keys trên Server' });
         }
 
-        // Tách chuỗi thành mảng các key (dựa vào dấu phẩy)
         const apiKeys = keysString.split(',').map(key => key.trim()).filter(key => key.length > 0);
-        
         let lastErrorData = null;
         let lastStatus = 500;
 
-        // VÒNG LẶP XOAY VÒNG KEY
         for (let i = 0; i < apiKeys.length; i++) {
             const currentKey = apiKeys[i];
             const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${currentKey}`;
@@ -33,30 +39,22 @@ export default async function handler(req, res) {
 
             const data = await response.json();
             
-            // Nếu thành công (Mã 200), trả kết quả về web ngay lập tức và dừng vòng lặp
             if (response.ok) {
                 return res.status(200).json(data);
             } 
             
-            // Nếu thất bại, lưu lại lỗi
             lastErrorData = data;
             lastStatus = response.status;
             
-            // Kiểm tra xem có phải lỗi hết hạn mức (Quota / 429) không
             const isQuotaError = response.status === 429 || (data.error && data.error.status === "RESOURCE_EXHAUSTED");
-            
             if (isQuotaError) {
-                // Đang hết hạn mức -> Bỏ qua và chạy tiếp vòng lặp để thử Key tiếp theo
-                console.log(`Key thứ ${i + 1} hết hạn mức, chuyển sang key tiếp theo...`);
                 continue; 
             } else {
-                // Nếu là các lỗi nghiêm trọng khác (sai cú pháp, lỗi server Google...), thì báo lỗi luôn
                 return res.status(response.status).json(data);
             }
         }
 
-        // Nếu vòng lặp chạy hết sạch các Key mà vẫn lỗi (Tất cả Key đều cạn kiệt)
-        return res.status(lastStatus).json(lastErrorData || { error: 'Tất cả các key đều đã hết hạn mức.' });
+        return res.status(lastStatus).json(lastErrorData || { error: 'Tất cả các key đều đã hết hạn.' });
 
     } catch (error) {
         console.error("Lỗi Server:", error);
