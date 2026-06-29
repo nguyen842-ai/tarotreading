@@ -243,8 +243,8 @@
         
         <div class="controls">
             <div class="ai-inputs">
-                <input type="password" id="api-key" placeholder="🗝️ Gửi vào đây các chiếc chìa khóa, cách nhau bằng dấu phẩy...">
-                <input type="text" id="user-question" placeholder="💭 Trái tim bạn đang băn khoăn điều gì lúc này?">
+                <input type="password" id="api-key" placeholder="🗝️ Nhập chìa khóa để mở cổng liên kết 🗝️.">
+                <input type="text" id="user-question" placeholder="💭 Bạn đang băn khoăn điều gì lúc này?">
             </div>
 
             <div>
@@ -262,16 +262,6 @@
         </div>
 
         <div id="status-message">✨ Đặt câu hỏi và ấn "Xào Bài"... ✨</div>
-
-        <div class="tarot-deck-visual-wrapper">
-            <div class="tarot-deck-visual">
-                <img id="shuffling-card" src="assets/images/new_folder/card-back.PNG" alt="Xào bài...">
-            </div>
-        </div>
-
-        <div id="tarot-board" class="tarot-board"></div>
-        <div id="reading-result"></div>
-    </div>
 
     <script>
         // HỆ THỐNG BÀI
@@ -334,7 +324,7 @@
                     clearInterval(cooldownTimer);
                     btnShuffle.innerText = "Xào Bài";
                     btnShuffle.disabled = false; 
-                    statusMsg.innerText = "✨ Năng lượng đã phục hồi. Bạn có thể thỉnh quẻ mới!";
+                    statusMsg.innerText = "✨ Năng lượng đã phục hồi. Bạn có thể đặt câu hỏi mới!";
                 }
             }, 1000);
         }
@@ -351,7 +341,7 @@
             readingBox.style.display = "block";
 
             if (apiKeyArray.length === 0) {
-                readingBox.innerHTML = "✨ Vũ trụ cần một chiếc chìa khóa (API Key) để mở cửa. Bạn giúp Pháp sư dán vào ô bên trên nhé! 🗝️";
+                readingBox.innerHTML = "✨ Vũ trụ cần một chiếc chìa khóa để mở cửa! 🗝️";
                 return;
             }
 
@@ -363,12 +353,12 @@
             }
 
             const currentApiKey = apiKeyArray[currentKeyIndex];
-            readingBox.innerHTML = `🔮 Trải bài đã sẵn sàng! Pháp sư đang nhắm mắt lại để thỉnh thông điệp từ vũ trụ cho bạn... 💫`;
+            readingBox.innerHTML = `🔮 Trải bài đã sẵn sàng! Thông điệp đang được gửi đến bạn... 💫`;
 
             // XÂY DỰNG NHÂN VẬT & TƯ DUY LUẬN GIẢI CHO AI
             let spreadContext = "";
-            let roleContext = "Bạn là một Reader Tarot & Lenormand huyền bí, vô cùng ấm áp, thấu hiểu tâm lý và sâu sắc. ";
-            roleContext += "Đặc biệt, bạn thấu hiểu ý nghĩa của bài Tarot ngược (sự cản trở, bài học chưa học, hoặc năng lượng hướng nội). Hãy giải nghĩa sâu sắc cả 2 chiều. ";
+            let roleContext = "Bạn là một Reader Tarot & Lenormand thực tế và có khả năng liên kết bức tranh tổng quan tốt. ";
+            roleContext += "Bạn hiểu ý nghĩa của bài Tarot ngược (sự cản trở, bài học chưa học, hoặc năng lượng hướng nội). Hãy giải nghĩa cả 2 chiều. ";
             roleContext += "Thêm vào đó, với Tarot, BẠN LÀ MỘT CHUYÊN GIA ĐỌC TỔNG QUAN (MACRO-READING). Bạn luôn nhìn vào bức tranh lớn trước tiên: Sự xuất hiện của Ẩn Chính (định mệnh), sự lặp lại của các con số, và sự áp đảo của các nguyên tố (Cốc, Gậy, Kiếm, Tiền). ";
 
             const getReversedStr = (card) => (card.type === 'tarot' && card.reversed) ? " (ngược)" : "";
@@ -402,12 +392,12 @@
                 - Gốc rễ nội tâm (1 Lá Tarot): ${drawnCardsList[0].name}${rootReversedStr}. 
                 - Sự kiện thực tế (2 Lá Lenormand): ${drawnCardsList[1].name} và ${drawnCardsList[2].name}.
                 YÊU CẦU BẮT BUỘC: 
-                1. Hãy phân tích bản chất năng lượng của lá Tarot (chú ý thuộc tính nguyên tố hoặc Ẩn chính).
+                1. Hãy phân tích bản chất năng lượng của từng lá Tarot đơn lẻ, sau đó kết hợp lại (chú ý thuộc tính nguyên tố hoặc Ẩn chính, sự lặp lại của các con số trong bộ ẩn phụ).
                 2. Với 2 lá Lenormand, tuyệt đối không giải nghĩa rời rạc. Hãy ghép nghĩa của chúng lại (Lá 1 + Lá 2) để tạo ra MỘT sự kiện/hành động đời thực duy nhất. 
                 3. Đan cài sự kiện Lenormand này với năng lượng gốc của lá Tarot để tạo thành bài luận quẻ liền mạch.`;
             }
 
-            const promptText = `${roleContext} Người dùng đặt câu hỏi: "${question}". Trong quẻ này, ${spreadContext} Hãy viết bài luận giải bằng tiếng Việt, phân tách các phần rõ ràng bằng tiêu đề in đậm, ngôn từ chữa lành và đưa ra lời khuyên thiết thực. Hãy xưng hô là "mình" và gọi người dùng là "bạn". Tuyệt đối không nhắc đến các từ kỹ thuật lập trình.`;
+            const promptText = `${roleContext} Người dùng đặt câu hỏi: "${question}". Trong quẻ này, ${spreadContext} Hãy viết bài luận giải bằng tiếng việt, phân tách các phần rõ ràng bằng tiêu đề in đậm, ngôn từ thực tế và đưa ra lời khuyên bao gồm 20% nội tâm, 80% lời khuyên hành động thực tế. Hãy xưng hô là "mình" và gọi người dùng là "bạn". Tuyệt đối không nhắc đến các từ kỹ thuật lập trình.`;
 
             const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${currentApiKey}`;
 
@@ -445,7 +435,7 @@
                     currentKeyIndex = (currentKeyIndex + 1) % apiKeyArray.length; 
                 }
             } catch (error) {
-                readingBox.innerHTML = "📡 Trạm thu phát sóng tâm linh báo rớt mạng mất rồi! Bạn kiểm tra lại mạng rồi thử lại nha! 🧚‍♀️";
+                readingBox.innerHTML = "📡 Trạm thu phát sóng tâm linh báo rớt mạng mất rồi! Bạn kiểm tra đường truyền mạng rồi thử lại nha! 🧚‍♀️";
             } finally {
                 isProcessing = false;
                 startCooldown(15); 
@@ -566,7 +556,7 @@
                         flippedCount++; 
                         
                         if (flippedCount === totalCardsToDraw) {
-                            statusMsg.innerText = "🔮 Cửa thông đạo đã mở. Đang đón nhận lời luận quẻ...";
+                            statusMsg.innerText = "🔮 Vũ trụ đang gửi tín hiệu xuống cho bạn nè...🔮";
                             getFullTarotReading(); 
                         } else {
                             statusMsg.innerText = `Lật tiếp đi bạn, còn ${totalCardsToDraw - flippedCount} lá nữa thôi!`;
@@ -587,7 +577,7 @@
             board.innerHTML = "";
             readingBox.style.display = "none";
             document.body.classList.add("shuffling");
-            statusMsg.innerText = "Bạn đã thay đổi ý niệm hỏi. Xin hãy xào bài lại nhé!";
+            statusMsg.innerText = "Bạn đã thay đổi câu hỏi. Xin hãy xào bài lại nhé!";
         });
     </script>
 </body>
