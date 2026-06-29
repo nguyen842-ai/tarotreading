@@ -253,9 +253,10 @@
 
         // Khai báo bộ Chakra (Lưu ý bổ sung thêm nếu còn file ảnh khác)
         const chakraDeck = [
-            "abundance", "acceptance", "balance", "bittersweet", "complacency", 
-            "completion", "confusion", "creation", "despondence", "destiny", 
-            "discovery", "dissipating", "enlightenment"
+            "abundance", "acceptance", "balance", "bittersweet", "complacency", "completion", "confusion",
+            "creation", "despondence", "destiny", "discovery", "dissipating", "enlightenment", "expansion", "facade", "faith", "forgiveness", "gossip", "gratitude", 
+            "grief", "growth", "guilt", "impartiality", "impasse", "impatience", "insecurity", "instinct", "isolation", "joy", "miracle", "mysticism", "passion", "perception",
+            "perfection", "perseverance", "prayer", "quest", "recovery", "rejection", "release", "renewal", "selfworth", "service", "soulmate", "trickery", "vanity", "victim", "wisdom", "workaholic"
         ];
 
         // --- ĐƯỜNG DẪN ẢNH ---
@@ -265,7 +266,7 @@
         
         const backTarot = pathTarot + "card-back.PNG";
         const backLenormand = pathLenormand + "card-back-L.jpg"; 
-        const backChakra = pathChakra + "card-back-C.PNG"; // Đảm bảo file này có sẵn trên Github
+        const backChakra = pathChakra + "card-back-C.PNG"
 
         // --- TRẠNG THÁI HIỆN TẠI ---
         let currentTarotDeck = [];
@@ -369,7 +370,7 @@
                 - Vết thương/Góc khuất (Chakra Oracle): ${drawnCardsList[0].name}.
                 - Nguyên nhân kìm hãm (Tarot): ${drawnCardsList[1].name}${getReversedStr(drawnCardsList[1])}.
                 - Giải pháp hành động (2 lá Lenormand): ${drawnCardsList[2].name} và ${drawnCardsList[3].name}.
-                YÊU CẦU: Phân tích tổn thương năng lượng qua lá Chakra, giải mã nguyên nhân sâu xa từ Tarot. Đặc biệt, hãy ghép 2 lá Lenormand lại thành MỘT hành động cụ thể ở đời thực mà họ CẦN LÀM NGAY để khơi thông điểm nghẽn.`;
+                YÊU CẦU: Phân tích tổn thương năng lượng qua lá Chakra, phải nói được đây là luân xa gì, chủ về vấn đề gì, bệnh tật thực tế trên cơ thể có thể biểu hiện ra là gì, giải mã nguyên nhân sâu xa từ Tarot. Đặc biệt, hãy ghép 2 lá Lenormand lại thành MỘT hành động cụ thể ở đời thực mà họ CẦN LÀM NGAY để khơi thông điểm nghẽn.`;
             }
 
             const promptText = `${roleContext} Người dùng đặt câu hỏi: "${question}". Trong quẻ này, ${spreadContext} Hãy viết bài luận giải bằng tiếng việt, phân tách các phần rõ ràng, ngôn từ thực tế (20% nội tâm, 80% lời khuyên hành động thực tế - Không nhắc đến tỷ lệ phần trăm này). Xưng hô là "mình" và "bạn".`;
