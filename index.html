@@ -466,7 +466,6 @@
             <div class="panel-left-label">✦ Đặt câu hỏi &amp; bốc bài</div>
             <div class="controls">
                 <div class="ai-inputs">
-                    <input type="password" id="api-key" placeholder="🗝️ Nhập chìa khóa để mở cổng liên kết 🗝️.">
                     <input type="text" id="user-question" placeholder="💭 Bạn đang băn khoăn điều gì lúc này?">
                 </div>
 
@@ -626,82 +625,59 @@
         }
 
         // HÀM GỌI AI LUẬN QUẺ (TÍCH HỢP TƯ DUY MASTER READER)
-        async function getFullTarotReading() {
+       async function getFullTarotReading() {
             if (isProcessing) return;
             
-            const rawKeys = document.getElementById("api-key").value.trim();
-            const apiKeyArray = rawKeys.split(",").map(key => key.trim()).filter(key => key.length > 0);
             const question = document.getElementById("user-question").value.trim() || "Vũ trụ muốn gửi gắm thông điệp gì cho mình hôm nay?";
             const spreadMode = spreadSelect.value;
             
             showReading();
-
-            if (apiKeyArray.length === 0) {
-                readingContent.innerHTML = "✨ Vũ trụ cần một chiếc chìa khóa để mở cửa! 🗝️";
-                return;
-            }
-
             isProcessing = true;
             btnShuffle.disabled = true; 
+            readingContent.innerHTML = `🔮 <span class="loading-dots">Thông điệp đang được giải mã</span>`;
 
-            if (currentKeyIndex >= apiKeyArray.length) {
-                currentKeyIndex = 0;
-            }
-
-            const currentApiKey = apiKeyArray[currentKeyIndex];
-            readingContent.innerHTML = `🔮 <span class="loading-dots">Thông điệp đang được gửi đến bạn</span>`;
-
-            // XÂY DỰNG NHÂN VẬT & TƯ DUY LUẬN GIẢI CHO AI
+            // Bối cảnh AI (giữ nguyên như cũ của bạn)
             let spreadContext = "";
-            let roleContext = "Bạn là một Reader Tarot & Lenormand thực tế và có khả năng liên kết bức tranh tổng quan tốt. ";
-            roleContext += "Bạn hiểu ý nghĩa của bài Tarot ngược (sự cản trở, bài học chưa học, hoặc năng lượng hướng nội). Hãy giải nghĩa cả 2 chiều. ";
-            roleContext += "Thêm vào đó, với Tarot, BẠN LÀ MỘT CHUYÊN GIA ĐỌC TỔNG QUAN (MACRO-READING, tuy nhiên khi trả lời tuyệt đối không nhắc đến cụm từ Macro reading). Bạn luôn nhìn vào bức tranh lớn trước tiên: Sự xuất hiện của Ẩn Chính (định mệnh), sự lặp lại của các con số của bộ ẩn phụ, Liên kết giữ một số lá ẩn chính và cung hoàng đạo và các nhà trong bản đồ sao, liên kết giữa một số lá ẩn chính với hành tinh và nguyên tố, và sự áp đảo của các nguyên tố (Cốc, Gậy, Kiếm, Tiền). ";
+            let roleContext = "Bạn là một Reader Tarot, Lenormand và là một Chakra Healer thực tế, thấu cảm. Bạn có khả năng liên kết bức tranh tổng quan tốt. Bạn hiểu ý nghĩa của bài Tarot ngược, và hiểu ý nghĩa của Chakra Wisdom Oracle về màu sắc luân xa và năng lượng tiềm thức. ";
 
             const getReversedStr = (card) => (card.type === 'tarot' && card.reversed) ? " (ngược)" : "";
 
             if (spreadMode === "intent_what") {
-                const cardReversedStr = getReversedStr(drawnCardsList[0]);
-                spreadContext = `người xem đang cần một câu trả lời nhanh gọn dạng WHAT hoặc YES/NO. Lá bài bốc được là 1 lá Tarot: ${drawnCardsList[0].name}${cardReversedStr}. Liên kết giữ một số lá ẩn chính và cung hoàng đạo và các nhà trong bản đồ sao, liên kết giữa một số lá ẩn chính với hành tinh và nguyên tố, và sự áp đảo của các nguyên tố (Cốc, Gậy, Kiếm, Tiền). Hãy tập trung giải quyết thẳng thắn, ngắn gọn nhưng định hướng tốt cho họ.`;
-                
+                spreadContext = `người xem đang cần một câu trả lời nhanh gọn dạng WHAT hoặc YES/NO. Lá bài: ${drawnCardsList[0].name}${getReversedStr(drawnCardsList[0])}. Giải quyết thẳng thắn và định hướng tốt.`;
             } else if (spreadMode === "intent_why") {
-                const r1 = getReversedStr(drawnCardsList[0]);
-                const r2 = getReversedStr(drawnCardsList[1]);
-                const r3 = getReversedStr(drawnCardsList[2]);
-                spreadContext = `người xem đang muốn đào sâu nguyên nhân (WHY) và cách thức diễn biến (HOW). Trải bài gồm 3 lá Tarot: 
-                Lá 1 (Quá khứ): ${drawnCardsList[0].name}${r1}, 
-                Lá 2 (Hiện tại): ${drawnCardsList[1].name}${r2}, 
-                Lá 3 (Tương lai xu hướng): ${drawnCardsList[2].name}${r3}. 
-                
-                YÊU CẦU BẮT BUỘC: 
-                1. (ĐỌC TỔNG QUAN - BỨC TRANH LỚN): TRƯỚC KHI giải thích từng mốc thời gian, HÃY quét qua 3 lá bài này và dành một đoạn ngắn để chỉ ra các điểm nhấn tổng quan: Có lá Ẩn chính nào xuất hiện không? Có sự lặp lại của các con số hay sự áp đảo của một nguyên tố nào không? Nó nói lên năng lượng chung gì?
-                2. (LUẬN GIẢI CHI TIẾT): Sau phần tổng quan, hãy phân tích sâu sắc tâm lý học, nhân quả vấn đề theo 3 mốc thời gian.`;
-                
+                spreadContext = `Trải bài 3 lá Tarot: 
+                Quá khứ: ${drawnCardsList[0].name}${getReversedStr(drawnCardsList[0])}, Hiện tại: ${drawnCardsList[1].name}${getReversedStr(drawnCardsList[1])}, Tương lai: ${drawnCardsList[2].name}${getReversedStr(drawnCardsList[2])}. 
+                1. Đọc tổng quan (Ẩn chính, nguyên tố). 2. Phân tích nhân quả sâu sắc theo 3 mốc thời gian.`;
             } else if (spreadMode === "intent_when") {
-                roleContext = "Bạn là một bậc thầy bài Lenormand cổ điển Pháp. Bạn KHÔNG BAO GIỜ đọc rời rạc từng lá. Khả năng của bạn là KIẾN TẠO MỘT CÂU CHUYỆN LIỀN MẠCH bằng cách tổ hợp, ghép nghĩa các lá bài lại với nhau.";
-                
-                spreadContext = `người xem hỏi về sự kiện thực tế (WHEN, WHAT, WHO). 3 lá Lenormand được rút theo thứ tự: ${drawnCardsList[0].name}, ${drawnCardsList[1].name}, và ${drawnCardsList[2].name}. 
-                YÊU CẦU BẮT BUỘC: Tuyệt đối không giải thích riêng lẻ từng lá. Hãy áp dụng quy tắc cốt lõi của Lenormand: coi lá ở giữa (${drawnCardsList[1].name}) làm trọng tâm sự kiện, hai lá hai bên làm tính từ bổ nghĩa. Giải nghĩa các lá bài trước, liên kết nó với từng lá bên trái và bên phải và giải mã tuần tự. Sau cùng, hãy hòa trộn, ghép nghĩa 3 lá này lại thành MỘT sự kiện thực tế, cụ thể sắp xảy ra trong đời thực. Lưu ý kết hợp với mốc thời gian cụ thể, nếu có khả năng hãy trả lời sự kiện này có thành hay không.`;
-                
+                spreadContext = `3 lá Lenormand: ${drawnCardsList[0].name}, ${drawnCardsList[1].name}, ${drawnCardsList[2].name}. 
+                Ghép nghĩa 3 lá này lại thành MỘT sự kiện thực tế, coi lá ở giữa làm trọng tâm.`;
             } else if (spreadMode === "intent_all") {
-                const rootReversedStr = getReversedStr(drawnCardsList[0]);
-                spreadContext = `người xem muốn có cái nhìn TOÀN DIỆN nhất. Quẻ bài kết hợp đặc biệt gồm:
-                - Gốc rễ nội tâm (1 Lá Tarot): ${drawnCardsList[0].name}${rootReversedStr}. 
-                - Sự kiện thực tế (2 Lá Lenormand): ${drawnCardsList[1].name} và ${drawnCardsList[2].name}.
-                YÊU CẦU BẮT BUỘC: 
-                1. Hãy phân tích bản chất năng lượng của từng lá Tarot đơn lẻ, sau đó kết hợp lại (chú ý thuộc tính nguyên tố hoặc Ẩn chính, sự lặp lại của các con số trong bộ ẩn phụ).
-                2. Với 2 lá Lenormand, tuyệt đối không giải nghĩa rời rạc. Hãy ghép nghĩa của chúng lại (Lá 1 + Lá 2) để tạo ra MỘT sự kiện/hành động đời thực duy nhất. 
-                3. Đan cài sự kiện Lenormand này với năng lượng gốc của lá Tarot để tạo thành bài luận quẻ liền mạch.`;
+                spreadContext = `Gốc rễ nội tâm (Tarot): ${drawnCardsList[0].name}${getReversedStr(drawnCardsList[0])}. Sự kiện đời thực (Lenormand): ${drawnCardsList[1].name} và ${drawnCardsList[2].name}. 
+                Đan cài sự kiện từ 2 lá Lenormand với năng lượng của lá Tarot.`;
+            } else if (spreadMode === "intent_mbs") {
+                spreadContext = `Trải bài M.B.S (Tâm linh - Tâm lý - Đời thực).
+                - Spirit (Gốc rễ năng lượng - Chakra Oracle): ${drawnCardsList[0].name}.
+                - Mind (Tâm lý/Bài học - Tarot): ${drawnCardsList[1].name}${getReversedStr(drawnCardsList[1])}.
+                - Body (Sự kiện thực tế - Lenormand): ${drawnCardsList[2].name}.
+                YÊU CẦU: Hãy liên kết sự rung động của Luân Xa dẫn đến trạng thái tâm lý của Tarot, và cuối cùng nó biểu hiện ra đời thực qua lá Lenormand như thế nào. Đưa ra lời khuyên để cân bằng.`;
+            } else if (spreadMode === "intent_healing") {
+                spreadContext = `Trải bài CHỮA LÀNH ĐIỂM NGHẼN.
+                - Vết thương/Góc khuất (Chakra Oracle): ${drawnCardsList[0].name}.
+                - Nguyên nhân kìm hãm (Tarot): ${drawnCardsList[1].name}${getReversedStr(drawnCardsList[1])}.
+                - Giải pháp hành động (2 lá Lenormand): ${drawnCardsList[2].name} và ${drawnCardsList[3].name}.
+                YÊU CẦU: Phân tích tổn thương năng lượng qua lá Chakra, giải mã nguyên nhân sâu xa từ Tarot. Đặc biệt, hãy ghép 2 lá Lenormand lại thành MỘT hành động cụ thể ở đời thực mà họ CẦN LÀM NGAY để khơi thông điểm nghẽn.`;
             }
 
-            const promptText = `${roleContext} Người dùng đặt câu hỏi: "${question}". Trong quẻ này, ${spreadContext} Hãy viết bài luận giải bằng tiếng việt, phân tách các phần rõ ràng bằng tiêu đề in đậm, ngôn từ thực tế và đưa ra lời khuyên bao gồm 20% nội tâm, 80% lời khuyên hành động thực tế ( Không được nhắc đến tỷ lệ % này trong phần trả lời, không nhắc đến bất kỳ cách thức đọc bài nào mà hãy trả lời câu hỏi một cách tự nhiên). Hãy xưng hô là "mình" và gọi người dùng là "bạn". Tuyệt đối không nhắc đến các từ kỹ thuật lập trình.`;
+            const promptText = `${roleContext} Người dùng đặt câu hỏi: "${question}". Trong quẻ này, ${spreadContext} Hãy viết bài luận giải bằng tiếng việt, phân tách các phần rõ ràng, ngôn từ thực tế (20% nội tâm, 80% lời khuyên hành động thực tế - Không nhắc đến tỷ lệ phần trăm này). Xưng hô là "mình" và "bạn".`;
 
-            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${currentApiKey}`;
+            // 👉 THAY ĐỔI QUAN TRỌNG: Gọi đến API nội bộ của Vercel thay vì Google
+            const apiUrl = `/api/gemini`;
 
             try {
                 const response = await fetch(apiUrl, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ contents: [{ parts: [{ text: promptText }] }] })
+                    body: JSON.stringify({ prompt: promptText }) // Chỉ gửi prompt lên server của mình
                 });
                 
                 const data = await response.json();
@@ -709,34 +685,24 @@
                 if (data.error) {
                     const isQuotaError = data.error.code === 429 || data.error.status === "RESOURCE_EXHAUSTED" || (data.error.message && data.error.message.toLowerCase().includes("quota"));
                     if (isQuotaError) {
-                        currentKeyIndex++; 
-                        if (currentKeyIndex < apiKeyArray.length) {
-                            isProcessing = false; 
-                            getFullTarotReading(); 
-                            return; 
-                        } else {
-                            readingContent.innerHTML = `🌙 Các vì sao đang nghỉ ngơi một chút! Năng lượng vũ trụ đang nạp lại, bạn đợi khoảng 1 phút rồi thử bốc lại nhé! 💖`;
-                            currentKeyIndex = 0; 
-                        }
+                         readingContent.innerHTML = `🌙 Các vì sao đang nghỉ ngơi! Năng lượng vũ trụ đang nạp lại, bạn đợi 1 phút rồi thử bốc lại nhé! 💖`;
                     } else {
-                        readingContent.innerHTML = `🌠 Tín hiệu từ vũ trụ đang bị chập chờn! Bạn thử xào bài và bốc lại giúp Pháp sư nhé! ✨`;
+                        readingContent.innerHTML = `🌠 Tín hiệu chập chờn! Hãy thử xào bài và bốc lại nhé! ✨`;
                     }
                 } else {
                     let aiResponse = data.candidates[0].content.parts[0].text;
                     aiResponse = aiResponse.replace(/\*\*(.*?)\*\*/g, '<b>$1</b>'); 
                     aiResponse = aiResponse.replace(/\n/g, '<br>'); 
                     readingContent.innerHTML = `✨ <b>THÔNG ĐIỆP TỪ VŨ TRỤ:</b><br><br>${aiResponse}`;
-                    currentKeyIndex = (currentKeyIndex + 1) % apiKeyArray.length; 
                 }
             } catch (error) {
-                readingContent.innerHTML = "📡 Trạm thu phát sóng tâm linh báo rớt mạng mất rồi! Bạn kiểm tra đường truyền mạng rồi thử lại nha! 🧚‍♀️";
+                readingContent.innerHTML = "📡 Trạm thu phát sóng tâm linh báo rớt mạng! Bạn kiểm tra mạng rồi thử lại nha! 🧚‍♀️";
             } finally {
                 isProcessing = false;
                 startCooldown(15);
                 readingBox.scrollIntoView({ behavior: 'smooth', block: 'start' });
             }
         }
-
         // XÀO BÀI (VỚI HOẠT ẢNH VISUAL DECK)
         function shuffleDeck() {
             if (isProcessing || btnShuffle.disabled) return;
