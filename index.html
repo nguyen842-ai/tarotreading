@@ -1,4 +1,3 @@
-Nguyen842 © 2026 All Rights Reserved
 <!DOCTYPE html>
 <html lang="vi">
 <head>
@@ -8,12 +7,12 @@ Nguyen842 © 2026 All Rights Reserved
     <style>
         /* ================= CSS VARIABLES ================= */
         :root {
-            --bg-main: #1a0b2e;         /* Tím đen huyền bí */
-            --bg-panel: #2a164d;        /* Tím panel nhạt hơn */
-            --text-main: #e5d3b3;       /* Vàng be sáng */
-            --accent-gold: #c29d59;     /* Vàng kim điểm nhấn */
+            --bg-main: #1a0b2e;
+            --bg-panel: #2a164d;
+            --text-main: #e5d3b3;
+            --accent-gold: #c29d59;
             --accent-gold-hover: #e5d3b3; 
-            --text-muted: #c4b5fd;      /* Tím nhạt cho text phụ */
+            --text-muted: #c4b5fd;
             --border-color: rgba(74, 43, 125, 0.5);
         }
 
@@ -57,22 +56,22 @@ Nguyen842 © 2026 All Rights Reserved
             margin: 0 auto;
         }
 
-        /* Cột phải: đặt câu hỏi + bốc bài */
-        .panel-right {
+        /* Cột trái (Mới): Đặt câu hỏi + bốc bài */
+        .panel-left {
             flex: 0 0 42%;
             max-width: 42%;
             display: flex;
             flex-direction: column;
-            padding: 0 0 24px 16px;
-            border-left: 1px solid var(--border-color);
+            padding: 0 16px 24px 0;
+            border-right: 1px solid var(--border-color); /* Kẻ viền bên phải để ngăn cách */
         }
 
-        /* Cột trái: kết quả luận quẻ */
-        .panel-left {
+        /* Cột phải (Mới): Kết quả luận quẻ */
+        .panel-right {
             flex: 1 1 58%;
             display: flex;
             flex-direction: column;
-            padding: 0 16px 24px 0;
+            padding: 0 0 24px 16px;
             position: relative;
         }
 
@@ -82,21 +81,21 @@ Nguyen842 © 2026 All Rights Reserved
                 flex-direction: column;
                 min-height: unset;
             }
-            .panel-right {
+            .panel-left {
                 flex: unset;
                 max-width: 100%;
                 padding: 0 0 24px 0;
-                border-left: none;
-                border-bottom: 1px solid var(--border-color);
+                border-right: none;
+                border-bottom: 1px solid var(--border-color); /* Kẻ viền phía dưới cho Mobile */
                 margin-bottom: 24px;
             }
-            .panel-left {
+            .panel-right {
                 flex: unset;
                 padding: 0;
             }
         }
 
-        /* ── CONTROLS (panel phải) ── */
+        /* ── CONTROLS (panel trái) ── */
         .controls {
             margin-bottom: 16px;
             background: rgba(0, 0, 0, 0.4);
@@ -116,7 +115,7 @@ Nguyen842 © 2026 All Rights Reserved
 
         input[type="text"], input[type="password"] {
             padding: 14px 12px;
-            font-size: 16px; /* Tránh zoom trên iOS */
+            font-size: 16px;
             border-radius: 8px;
             background: var(--bg-panel);
             color: white;
@@ -182,7 +181,7 @@ Nguyen842 © 2026 All Rights Reserved
             transition: background-color 0.2s, box-shadow 0.2s, transform 0.1s;
             flex: 1 1 120px;
             min-width: 0;
-            min-height: 44px; /* Apple HIG standard */
+            min-height: 44px;
             touch-action: manipulation;
         }
 
@@ -440,6 +439,7 @@ Nguyen842 © 2026 All Rights Reserved
             text-align: left;
         }
         
+        /* Chỉnh lại padding do đã đổi cột */
         .panel-left-label { padding-left: 2px; }
         .panel-right-label { padding-left: 18px; }
 
@@ -464,7 +464,34 @@ Nguyen842 © 2026 All Rights Reserved
     <div class="app-layout">
 
         <div class="panel-left">
-            <div class="panel-left-label">✦ Thông điệp vũ trụ</div>
+            <div class="panel-left-label">✦ Đặt câu hỏi &amp; bốc bài</div>
+            <div class="controls">
+                <div class="ai-inputs">
+                    <input type="password" id="api-key" placeholder="🗝️ Nhập chìa khóa để mở cổng liên kết 🗝️.">
+                    <input type="text" id="user-question" placeholder="💭 Bạn đang băn khoăn điều gì lúc này?">
+                </div>
+
+                <div class="spread-row">
+                    <label for="spread-type">Bạn muốn vũ trụ làm rõ điều gì?</label>
+                    <select id="spread-type">
+                        <option value="intent_all">TOÀN DIỆN (Năng lượng cốt lõi & Sự kiện đời thực)</option>
+                        <option value="intent_what">WHAT / YES-NO (Lời khuyên hành động nhanh & Định hướng)</option>
+                        <option value="intent_why">WHY / HOW (Gốc rễ tâm lý, Nhân quả & Xu hướng sắp tới)</option>
+                        <option value="intent_when">WHEN / WHO (Sự kiện cụ thể, Thời gian & Con người thực tế)</option>
+                    </select>
+                </div>
+                <div class="btn-row">
+                    <button id="btn-shuffle" class="mystic-btn">🔀 Xào Bài</button>
+                    <button id="btn-draw" class="mystic-btn" disabled>✨ Bốc Bài</button>
+                </div>
+            </div>
+
+            <div id="status-message">✨ Đặt câu hỏi và ấn "Xào Bài"... ✨</div>
+            <div id="tarot-board" class="tarot-board"></div>
+        </div>
+
+        <div class="panel-right">
+            <div class="panel-right-label">✦ Thông điệp vũ trụ</div>
             <div class="reading-placeholder" id="reading-placeholder">
                 <div class="placeholder-icon">🔮</div>
                 <div>Thông điệp từ vũ trụ sẽ hiện ra ở đây<br>sau khi bạn lật đủ các lá bài...</div>
@@ -480,6 +507,8 @@ Nguyen842 © 2026 All Rights Reserved
                 </div>
             </div>
         </div>
+
+    </div>
 
         <div class="panel-right">
             <div class="panel-right-label">✦ Đặt câu hỏi &amp; bốc bài</div>
