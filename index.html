@@ -28,295 +28,315 @@
             background-color: var(--bg-main);
             color: var(--text-main);
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            text-align: center;
-            padding: 16px;
+            padding: 10px 16px; /* Giảm padding tổng để tối ưu không gian */
             min-height: 100vh;
-            overflow-x: hidden; /* Ngăn cuộn ngang khi trang trượt */
+            overflow-x: hidden; 
             -webkit-text-size-adjust: 100%;
         }
 
-        /* ── HEADER ── */
-        .app-header { margin-bottom: 20px; }
-
-        h1 {
-            margin-bottom: 0;
-            font-size: clamp(1.5rem, 3.5vw, 2.2rem);
-            text-shadow: 0 0 15px var(--accent-gold);
-            line-height: 1.3;
+        /* ================= HEADER ĐỘNG (ANIMATED HEADER) ================= */
+        #app-header {
+            display: flex;
+            flex-wrap: wrap;
+            width: 100%;
+            transition: all 0.6s cubic-bezier(0.25, 1, 0.5, 1);
+            margin-bottom: 15px;
         }
 
-        /* ================= HỆ THỐNG GIAO DIỆN TABS ================= */
+        .title-tab-group {
+            display: flex;
+            flex-direction: column;
+            transition: all 0.6s cubic-bezier(0.25, 1, 0.5, 1);
+        }
+
+        h1 {
+            margin-bottom: 5px;
+            font-size: clamp(1.3rem, 2.5vw, 1.8rem); /* Thu nhỏ tiêu đề một chút */
+            text-shadow: 0 0 15px var(--accent-gold);
+            line-height: 1.2;
+            transition: all 0.4s ease;
+        }
+
         .tabs-container {
             display: flex;
-            justify-content: center;
-            gap: 12px;
-            margin: 20px auto 30px auto;
-            max-width: 600px;
-            position: relative;
-            z-index: 10;
+            gap: 8px;
+            transition: all 0.4s ease;
         }
 
         .tab-btn {
             background: var(--bg-panel);
             color: var(--text-muted);
             border: 1px solid var(--border-color);
-            padding: 12px 24px;
-            border-radius: 30px;
+            padding: 8px 16px; /* Nút nhỏ gọn hơn */
+            border-radius: 20px;
             cursor: pointer;
-            font-size: clamp(0.9rem, 2.5vw, 1rem);
+            font-size: 0.85rem;
             font-weight: bold;
             transition: all 0.3s ease;
             box-shadow: 0 4px 10px rgba(0,0,0,0.2);
         }
 
-        .tab-btn:hover {
-            color: var(--accent-gold-hover);
-            border-color: var(--accent-gold);
-            background: rgba(74, 43, 125, 0.3);
+        .tab-btn:hover { color: var(--accent-gold-hover); border-color: var(--accent-gold); background: rgba(74, 43, 125, 0.3); }
+        .tab-btn.active { background: var(--accent-gold); color: var(--bg-main); border-color: var(--accent-gold); box-shadow: 0 0 10px var(--accent-gold); }
+
+        /* --- TRẠNG THÁI HEADER KHI Ở TAB GIỚI THIỆU --- */
+        #app-header.intro-mode .title-tab-group {
+            width: 100%;
+            align-items: center;
+            justify-content: center;
+            margin-top: 1vh;
+        }
+        #app-header.intro-mode .controls-group {
+            width: 0%;
+            opacity: 0;
+            transform: translateX(30px);
+            pointer-events: none;
+            height: 0;
+            overflow: hidden;
         }
 
-        .tab-btn.active {
-            background: var(--accent-gold);
-            color: var(--bg-main);
-            border-color: var(--accent-gold);
-            box-shadow: 0 0 15px var(--accent-gold);
+        /* --- TRẠNG THÁI HEADER KHI Ở TAB BỐC BÀI (TRƯỢT LÊN GÓC) --- */
+        #app-header.reading-mode {
+            flex-direction: row;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid rgba(194, 157, 89, 0.2);
+            padding-bottom: 12px;
+        }
+        #app-header.reading-mode .title-tab-group {
+            width: 32%; /* Đẩy sang trái 1/3 màn hình */
+            align-items: flex-start;
+        }
+        #app-header.reading-mode h1 { text-align: left; }
+        
+        #app-header.reading-mode .controls-group {
+            width: 66%; /* Bảng điều khiển chiếm 2/3 màn hình bên phải */
+            opacity: 1;
+            transform: translateX(0);
+            pointer-events: auto;
+            height: auto;
         }
 
-        /* --- HIỆU ỨNG TRƯỢT TRANG (Thay cho fadeIn cũ) --- */
+        /* ── BẢNG ĐIỀU KHIỂN (THU GỌN LÊN TOP NAV) ── */
+        .controls-inner {
+            display: grid;
+            grid-template-columns: 1.5fr 1fr 1fr;
+            grid-template-areas: 
+                "q q q"
+                "sys spread btns"
+                "status status status";
+            gap: 8px;
+            background: rgba(0, 0, 0, 0.4);
+            padding: 10px 14px;
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+            width: 100%;
+        }
+
+        #user-question { grid-area: q; }
+        #reading-style { grid-area: sys; }
+        #spread-type { grid-area: spread; }
+        .btn-group { grid-area: btns; display: flex; gap: 6px; }
+        
+        #status-message { 
+            grid-area: status; 
+            margin: 0; 
+            font-size: 0.85rem; 
+            font-style: italic; 
+            color: var(--text-muted); 
+            text-align: left;
+            padding-left: 4px;
+        }
+
+        input[type="text"], select {
+            padding: 8px 12px; 
+            font-size: 0.9rem; /* Giảm size chữ input */
+            border-radius: 6px;
+            background: var(--bg-panel); color: white; border: 1px solid var(--accent-gold);
+            width: 100%; outline: none; -webkit-appearance: none; appearance: none;
+        }
+        input::placeholder { color: #a78bfa; opacity: 0.7; }
+        select { cursor: pointer; }
+
+        .mystic-btn {
+            padding: 8px 12px; font-size: 0.85rem; font-weight: bold; color: var(--bg-main);
+            background-color: var(--accent-gold); border: none; border-radius: 6px;
+            cursor: pointer; transition: all 0.2s;
+            flex: 1; min-height: 34px; white-space: nowrap;
+        }
+        .mystic-btn:active:not(:disabled) { transform: scale(0.95); background-color: var(--accent-gold-hover); }
+        @media (hover: hover) {
+            .mystic-btn:hover:not(:disabled) { background-color: var(--accent-gold-hover); box-shadow: 0 0 10px var(--accent-gold); }
+        }
+        .mystic-btn:disabled { background-color: #555; color: #888; cursor: not-allowed; }
+
+        /* ================= NỘI DUNG TABS (TỐI ƯU HIỂN THỊ) ================= */
         .tab-content {
             display: none;
             width: 100%;
             margin: 0 auto;
         }
+        .tab-content.active { display: block; }
 
-        .tab-content.active {
-            display: block;
+        @keyframes slideInRight { from { opacity: 0; transform: translateX(60px); } to { opacity: 1; transform: translateX(0); } }
+        @keyframes slideOutLeft { from { opacity: 1; transform: translateX(0) scale(1); } to { opacity: 0; transform: translateX(-30px) scale(0.98); } }
+
+        /* ── BỐ CỤC 4 Ô GIỚI THIỆU ── */
+        #intro-container {
+            width: 100%; max-width: 100%; 
+            min-height: calc(100vh - 120px); 
+            display: flex; flex-direction: column;
+            margin: 0 auto;
         }
 
-        @keyframes slideInRight {
-            from { opacity: 0; transform: translateX(80px); }
-            to { opacity: 1; transform: translateX(0); }
+        #sheets-content {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr); 
+            gap: 16px; /* Giảm gap */
+            width: 100%;
+            flex-grow: 1; 
         }
-
-        @keyframes slideOutLeft {
-            from { opacity: 1; transform: translateX(0) scale(1); }
-            to { opacity: 0; transform: translateX(-40px) scale(0.98); }
-        }
-
-        /* ── BỐ CỤC 4 Ô GIỚI THIỆU MỚI (GRID LẤP ĐẦY) ── */
-       #intro-container {
-    width: 100%;
-    max-width: 100%; 
-    min-height: calc(100vh - 160px); /* Lấy tổng chiều cao màn hình trừ đi phần Header */
-    display: flex;
-    padding: 0 20px; /* Cách mép màn hình một chút cho đẹp */
-    margin: 0 auto 30px auto;
-}
-
-#sheets-content {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr); 
-    gap: 20px;
-    width: 100%;
-    flex-grow: 1; /* Ép 4 ô tự động giãn dài lấp đầy khoảng trống chiều dọc */
-}
 
         .intro-card {
-            background: rgba(42, 22, 77, 0.7);
-            border: 1px solid var(--border-color);
-            border-radius: 16px;
-            padding: 24px;
-            text-align: left;
-            display: flex;
-            flex-direction: column;
-            box-shadow: 0 8px 25px rgba(0,0,0,0.3);
-            
-            /* Hiệu ứng trượt lên khi load */
-            opacity: 0;
-            transform: translateY(40px);
-            animation: slideUpCard 0.8s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+            background: rgba(42, 22, 77, 0.7); border: 1px solid var(--border-color);
+            border-radius: 12px; padding: 18px; text-align: left;
+            display: flex; flex-direction: column; box-shadow: 0 6px 15px rgba(0,0,0,0.3);
+            opacity: 0; transform: translateY(30px);
+            animation: slideUpCard 0.6s cubic-bezier(0.25, 1, 0.5, 1) forwards;
         }
+        .intro-card:nth-child(1) { animation-delay: 0.1s; } .intro-card:nth-child(2) { animation-delay: 0.2s; }
+        .intro-card:nth-child(3) { animation-delay: 0.3s; } .intro-card:nth-child(4) { animation-delay: 0.4s; }
 
-        /* Tạo độ trễ nghệ thuật cho 4 ô */
-        .intro-card:nth-child(1) { animation-delay: 0.1s; }
-        .intro-card:nth-child(2) { animation-delay: 0.25s; }
-        .intro-card:nth-child(3) { animation-delay: 0.4s; }
-        .intro-card:nth-child(4) { animation-delay: 0.55s; }
+        @keyframes slideUpCard { to { opacity: 1; transform: translateY(0); } }
 
-        @keyframes slideUpCard {
-            to { opacity: 1; transform: translateY(0); }
-        }
+        .intro-card h2 { color: var(--accent-gold); margin-bottom: 10px; font-size: 1.1rem; border-bottom: 1px solid rgba(194, 157, 89, 0.2); padding-bottom: 8px; }
+        .intro-card p { color: var(--text-main); line-height: 1.6; font-size: 0.9rem; flex-grow: 1; }
+        .btn-jump { margin-top: 15px; width: 100%; font-size: 0.9rem; padding: 10px; }
 
-        .intro-card h2 { 
-            color: var(--accent-gold); 
-            margin-bottom: 14px; 
-            font-size: 1.3rem; 
-            border-bottom: 1px solid rgba(194, 157, 89, 0.2);
-            padding-bottom: 12px;
-            text-shadow: 0 0 10px rgba(194, 157, 89, 0.2);
-        }
-        
-        .intro-card p { 
-            color: var(--text-main); 
-            line-height: 1.8; 
-            font-size: 1rem; 
-            flex-grow: 1; /* Đẩy nội dung lấp đầy để nút (nếu có) luôn ở đáy */
-        }
-
-        /* ── LAYOUT DESKTOP 2 CỘT (TAB BỐC BÀI) ── */
+        /* ── LAYOUT DESKTOP 2 CỘT CHO TAB BỐC BÀI ── */
         .app-layout {
-    display: flex;
-    gap: 0;
-    align-items: stretch;
-    min-height: calc(100vh - 180px);
-    max-width: 1600px; /* Trả lại giới hạn 1600px cho riêng phần bốc bài */
-    margin: 0 auto;
-}
+            display: flex;
+            gap: 15px; /* Khoảng cách giữa bàn bài và bảng kết quả */
+            align-items: stretch;
+            min-height: calc(100vh - 150px);
+        }
 
         .panel-left {
-            flex: 0 0 42%;
-            max-width: 42%;
-            display: flex;
-            flex-direction: column;
-            padding: 0 16px 24px 0;
-            border-right: 1px solid var(--border-color);
+            flex: 0 0 50%; /* Trải bài chiếm 50% */
+            max-width: 50%;
+            display: flex; flex-direction: column;
+            border-right: 1px solid rgba(194, 157, 89, 0.15);
+            padding-right: 15px;
         }
 
         .panel-right {
-            flex: 1 1 58%;
-            display: flex;
-            flex-direction: column;
-            padding: 0 0 24px 16px;
+            flex: 1 1 50%; /* Giải bài chiếm 50% */
+            display: flex; flex-direction: column;
             position: relative;
         }
 
-        /* ── MOBILE RESPONSIVE TỔNG HỢP ── */
+        /* ── MOBILE RESPONSIVE ── */
         @media (max-width: 992px) {
-            #sheets-content {
-                grid-template-columns: repeat(2, 1fr); /* 2 cột trên iPad */
-            }
+            #sheets-content { grid-template-columns: repeat(2, 1fr); }
+            #app-header.reading-mode { flex-direction: column; align-items: flex-start; }
+            #app-header.reading-mode .title-tab-group, #app-header.reading-mode .controls-group { width: 100%; }
+            #app-header.reading-mode .controls-group { margin-top: 12px; }
         }
 
         @media (max-width: 768px) {
-            #sheets-content {
-                grid-template-columns: 1fr; /* 1 cột trên điện thoại để không mất chữ */
-            }
+            #sheets-content { grid-template-columns: 1fr; }
             .app-layout { flex-direction: column; min-height: unset; }
-            .panel-left {
-                flex: unset; max-width: 100%; padding: 0 0 24px 0;
-                border-right: none; border-bottom: 1px solid var(--border-color); margin-bottom: 24px;
-            }
-            .panel-right { flex: unset; padding: 0; }
+            .panel-left { flex: unset; max-width: 100%; border-right: none; border-bottom: 1px solid var(--border-color); padding-right: 0; padding-bottom: 20px; margin-bottom: 20px; }
+            .panel-right { flex: unset; }
+            .controls-inner { grid-template-areas: "q" "sys" "spread" "btns" "status"; grid-template-columns: 1fr; }
         }
 
-        /* ── CONTROLS & NÚT BẤM ── */
-        .controls {
-            margin-bottom: 16px; background: rgba(0, 0, 0, 0.4);
-            padding: 16px; border-radius: 12px; display: block; width: 100%; border: 1px solid #4a2b7d;
-        }
-
-        .ai-inputs { display: flex; flex-direction: column; gap: 12px; margin-bottom: 15px; }
-
-        input[type="text"], select {
-            padding: 14px 12px; font-size: 16px; border-radius: 8px;
-            background: var(--bg-panel); color: white; border: 1px solid var(--accent-gold);
-            width: 100%; outline: none; -webkit-appearance: none; appearance: none;
-        }
-        input::placeholder { color: #a78bfa; opacity: 0.7; }
-        select { margin-bottom: 12px; cursor: pointer; }
-
-        .spread-row { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; justify-content: center; }
-        .spread-row label { width: 100%; margin-bottom: 2px; font-size: 0.9rem; color: var(--text-muted); text-align: left; }
+        /* --- BÀN BỐC BÀI & KÍCH THƯỚC LÁ BÀI (THU NHỎ LẠI) --- */
+        .tarot-board { display: flex; flex-wrap: wrap; justify-content: center; gap: 30px 12px; margin: 15px 0; }
         
-        .btn-row { display: flex; gap: 8px; justify-content: center; margin-top: 10px; flex-wrap: wrap; }
-        
-        .mystic-btn {
-            padding: 13px 22px; font-size: 1rem; font-weight: bold; color: var(--bg-main);
-            background-color: var(--accent-gold); border: none; border-radius: 8px;
-            cursor: pointer; transition: background-color 0.2s, box-shadow 0.2s, transform 0.1s;
-            flex: 1 1 120px; min-width: 0; min-height: 44px; touch-action: manipulation;
+        .card-slot { 
+            perspective: 1000px; 
+            width: clamp(65px, 9vw, 95px); /* Thu nhỏ width (trước là 90-140) */
+            height: clamp(113px, 15vw, 166px); /* Thu nhỏ height */
+            cursor: pointer; position: relative; touch-action: manipulation; 
         }
-        .mystic-btn:active:not(:disabled) { transform: scale(0.97); background-color: var(--accent-gold-hover); }
-        @media (hover: hover) {
-            .mystic-btn:hover:not(:disabled) { background-color: var(--accent-gold-hover); box-shadow: 0 0 15px var(--accent-gold); }
-        }
-        .mystic-btn:disabled { background-color: #555; color: #888; cursor: not-allowed; box-shadow: none; }
-
-        /* Nút phụ cho phần giới thiệu */
-        .btn-jump { margin-top: 20px; width: 100%; }
-
-        #status-message { font-size: clamp(0.9rem, 1.2vw, 1.05rem); margin-bottom: 16px; font-style: italic; color: var(--text-muted); line-height: 1.5; }
-
-        /* --- BÀN BỐC BÀI & LÁ BÀI --- */
-        .tarot-board { display: flex; flex-wrap: wrap; justify-content: center; gap: 45px 20px; margin: 36px 0 24px 0; padding: 0 4px; }
         
-        .card-slot { perspective: 1000px; width: clamp(90px, 12vw, 140px); height: clamp(158px, 21vw, 245px); cursor: pointer; position: relative; touch-action: manipulation; }
-        @media (max-width: 860px) { .card-slot { width: clamp(100px, 28vw, 150px); height: clamp(175px, 49vw, 260px); } }
-
         .card-label {
-            position: absolute; top: -24px; left: 0; width: 100%;
-            font-size: clamp(0.65rem, 2.2vw, 0.85rem); color: var(--accent-gold); font-weight: bold;
-            text-transform: uppercase; letter-spacing: 1px; text-shadow: 0 0 5px rgba(0,0,0,0.8);
-            white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+            position: absolute; top: -20px; left: 0; width: 100%;
+            font-size: 0.65rem; color: var(--accent-gold); font-weight: bold;
+            text-transform: uppercase; letter-spacing: 0.5px; text-shadow: 0 0 3px rgba(0,0,0,0.8);
+            white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-align: center;
         }
 
-        .card-inner { width: 100%; height: 100%; position: relative; transition: transform 0.7s cubic-bezier(0.4, 0.2, 0.2, 1); transform-style: preserve-3d; }
+        .card-inner { width: 100%; height: 100%; position: relative; transition: transform 0.6s cubic-bezier(0.4, 0.2, 0.2, 1); transform-style: preserve-3d; }
         .card-slot.flipped .card-inner { transform: rotateY(180deg); }
         .card-front, .card-back {
             width: 100%; height: 100%; position: absolute; backface-visibility: hidden; -webkit-backface-visibility: hidden;
-            border-radius: 10px; box-shadow: 0 6px 12px rgba(0,0,0,0.5); border: 2px solid var(--accent-gold);
+            border-radius: 6px; box-shadow: 0 4px 8px rgba(0,0,0,0.5); border: 1.5px solid var(--accent-gold);
         }
         .card-front { background-color: var(--bg-panel); }
-        .card-front img, .card-back img { width: 100%; height: 100%; object-fit: cover; border-radius: 8px; -webkit-touch-callout: none; pointer-events: none; }
+        .card-front img, .card-back img { width: 100%; height: 100%; object-fit: cover; border-radius: 4px; pointer-events: none; }
         .card-back { transform: rotateY(180deg); background-color: #fff; }
         .card-slot .card-inner .card-back img.card-reversed { transform: rotate(180deg); }
 
-        /* --- LOADING & KẾT QUẢ --- */
+        /* --- KẾT QUẢ GIẢI BÀI (THU GỌN FONT & PADDING) --- */
         .loading-dots::after { content: ''; animation: dots 1.4s infinite; }
         @keyframes dots { 0% {content:'';} 25% {content:'.';} 50% {content:'..';} 75% {content:'...';} }
 
         .reading-placeholder {
             display: flex; flex-direction: column; align-items: center; justify-content: center;
-            flex: 1; color: rgba(196, 181, 253, 0.3); font-size: 1rem; font-style: italic; gap: 16px; padding: 40px 20px; min-height: 300px; line-height: 1.7;
+            flex: 1; color: rgba(196, 181, 253, 0.3); font-size: 0.9rem; font-style: italic; gap: 10px; padding: 20px; min-height: 200px;
         }
-        .placeholder-icon { font-size: 3.5rem; opacity: 0.25; }
-        @media (max-width: 860px) { .reading-placeholder { display: none; } }
+        .placeholder-icon { font-size: 2.5rem; opacity: 0.25; }
 
         #reading-result {
-            background: rgba(42, 22, 77, 0.95); border: 1px solid var(--accent-gold); padding: 24px 20px; border-radius: 12px;
-            text-align: left; line-height: 1.85; font-size: clamp(0.95rem, 1.1vw, 1.05rem); display: none;
-            box-shadow: 0 0 30px rgba(194, 157, 89, 0.2); -webkit-overflow-scrolling: touch; flex: 1; overflow-y: auto; max-height: calc(100vh - 120px);
+            background: rgba(42, 22, 77, 0.7); border: 1px solid var(--accent-gold); padding: 16px; border-radius: 10px;
+            text-align: left; line-height: 1.7; font-size: 0.9rem; /* Giảm font size của reading */
+            display: none; box-shadow: 0 0 20px rgba(194, 157, 89, 0.1); flex: 1; overflow-y: auto; max-height: calc(100vh - 160px);
         }
-        @media (max-width: 860px) { #reading-result { max-height: unset; overflow-y: visible; margin-bottom: 32px; } }
 
-        .copy-btn-wrap { display: flex; justify-content: flex-end; margin-top: 18px; padding-top: 14px; border-top: 1px solid rgba(194, 157, 89, 0.3); }
-        #btn-copy { display: flex; align-items: center; gap: 6px; padding: 10px 18px; font-size: 0.9rem; font-weight: bold; color: var(--bg-main); background-color: var(--accent-gold); border: none; border-radius: 8px; cursor: pointer; transition: background-color 0.2s, transform 0.1s; }
+        .copy-btn-wrap { display: flex; justify-content: flex-end; margin-top: 15px; padding-top: 10px; border-top: 1px solid rgba(194, 157, 89, 0.3); }
+        #btn-copy { display: flex; align-items: center; gap: 4px; padding: 6px 12px; font-size: 0.8rem; font-weight: bold; color: var(--bg-main); background-color: var(--accent-gold); border: none; border-radius: 6px; cursor: pointer; transition: 0.2s; }
         #btn-copy:active { transform: scale(0.96); background-color: var(--accent-gold-hover); }
         #btn-copy.copied { background-color: #4ade80; color: var(--bg-main); }
 
-        #reading-result::-webkit-scrollbar { width: 5px; }
-        #reading-result::-webkit-scrollbar-track { background: rgba(255,255,255,0.04); border-radius: 4px; }
+        #reading-result::-webkit-scrollbar { width: 4px; }
+        #reading-result::-webkit-scrollbar-track { background: rgba(255,255,255,0.02); }
         #reading-result::-webkit-scrollbar-thumb { background: rgba(194, 157, 89, 0.4); border-radius: 4px; }
-
-        .panel-left-label, .panel-right-label { font-size: 0.75rem; letter-spacing: 2px; text-transform: uppercase; color: rgba(194, 157, 89, 0.45); margin-bottom: 14px; text-align: left; }
-        .panel-left-label { padding-left: 2px; } .panel-right-label { padding-left: 18px; }
-        @media (max-width: 860px) { .panel-left-label, .panel-right-label { display: none; } }
     </style>
 </head>
 <body>
-    <div class="app-header">
-        <h1>🔮 Trạm Lắng Nghe Vũ Trụ 🔮</h1>
-    </div>
-
-    <div class="tabs-container">
-        <button class="tab-btn active" onclick="switchTab('tab-intro')">💌 Giới Thiệu Chung</button>
-        <button class="tab-btn" onclick="switchTab('tab-reading')">✨ Bốc Bài & Giải Mã</button>
-    </div>
+    
+    <header id="app-header" class="intro-mode">
+        <div class="title-tab-group">
+            <h1>🔮 Trạm Lắng Nghe Vũ Trụ</h1>
+            <div class="tabs-container">
+                <button class="tab-btn active" onclick="switchTab('tab-intro')">💌 Giới Thiệu</button>
+                <button class="tab-btn" onclick="switchTab('tab-reading')">✨ Bốc Bài</button>
+            </div>
+        </div>
+        
+        <div class="controls-group" id="controls-group">
+            <div class="controls-inner">
+                <input type="text" id="user-question" placeholder="💭 Bạn băn khoăn điều gì lúc này?">
+                <select id="reading-style">
+                    <option value="modern" selected>✨ Hiện Đại</option>
+                    <option value="classical">⚜️ Cổ Điển</option>
+                </select>
+                <select id="spread-type"></select>
+                <div class="btn-group">
+                    <button id="btn-shuffle" class="mystic-btn">🔀 Xào Bài</button>
+                    <button id="btn-draw" class="mystic-btn" disabled>✨ Bốc Bài</button>
+                </div>
+                <div id="status-message">✨ Đặt câu hỏi và ấn "Xào Bài"... ✨</div>
+            </div>
+        </div>
+    </header>
 
     <div id="tab-intro" class="tab-content active">
         <div id="intro-container">
             <div id="loading-intro" style="text-align: center; color: var(--text-muted); font-style: italic; padding: 20px;">
-                ...
+                Đang kết nối luồng ánh sáng đến dữ liệu của Trạm... ⏳
             </div>
             <div id="sheets-content"></div>
         </div>
@@ -324,42 +344,15 @@
 
     <div id="tab-reading" class="tab-content">
         <div class="app-layout">
+            
             <div class="panel-left">
-                <div class="panel-left-label">✦ Đặt câu hỏi &amp; bốc bài</div>
-                <div class="controls">
-                    <div class="ai-inputs">
-                        <input type="text" id="user-question" placeholder="💭 Bạn đang băn khoăn điều gì lúc này?">
-                    </div>
-                    
-                    <div class="spread-row">
-                        <label for="reading-style">Hệ thống giải mã:</label>
-                        <select id="reading-style">
-                            <option value="modern" selected>✨ Xem Bài Hiện Đại</option>
-                            <option value="classical">⚜️ Xem TAROT Cổ Điển</option>
-                        </select>
-                    </div>
-
-                    <div class="spread-row">
-                        <label for="spread-type">Bạn muốn vũ trụ làm rõ điều gì?</label>
-                        <select id="spread-type">
-                            </select>
-                    </div>
-
-                    <div class="btn-row">
-                        <button id="btn-shuffle" class="mystic-btn">🔀 Xào Bài</button>
-                        <button id="btn-draw" class="mystic-btn" disabled>✨ Bốc Bài</button>
-                    </div>
-                </div>
-
-                <div id="status-message">✨ Đặt câu hỏi và ấn "Xào Bài"... ✨</div>
                 <div id="tarot-board" class="tarot-board"></div>
             </div>
 
             <div class="panel-right">
-                <div class="panel-right-label">✦ Thông điệp vũ trụ ✦</div>
                 <div class="reading-placeholder" id="reading-placeholder">
                     <div class="placeholder-icon">🔮</div>
-                    <div>Thông điệp từ vũ trụ sẽ hiện ra ở đây<br>sau khi bạn lật đủ các lá bài...</div>
+                    <div>Thông điệp vũ trụ sẽ hiện ra ở đây...</div>
                 </div>
 
                 <div id="reading-result">
@@ -372,18 +365,28 @@
                     </div>
                 </div>
             </div>
+            
         </div>
     </div>
 
     <script>
-        // --- LOGIC CHUYỂN TABS KÈM HIỆU ỨNG TRƯỢT NGANG ---
+        // --- LOGIC CHUYỂN TABS & ĐIỀU KHIỂN HEADER ---
         function switchTab(tabId) {
             const currentActive = document.querySelector('.tab-content.active');
             const nextActive = document.getElementById(tabId);
+            const header = document.getElementById('app-header');
             
             if (currentActive === nextActive) return;
 
-            // Đổi trạng thái nút bấm
+            // Đổi class cho Header để kích hoạt hiệu ứng trượt/thu phóng bảng điều khiển
+            if (tabId === 'tab-reading') {
+                header.classList.remove('intro-mode');
+                header.classList.add('reading-mode');
+            } else {
+                header.classList.remove('reading-mode');
+                header.classList.add('intro-mode');
+            }
+
             document.querySelectorAll('.tab-btn').forEach(btn => {
                 if (btn.getAttribute('onclick').includes(tabId)) {
                     btn.classList.add('active');
@@ -392,20 +395,18 @@
                 }
             });
 
-            // Gán hiệu ứng trượt ra (slide left)
             currentActive.style.animation = "slideOutLeft 0.3s cubic-bezier(0.77, 0, 0.175, 1) forwards";
             
-            // Chờ trượt ra xong thì đổi lớp active và trượt trang mới vào
             setTimeout(() => {
                 currentActive.classList.remove('active');
-                currentActive.style.animation = ""; // Xóa animation thừa
+                currentActive.style.animation = ""; 
                 
                 nextActive.classList.add('active');
                 nextActive.style.animation = "slideInRight 0.5s cubic-bezier(0.77, 0, 0.175, 1) forwards";
             }, 280); 
         }
 
-        // --- GỌI API GOOGLE SHEETS CHO TAB GIỚI THIỆU (DẠNG 4 Ô) ---
+        // --- GỌI API GOOGLE SHEETS LẤY DỮ LIỆU GIỚI THIỆU ---
         async function fetchIntroData() {
             const contentDiv = document.getElementById('sheets-content');
             const loadingDiv = document.getElementById('loading-intro');
@@ -427,12 +428,10 @@
                         const formattedContent = content.replace(/\n/g, '<br>');
 
                         let btnHtml = '';
-                        // Nếu là ô cuối cùng (hoặc ô thứ 4), tự động chèn nút chuyển trang bốc bài
                         if (index === totalSheets - 1 || index === 3) {
-                            btnHtml = `<button class="mystic-btn btn-jump" onclick="switchTab('tab-reading')">🔮 Trải nghiệm ngay 🔮</button>`;
+                            btnHtml = `<button class="mystic-btn btn-jump" onclick="switchTab('tab-reading')">🔮 Bốc Bài Ngay</button>`;
                         }
 
-                        // Áp dụng class intro-card thay cho sheet-section
                         htmlOutput += `
                             <div class="intro-card">
                                 <h2>${title}</h2>
@@ -441,20 +440,16 @@
                             </div>
                         `;
                     });
-
                     contentDiv.innerHTML = htmlOutput;
-                } else {
-                    throw new Error("Không thể trích xuất mảng dữ liệu.");
-                }
+                } else { throw new Error("Lỗi mảng dữ liệu."); }
             } catch (error) {
-                console.error("Lỗi Sheets API:", error);
-                loadingDiv.innerHTML = "📡 Trạm không thể tải thông tin giới thiệu. Bạn vui lòng kiểm tra lại kết nối mạng hoặc liên hệ bên cung cấp dịch vụ!";
+                loadingDiv.innerHTML = "📡 Mất kết nối đến Trạm. Vui lòng thử lại sau!";
             }
         }
 
         document.addEventListener("DOMContentLoaded", fetchIntroData);
 
-        // ================= DANH SÁCH DỮ LIỆU BÀI GỐC =================
+        // ================= DỮ LIỆU BÀI & ENGINE =================
         const tarotDeck = [
             "0thefool", "1themagician", "2thehighpriestess", "3theempress", "4theemperor", 
             "5thehierophant", "6thelovers", "7thechariot", "8strength", "9thehermit", 
@@ -465,7 +460,6 @@
             "1sword", "2sword", "3sword", "4sword", "5sword", "6sword", "7sword", "8sword", "9sword", "10sword", "pagesword", "knightsword", "queensword", "kingsword",
             "1pen", "2pen", "3pen", "4pen", "5pen", "6pen", "7pen", "8pen", "9pen", "10pen", "pagepen", "knightpen", "queenpen", "kingpen"
         ];
-
         const lenormandDeck = [
             "1rider", "2clover", "3ship", "4house", "5tree", "6clouds", "7snake", "8coffin",
             "9bouquet", "10scythe", "11whip", "12birds", "13child", "14fox", "15bear", "16stars",
@@ -473,7 +467,6 @@
             "25ring", "26book", "27letter", "28man", "29woman", "30lilies", "31sun", "32moon",
             "33key", "34fish", "35anchor", "36cross"
         ];
-
         const chakraDeck = [
             "abundance", "acceptance", "balance", "bittersweet", "complacency", "completion", "confusion",
             "creation", "despondence", "destiny", "discovery", "dissipating", "enlightenment", "expansion", "facade", "faith", "forgiveness", "gossip", "gratitude", 
@@ -484,19 +477,13 @@
         const pathTarot = "assets/images/new_folder/";
         const pathLenormand = "assets/images/lenormand/";
         const pathChakra = "assets/images/oracle/";
-        
         const backTarot = pathTarot + "card-back.PNG";
         const backLenormand = pathLenormand + "card-back-L.jpg"; 
         const backChakra = pathChakra + "card-back-C.PNG";
 
-        let currentTarotDeck = [];
-        let currentLenormandDeck = [];
-        let currentChakraDeck = [];
-        let drawnCardsList = []; 
-        let totalCardsToDraw = 0;
-        let flippedCount = 0;    
-        let isProcessing = false; 
-        let cooldownTimer = null; 
+        let currentTarotDeck = [], currentLenormandDeck = [], currentChakraDeck = [];
+        let drawnCardsList = [], totalCardsToDraw = 0, flippedCount = 0;    
+        let isProcessing = false, cooldownTimer = null; 
         const REVERSAL_THRESHOLD = 30; 
 
         // --- DOM Elements ---
@@ -511,36 +498,30 @@
         const btnCopy = document.getElementById("btn-copy");
         const readingPlaceholder = document.getElementById("reading-placeholder");
 
-        // --- CẤU CẤU TRÚC DANH SÁCH SPREADS THEO DANH MỤC ICON ---
+        // --- OPTIONS SPREAD ---
         const modernSpreadsHTML = `
-            <option value="intent_all">💌 TOÀN DIỆN (What, Why, How? & When, Who?)</option>
-            <option value="intent_what">💌 WHAT / YES-NO (1 lá Tarot thông điệp ngay lập tức)</option>
-            <option value="intent_why">💌 WHY / HOW (Gốc rễ, nhân quả & Xu hướng sắp tới)</option>
-            <option value="intent_when">💌 WHEN / WHO (Sự kiện, Thời gian & Con người cụ thể)</option>
+            <option value="intent_all">💌 TOÀN DIỆN (What, Why, How, When, Who?)</option>
+            <option value="intent_what">💌 WHAT / YES-NO (1 lá Tức thì)</option>
+            <option value="intent_why">💌 WHY / HOW (Gốc rễ, nhân quả)</option>
+            <option value="intent_when">💌 WHEN / WHO (Thời gian & Nhân vật)</option>
             <option value="intent_mbs">💖 M.B.S (Tâm linh - Tâm lý - Đời thực)</option>
-            <option value="intent_healing">💖 CHỮA LÀNH (Điểm nghẽn năng lượng & Giải pháp)</option>
-            <option value="intent_relationship">💖 GƯƠNG SOI NHÂN DUYÊN (Tâm lý, Sự kiện & Bài học)</option>
-            <option value="intent_dream">🔮 GIẢI MÃ GIẤC MƠ / TIỀM THỨC</option>
-            <option value="intent_mirror">🔮 BẢN NGÃ (Vị thế & Sự thật)</option>
-            <option value="intent_crossroads">🔮 NGÃ RẼ CUỘC ĐỜI (Công việc/Tình cảm: Hướng A hay B?)</option>
-            <option value="intent_flow">🔮 DÒNG CHẢY SỰ KIỆN (Tiên tri diễn biến sự kiện thực)</option>
+            <option value="intent_healing">💖 CHỮA LÀNH (Điểm nghẽn năng lượng)</option>
+            <option value="intent_relationship">💖 NHÂN DUYÊN (Sự kiện & Bài học)</option>
+            <option value="intent_dream">🔮 GIẢI MÃ TIỀM THỨC</option>
+            <option value="intent_mirror">🔮 BẢN NGÃ (Vị thế thực tế)</option>
+            <option value="intent_crossroads">🔮 NGÃ RẼ (Hướng A hay B?)</option>
+            <option value="intent_flow">🔮 DÒNG CHẢY SỰ KIỆN</option>
         `;
-
         const classicalSpreadsHTML = `
-            <option value="classic_croix">⚜️ Tirage au Croix ⚜️</option>
-            <option value="classic_ligne">⚜️ Tirage en ligne ⚜️</option>
-            <option value="classic_grand_ourse">⚜️ Tirage de Grande Ourse ⚜️</option>
-            <option value="classic_astrologique">⚜️ Tirage astrologique ⚜️</option>
-            <option value="classic_celtique">⚜️ Tirage de Celtique ⚜️</option>
+            <option value="classic_croix">⚜️ Chữ Thập (Croix)</option>
+            <option value="classic_ligne">⚜️ Thẳng Hàng (Ligne)</option>
+            <option value="classic_grand_ourse">⚜️ Đại Hùng Tinh (Ourse)</option>
+            <option value="classic_astrologique">⚜️ Thiên Văn Học 12 Nhà</option>
+            <option value="classic_celtique">⚜️ Thập Tự Celtic</option>
         `;
 
-        // Đồng bộ danh sách câu hỏi khi thay đổi phong cách hệ thống
         function updateSpreadOptions() {
-            if (readingStyleSelect.value === "modern") {
-                spreadSelect.innerHTML = modernSpreadsHTML;
-            } else {
-                spreadSelect.innerHTML = classicalSpreadsHTML;
-            }
+            spreadSelect.innerHTML = (readingStyleSelect.value === "modern") ? modernSpreadsHTML : classicalSpreadsHTML;
             resetBoardState();
         }
 
@@ -549,15 +530,11 @@
             btnDraw.disabled = true;
             board.innerHTML = "";
             hideReading();
-            document.body.classList.add("shuffling");
-            setTimeout(() => document.body.classList.remove("shuffling"), 1200);
-            statusMsg.innerText = "Hệ thống đã thay đổi cấu trúc trải bài. Hãy xào bài lại nhé!";
+            statusMsg.innerText = "Cấu trúc đã thay đổi. Hãy xào bài lại!";
         }
 
         readingStyleSelect.addEventListener("change", updateSpreadOptions);
         spreadSelect.addEventListener("change", resetBoardState);
-        
-        // Khởi tạo danh sách lần đầu tiên khi tải ứng dụng
         spreadSelect.innerHTML = modernSpreadsHTML;
 
         function showReading() {
@@ -567,7 +544,6 @@
         }
 
         function hideReading() {
-            readingBox.style.none = "none";
             readingBox.style.display = "none";
             if (readingPlaceholder) readingPlaceholder.style.display = "flex";
         }
@@ -577,13 +553,11 @@
             if (!text) return;
             navigator.clipboard.writeText(text).then(() => {
                 btnCopy.classList.add("copied");
-                document.getElementById("copy-icon").textContent = "✅";
-                document.getElementById("copy-label").textContent = "Đã sao chép!";
+                document.getElementById("copy-label").textContent = "Đã copy!";
                 setTimeout(() => {
                     btnCopy.classList.remove("copied");
-                    document.getElementById("copy-icon").textContent = "📋";
                     document.getElementById("copy-label").textContent = "Sao chép";
-                }, 2500);
+                }, 2000);
             });
         });
 
@@ -597,28 +571,27 @@
                     clearInterval(cooldownTimer);
                     btnShuffle.textContent = "🔀 Xào Bài";
                     btnShuffle.disabled = false; 
-                    statusMsg.innerText = "✨ Năng lượng đã phục hồi. Bạn có thể đặt câu hỏi mới!";
+                    statusMsg.innerText = "✨ Bạn có thể đặt câu hỏi mới!";
                 }
             }, 1000);
         }
 
-        // ================= PHẦN ENGINE GIẢI MÃ CHÍNH (PROMPTS) =================
+        // ================= HỆ THỐNG PROMPT GIẢI MÃ =================
         async function getFullTarotReading() {
             if (isProcessing) return;
-            const question = document.getElementById("user-question").value.trim() || "Vũ trụ muốn gửi gắm thông điệp gì cho mình hôm nay?";
+            const question = document.getElementById("user-question").value.trim() || "Vũ trụ muốn gửi gắm thông điệp gì cho mình?";
             const spreadMode = spreadSelect.value;
             
             showReading();
             isProcessing = true;
             btnShuffle.disabled = true; 
-            readingContent.innerHTML = `🔮 <span class="loading-dots">Thông điệp đang được giải mã</span>`;
+            readingContent.innerHTML = `🔮 <span class="loading-dots">Đang giải mã tín hiệu</span>`;
 
             let spreadContext = "";
             let roleContext = "Bạn là một Reader Tarot, Lenormand thực tế, có tầm nhìn. Bạn có khả năng liên kết bức tranh tổng quan tốt. Bạn hiểu ý nghĩa của bài Tarot ngược, đọc được thời gian, liên kết được tarot và chiêm tinh học, và hiểu ý nghĩa của Chakra Wisdom Oracle về năng lượng tiềm thức. ";
-
             const getReversedStr = (card) => (card.type === 'tarot' && card.reversed) ? " (ngược)" : "";
 
-            // --- KIỂM TRA PHƯƠNG ÁN ĐỂ ĐƯA VÀO BỐ CỤC PROMPT PHÙ HỢP ---
+            // --- GIỮ NGUYÊN 100% CÁC PROMPT NHƯ BẠN YÊU CẦU ---
             if (spreadMode === "intent_what") {
                 spreadContext = `người xem đang cần một câu trả lời dạng WHAT hoặc YES/NO. Lá bài: ${drawnCardsList[0].name}${getReversedStr(drawnCardsList[0])}. Đầu tiên bắt buộc trả lời Yes hoặc No, giải thích vì sao lại là yes hoặc no. nếu nội dung chung chung không thể nói yes hoặc no, hãy gợi ý cho người xem đang vướng mắc ở đâu. Không cần đưa ra lời khuyên`;
             } else if (spreadMode === "intent_why") {
@@ -642,8 +615,6 @@
             } else if (spreadMode === "intent_mirror") {
                 spreadContext = `Trải bài Tấm Gương Bản Ngã (5 lá Tarot). Bản ngã/Cái tôi bên trong: ${drawnCardsList[0].name}${getReversedStr(drawnCardsList[0])}. Soi chiếu nhìn bản thân: ${drawnCardsList[1].name}${getReversedStr(drawnCardsList[1])}. Vị thế thực tế hiện tại: ${drawnCardsList[2].name}${getReversedStr(drawnCardsList[2])}. Bạn trong mắt công chúng/người khác: ${drawnCardsList[3].name}${getReversedStr(drawnCardsList[3])}. Sự thật cốt lõi & Lời khuyên: ${drawnCardsList[4].name}${getReversedStr(drawnCardsList[4])}. YÊU CẦU: Hãy phân tích sự đối chiếu (và mâu thuẫn nếu có) giữa cách nhìn nhận bản thân, thực tế đang ở vị thế nào, và cách người khác đánh giá. Hãy lưu ý đến các yếu tố lặp số ở bộ ẩn phụ, cung hoàng đạo,The Three Primitives,The Seven Sacred Planets và houses, sau cùng, bạn hãy kiểm tra xem nguyên tố nào chiếm phần lớn tụ bài. Hãy đọc như một nhà chiêm tinh học kiêm tarot reader linh hoạt`;
             } 
-            
-            // --- HỆ THỐNG PROMPTS GIẢI MÃ CỔ ĐIỂN ---
             else if (spreadMode === "classic_croix") {
                 spreadContext = `Trải bài Chữ Thập Cổ Điển (Tirage au Croix) bao gồm 5 lá Tarot theo đúng cấu trúc truyền thống pháp: Lá 1 (Bên Trái - Pour: Đại diện cho thế mạnh, nguồn lực thuận lợi thúc đẩy): ${drawnCardsList[0].name}${getReversedStr(drawnCardsList[0])}. Lá 2 (Bên Phải - Contre: Đại diện cho trở ngại, thách thức hoặc phe đối lập): ${drawnCardsList[1].name}${getReversedStr(drawnCardsList[1])}. Lá 3 (Phía Trên - État: Tình cảnh thực tế hiện tại, đỉnh điểm của hoàn cảnh): ${drawnCardsList[2].name}${getReversedStr(drawnCardsList[2])}. Lá 4 (Phía Dưới - Résultats: Kết quả phát triển, diễn tiến tự nhiên tiếp theo): ${drawnCardsList[3].name}${getReversedStr(drawnCardsList[3])}. Lá 5 (Ở Chính Giữa - Synthèse: Lá bài tổng hợp mang tính cốt lõi, giải pháp và lời khuyên kết luận): ${drawnCardsList[4].name}${getReversedStr(drawnCardsList[4])}. Hãy thực hiện biện chứng sâu sắc hai mặt Pour-Contre kết hợp với tình huống hiện tại, xác định mối liên kết sau để đưa ra lời luận giải: có xuất hiện lá ẩn chính không, lá ẩn chính đang nằm ở chu kỳ nào?, các yếu tố lặp số hoặc lặp các quân court trong bộ ẩn phụ không, những con số có nằm sát chu kỳ hoàn thành sự kiện không hay bắt đầu?. Hãy kiểm tra xem nguyên tố nào chiếm phần lớn tụ bài? Cả tụ bài có màu sắc tích cực hay tiêu cực Khoảng thời gian trong lá tương lai bắt buộc phải trả lời được nằm trong mốc thời gian nào. để khai mở toàn bộ kết quả tổng hòa từ lá bài trung tâm.`;
             } else if (spreadMode === "classic_ligne") {
@@ -674,7 +645,7 @@
                 if (data.error) {
                     const isQuotaError = response.status === 429 || (data.error.status === "RESOURCE_EXHAUSTED");
                     if (isQuotaError) {
-                        readingContent.innerHTML = `🌙 Các vì sao đang nghỉ ngơi! Năng lượng vũ trụ đang nạp lại, bạn đợi 1 phút rồi thử bốc lại nhé! 💖`;
+                        readingContent.innerHTML = `🌙 Các vì sao đang nghỉ ngơi! Năng lượng đang nạp lại, bạn đợi 1 phút rồi thử bốc lại nhé! 💖`;
                     } else {
                         readingContent.innerHTML = `🌠 Tín hiệu chập chờn! Hãy thử xào bài và bốc lại nhé! ✨`;
                     }
@@ -685,17 +656,15 @@
                     readingContent.innerHTML = `✨ <b>THÔNG ĐIỆP TỪ VŨ TRỤ:</b><br><br>${aiResponse}`;
                 }
             } catch (error) {
-                readingContent.innerHTML = "📡 Trạm thu phát sóng tâm linh báo rớt mạng! Bạn kiểm tra mạng rồi thử lại nha! 🧚‍♀️";
+                readingContent.innerHTML = "📡 Mất kết nối! Bạn kiểm tra mạng rồi thử lại nha! 🧚‍♀️";
             } finally {
                 isProcessing = false;
                 startCooldown(15);
-                readingBox.scrollIntoView({ behavior: 'smooth', block: 'start' });
             }
         }
 
         function shuffleDeck() {
             if (isProcessing || btnShuffle.disabled) return;
-            document.body.classList.add("shuffling");
             board.innerHTML = ""; 
             hideReading();
             btnDraw.disabled = true;
@@ -704,18 +673,16 @@
             currentLenormandDeck = [...lenormandDeck].sort(() => Math.random() - 0.5);
             currentChakraDeck = [...chakraDeck].sort(() => Math.random() - 0.5);
             
-            statusMsg.innerText = "✨ Đang kết nối dòng chảy năng lượng... Hãy thả lỏng tâm trí nhé! ✨";
+            statusMsg.innerText = "✨ Đang kết nối dòng chảy... Hãy thả lỏng tâm trí! ✨";
             drawnCardsList = []; 
             flippedCount = 0;    
             
             setTimeout(() => {
-                document.body.classList.remove("shuffling"); 
                 btnDraw.disabled = false; 
-                statusMsg.innerText = "Năng lượng đã đồng điệu. Hãy hít một hơi thật sâu và ấn Bốc Bài!";
-            }, 1200);
+                statusMsg.innerText = "Đã đồng điệu. Hãy ấn Bốc Bài!";
+            }, 1000);
         }
 
-        // ================= CẤU HÌNH PHÂN PHỐI LÁ BÀI & CẤU TRÚC LOGIC PHÂN BỔ =================
         function drawCards() {
             board.innerHTML = ""; 
             hideReading();
@@ -729,109 +696,59 @@
             const lenormandPop = () => ({ type: 'lenormand', name: currentLenormandDeck.pop(), reversed: false });
             const chakraPop = () => ({ type: 'chakra', name: currentChakraDeck.pop(), reversed: false });
 
-            if (spreadMode === "intent_what") {
-                setupPlan.push(tarotPop());
-            } else if (spreadMode === "intent_why") {
-                setupPlan.push(tarotPop()); setupPlan.push(tarotPop()); setupPlan.push(tarotPop());
-            } else if (spreadMode === "intent_when") {
-                setupPlan.push(lenormandPop()); setupPlan.push(lenormandPop()); setupPlan.push(lenormandPop());
-            } else if (spreadMode === "intent_all") {
-                setupPlan.push(tarotPop()); setupPlan.push(tarotPop()); setupPlan.push(tarotPop());
-                setupPlan.push(lenormandPop()); setupPlan.push(lenormandPop());
-            } else if (spreadMode === "intent_mbs") {
-                setupPlan.push(chakraPop()); setupPlan.push(tarotPop()); setupPlan.push(lenormandPop());
-            } else if (spreadMode === "intent_healing") {
-                setupPlan.push(chakraPop()); setupPlan.push(tarotPop()); setupPlan.push(lenormandPop()); setupPlan.push(lenormandPop());
-            } else if (spreadMode === "intent_crossroads") {
-                setupPlan.push(tarotPop()); setupPlan.push(tarotPop()); setupPlan.push(tarotPop());
-            } else if (spreadMode === "intent_flow") {
-                setupPlan.push(lenormandPop()); setupPlan.push(lenormandPop()); setupPlan.push(lenormandPop()); setupPlan.push(lenormandPop()); setupPlan.push(lenormandPop());
-            } else if (spreadMode === "intent_relationship") {
-                setupPlan.push(tarotPop()); setupPlan.push(tarotPop()); setupPlan.push(lenormandPop()); setupPlan.push(lenormandPop()); setupPlan.push(chakraPop());
-            } else if (spreadMode === "intent_dream") {
-                setupPlan.push(chakraPop()); setupPlan.push(tarotPop()); setupPlan.push(lenormandPop());
-            } else if (spreadMode === "intent_mirror") {
-                setupPlan.push(tarotPop()); setupPlan.push(tarotPop()); setupPlan.push(tarotPop()); setupPlan.push(tarotPop()); setupPlan.push(tarotPop());
-            }
-            // PHÂN PHỐI LÁ BÀI HỆ CỔ ĐIỂN
-            else if (spreadMode === "classic_croix") {
-                setupPlan.push(tarotPop()); setupPlan.push(tarotPop()); setupPlan.push(tarotPop()); setupPlan.push(tarotPop()); setupPlan.push(tarotPop());
-            } else if (spreadMode === "classic_ligne") {
-                setupPlan.push(tarotPop()); setupPlan.push(tarotPop()); setupPlan.push(tarotPop());
-            } else if (spreadMode === "classic_grand_ourse") {
-                for(let i = 0; i < 7; i++) setupPlan.push(tarotPop());
-            } else if (spreadMode === "classic_astrologique") {
-                for(let i = 0; i < 12; i++) setupPlan.push(tarotPop());
-            } else if (spreadMode === "classic_celtique") {
-                for(let i = 0; i < 10; i++) setupPlan.push(tarotPop());
-            }
+            if (spreadMode === "intent_what") { setupPlan.push(tarotPop()); }
+            else if (spreadMode === "intent_why") { setupPlan.push(tarotPop(), tarotPop(), tarotPop()); }
+            else if (spreadMode === "intent_when") { setupPlan.push(lenormandPop(), lenormandPop(), lenormandPop()); }
+            else if (spreadMode === "intent_all") { setupPlan.push(tarotPop(), tarotPop(), tarotPop(), lenormandPop(), lenormandPop()); }
+            else if (spreadMode === "intent_mbs") { setupPlan.push(chakraPop(), tarotPop(), lenormandPop()); }
+            else if (spreadMode === "intent_healing") { setupPlan.push(chakraPop(), tarotPop(), lenormandPop(), lenormandPop()); }
+            else if (spreadMode === "intent_crossroads") { setupPlan.push(tarotPop(), tarotPop(), tarotPop()); }
+            else if (spreadMode === "intent_flow") { setupPlan.push(lenormandPop(), lenormandPop(), lenormandPop(), lenormandPop(), lenormandPop()); }
+            else if (spreadMode === "intent_relationship") { setupPlan.push(tarotPop(), tarotPop(), lenormandPop(), lenormandPop(), chakraPop()); }
+            else if (spreadMode === "intent_dream") { setupPlan.push(chakraPop(), tarotPop(), lenormandPop()); }
+            else if (spreadMode === "intent_mirror") { setupPlan.push(tarotPop(), tarotPop(), tarotPop(), tarotPop(), tarotPop()); }
+            else if (spreadMode === "classic_croix") { setupPlan.push(tarotPop(), tarotPop(), tarotPop(), tarotPop(), tarotPop()); }
+            else if (spreadMode === "classic_ligne") { setupPlan.push(tarotPop(), tarotPop(), tarotPop()); }
+            else if (spreadMode === "classic_grand_ourse") { for(let i=0; i<7; i++) setupPlan.push(tarotPop()); }
+            else if (spreadMode === "classic_astrologique") { for(let i=0; i<12; i++) setupPlan.push(tarotPop()); }
+            else if (spreadMode === "classic_celtique") { for(let i=0; i<10; i++) setupPlan.push(tarotPop()); }
 
             drawnCardsList = setupPlan;
             totalCardsToDraw = setupPlan.length;
-            statusMsg.innerText = `Hãy chọn lật mở ${totalCardsToDraw} chương định mệnh đang hiển hiện...`;
+            statusMsg.innerText = `Hãy lật mở ${totalCardsToDraw} lá bài...`;
             btnDraw.disabled = true; 
 
             setupPlan.forEach((cardObj, index) => {
                 const cardSlot = document.createElement("div");
                 cardSlot.classList.add("card-slot");
                 
-                let backImg = backTarot;
-                let frontImg = '';
-                
-                if (cardObj.type === 'tarot') {
-                    backImg = backTarot;
-                    frontImg = `${pathTarot}${cardObj.name}.PNG`;
-                } else if (cardObj.type === 'lenormand') {
-                    backImg = backLenormand;
-                    frontImg = `${pathLenormand}${cardObj.name}.PNG`;
-                } else if (cardObj.type === 'chakra') {
-                    backImg = backChakra; 
-                    frontImg = `${pathChakra}${cardObj.name}.PNG`; 
-                }
+                let backImg = backTarot, frontImg = '';
+                if (cardObj.type === 'tarot') { backImg = backTarot; frontImg = `${pathTarot}${cardObj.name}.PNG`; }
+                else if (cardObj.type === 'lenormand') { backImg = backLenormand; frontImg = `${pathLenormand}${cardObj.name}.PNG`; }
+                else if (cardObj.type === 'chakra') { backImg = backChakra; frontImg = `${pathChakra}${cardObj.name}.PNG`; }
                 
                 let labelText = "Thấu Thị";
-                if (spreadMode === "intent_why") {
-                    labelText = ["Quá Khứ", "Hiện Tại", "Tương Lai"][index];
-                } else if (spreadMode === "intent_when") {
-                    labelText = `Sự Kiện ${index + 1}`;
-                } else if (spreadMode === "intent_all") {
-                    labelText = ["WHAT (Tarot)", "WHY (Tarot)", "HOW (Tarot)", "WHEN (Lenormand)", "WHO (Lenormand)"][index];
-                } else if (spreadMode === "intent_mbs") {
-                    labelText = ["Spirit (Luân Xa)", "Mind (Tâm Trí)", "Body (Hành Động)"][index];
-                } else if (spreadMode === "intent_healing") {
-                    labelText = ["Vết Thương", "Nguyên Nhân", "Giải Pháp", "Bổ Trợ"][index];
-                } else if (spreadMode === "intent_crossroads") {
-                    labelText = ["Hướng A", "Hướng B", "Lời Khuyên"][index];
-                } else if (spreadMode === "intent_flow") {
-                    labelText = ["Quá Khứ Xa", "Quá Khứ Gần", "Trọng Tâm", "Tương Lai Gần", "Kết Quả"][index];
-                } else if (spreadMode === "intent_relationship") {
-                    labelText = ["Tâm Lý Bạn", "Tâm Lý Họ", "Sự Kiện 1", "Sự Kiện 2", "Bài Học"][index];
-                } else if (spreadMode === "intent_dream") {
-                    labelText = ["Tiềm Thức", "Higher Self", "Dấu Hiệu"][index];
-                } else if (spreadMode === "intent_mirror") {
-                    labelText = ["Bản Ngã", "Tầm Nhìn", "Vị Thế", "Công Chúng", "Sự Thật"][index];
-                }
-                else if (spreadMode === "classic_croix") {
-                    labelText = ["Trái (Pour)", "Phải (Contre)", "Trên (État)", "Dưới (Résultats)", "Giữa (Synthèse)"][index];
-                } else if (spreadMode === "classic_ligne") {
-                    labelText = ["Khởi Điểm", "Điểm Nút", "Phát Triển"][index];
-                } else if (spreadMode === "classic_grand_ourse") {
-                    labelText = `Sao Bắc Đẩu ${index + 1}`;
-                } else if (spreadMode === "classic_astrologique") {
-                    labelText = `Cung Nhà ${index + 1}`;
-                } else if (spreadMode === "classic_celtique") {
-                    labelText = `Vị Trí C.C ${index + 1}`;
-                }
+                if (spreadMode === "intent_why") { labelText = ["Quá Khứ", "Hiện Tại", "Tương Lai"][index]; }
+                else if (spreadMode === "intent_when") { labelText = `Sự Kiện ${index + 1}`; }
+                else if (spreadMode === "intent_all") { labelText = ["WHAT", "WHY", "HOW", "WHEN", "WHO"][index]; }
+                else if (spreadMode === "intent_mbs") { labelText = ["Luân Xa", "Tâm Trí", "Hành Động"][index]; }
+                else if (spreadMode === "intent_healing") { labelText = ["Vết Thương", "Nguyên Nhân", "Giải Pháp", "Bổ Trợ"][index]; }
+                else if (spreadMode === "intent_crossroads") { labelText = ["Hướng A", "Hướng B", "Lời Khuyên"][index]; }
+                else if (spreadMode === "intent_flow") { labelText = ["QK Xa", "QK Gần", "Trọng Tâm", "Tương Lai", "Kết Quả"][index]; }
+                else if (spreadMode === "intent_relationship") { labelText = ["Bạn", "Người Ấy", "Sự Kiện 1", "Sự Kiện 2", "Bài Học"][index]; }
+                else if (spreadMode === "intent_dream") { labelText = ["Tiềm Thức", "Higher Self", "Dấu Hiệu"][index]; }
+                else if (spreadMode === "intent_mirror") { labelText = ["Bản Ngã", "Tầm Nhìn", "Vị Thế", "Công Chúng", "Sự Thật"][index]; }
+                else if (spreadMode === "classic_croix") { labelText = ["Pour", "Contre", "État", "Résultats", "Synthèse"][index]; }
+                else if (spreadMode === "classic_ligne") { labelText = ["Khởi Điểm", "Điểm Nút", "Phát Triển"][index]; }
+                else if (spreadMode === "classic_grand_ourse") { labelText = `Bắc Đẩu ${index + 1}`; }
+                else if (spreadMode === "classic_astrologique") { labelText = `Nhà ${index + 1}`; }
+                else if (spreadMode === "classic_celtique") { labelText = `Vị Trí ${index + 1}`; }
 
                 cardSlot.innerHTML = `
                     <div class="card-label">${labelText}</div>
                     <div class="card-inner">
                         <div class="card-front"><img src="${backImg}" alt="Mặt sau" onerror="this.src='${backTarot}'"></div>
-                        <div class="card-back">
-                            <img src="${frontImg}" alt="${cardObj.name}" 
-                                 class="${cardObj.reversed ? 'card-reversed' : ''}" 
-                                 onerror="this.src='https://via.placeholder.com/150x260/fff/000?text=${cardObj.name}'">
-                        </div>
+                        <div class="card-back"><img src="${frontImg}" alt="${cardObj.name}" class="${cardObj.reversed ? 'card-reversed' : ''}"></div>
                     </div>
                 `;
 
@@ -841,10 +758,10 @@
                         this.classList.add("flipped");
                         flippedCount++; 
                         if (flippedCount === totalCardsToDraw) {
-                            statusMsg.innerText = "🔮 Vũ trụ đang gửi tín hiệu xuống cho bạn nè...🔮";
+                            statusMsg.innerText = "🔮 Đang giải mã...🔮";
                             getFullTarotReading(); 
                         } else {
-                            statusMsg.innerText = `Lật tiếp đi bạn, còn ${totalCardsToDraw - flippedCount} lá nữa thôi!`;
+                            statusMsg.innerText = `Còn ${totalCardsToDraw - flippedCount} lá nữa!`;
                         }
                     }
                 });
