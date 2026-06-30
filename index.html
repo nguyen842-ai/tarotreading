@@ -778,7 +778,7 @@
                 Lá 2 (Vùng Mù - Nhược điểm/sức mạnh người khác thấy nhưng bạn lại không nhận ra): ${drawnCardsList[1].name}${getReversedStr(drawnCardsList[1])}.
                 Lá 3 (Vùng Ẩn - Bí mật/Cảm xúc bạn cố che giấu không cho ai biết): ${drawnCardsList[2].name}${getReversedStr(drawnCardsList[2])}.
                 Lá 4 (Vùng Đóng - Tiềm thức sâu thẳm, chướng ngại hoặc tiềm năng chưa từng được bộc lộ): ${drawnCardsList[3].name}${getReversedStr(drawnCardsList[3])}.
-                YÊU CẦU: Đọc bài như một nhà phân tích tâm lý, vạch trần điểm mù và hướng dẫn người xem mở rộng nhận thức bản thân.`;
+                YÊU CẦU: Đọc bài như một nhà phân tích tâm lý, liên kết 4 lá với 4 ô: Open Area, Blind Spot, Hidden Area, Unknown Area.Soi xét kỹ lưỡng: có xuất hiện lá ẩn chính không, lá ẩn chính đang nằm ở chu kỳ nào?, các yếu tố lặp số hoặc lặp các quân court trong bộ ẩn phụ không, những con số có nằm sát chu kỳ hoàn thành sự kiện không hay bắt đầu?. Hãy kiểm tra xem nguyên tố nào chiếm phần lớn tụ bài? những lá bài này xuất hiện ở vị trí đó mang ý nghĩa gì. Tổng quan bài học tâm lí này là gì`;
             } else if (spreadMode === "mystic_karmic") {
                 spreadContext = `Trải bài Duyên Nợ Tiền Kiếp (Karmic Connections) - 5 lá Tarot:
                 Lá 1 (Năng lượng Tiền kiếp - Quá khứ gốc rễ của câu chuyện này): ${drawnCardsList[0].name}${getReversedStr(drawnCardsList[0])}.
@@ -786,7 +786,7 @@
                 Lá 3 (Khế Ước Linh Hồn - Lý do sự việc/con người này xuất hiện hiện tại): ${drawnCardsList[2].name}${getReversedStr(drawnCardsList[2])}.
                 Lá 4 (Bài Học Nhân Quả - Điều bạn bắt buộc phải nhận ra để không lặp lại): ${drawnCardsList[3].name}${getReversedStr(drawnCardsList[3])}.
                 Lá 5 (Giải Phóng - Hành động để cắt đứt nghiệp quả hoặc nâng cấp linh hồn): ${drawnCardsList[4].name}${getReversedStr(drawnCardsList[4])}.
-                YÊU CẦU: Luận giải sâu sắc về góc độ tâm linh, nhân quả nghiệp báo, đưa ra định hướng tháo gỡ nghiệp lực một cách tỉnh thức.`;
+                YÊU CẦU: Luận giải sâu sắc về góc độ tâm linh, nhân quả nghiệp báo, đưa ra định hướng tháo gỡ nghiệp lực một cách tỉnh thức. Lưu ý liên kết giữa các lá ẩn chính và Các Giao ước Định mệnh, bộ ẩn phụ với Cách Nghiệp vận hành ở đời thực, Sự kết thúc chu kỳ Nghiệp, liên kết giữa các suits đóng vai trò chủ đạo với nghiệp quả.`;
             }
 
             const promptText = `${roleContext} Người dùng đặt câu hỏi: "${question}". Trong quẻ này, ${spreadContext} Hãy viết bài luận giải bằng tiếng việt, phân tách các phần rõ ràng, ngôn từ thực tế (20% thiên thời ( có đúng lúc không?), 30% địa lợi ( có được trợ giúp, trợ lực nào không?), 40% nhân hòa ( có tiềm lực, năng lực không, có ý chí không?), không nhắc đến các cụm từ thiên thời địa lợi nhân hòa và % khi giải bài). Xưng hô là "mình" và "bạn". Tuyệt đối không nhắc đến các từ ngữ lập trình.`;
