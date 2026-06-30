@@ -86,7 +86,6 @@
         .tab-content {
             display: none;
             width: 100%;
-            max-width: 1600px;
             margin: 0 auto;
         }
 
@@ -105,17 +104,22 @@
         }
 
         /* ── BỐ CỤC 4 Ô GIỚI THIỆU MỚI (GRID LẤP ĐẦY) ── */
-        #intro-container {
-            width: 100%;
-            margin: 0 auto 30px auto;
-        }
+       #intro-container {
+    width: 100%;
+    max-width: 100%; 
+    min-height: calc(100vh - 160px); /* Lấy tổng chiều cao màn hình trừ đi phần Header */
+    display: flex;
+    padding: 0 20px; /* Cách mép màn hình một chút cho đẹp */
+    margin: 0 auto 30px auto;
+}
 
-        #sheets-content {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr); /* 4 cột bằng nhau */
-            gap: 20px;
-            align-items: stretch; /* Đảm bảo các ô cao bằng nhau */
-        }
+#sheets-content {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr); 
+    gap: 20px;
+    width: 100%;
+    flex-grow: 1; /* Ép 4 ô tự động giãn dài lấp đầy khoảng trống chiều dọc */
+}
 
         .intro-card {
             background: rgba(42, 22, 77, 0.7);
@@ -161,11 +165,13 @@
 
         /* ── LAYOUT DESKTOP 2 CỘT (TAB BỐC BÀI) ── */
         .app-layout {
-            display: flex;
-            gap: 0;
-            align-items: stretch;
-            min-height: calc(100vh - 180px);
-        }
+    display: flex;
+    gap: 0;
+    align-items: stretch;
+    min-height: calc(100vh - 180px);
+    max-width: 1600px; /* Trả lại giới hạn 1600px cho riêng phần bốc bài */
+    margin: 0 auto;
+}
 
         .panel-left {
             flex: 0 0 42%;
