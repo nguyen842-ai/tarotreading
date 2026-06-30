@@ -118,20 +118,21 @@
         }
 
         /* ── BẢNG ĐIỀU KHIỂN (THU GỌN LÊN TOP NAV) ── */
-        .controls-inner {
-            display: grid;
-            grid-template-columns: 1.5fr 1fr 1fr;
-            grid-template-areas: 
-                "q q q"
-                "sys spread btns"
-                "status status status";
-            gap: 8px;
-            background: rgba(0, 0, 0, 0.4);
-            padding: 10px 14px;
-            border-radius: 12px;
-            border: 1px solid var(--border-color);
-            width: 100%;
-        }
+.controls-inner {
+    display: grid;
+    /* CẬP NHẬT: Ép ô Hệ thống nhỏ lại (0.7fr), ô Phương pháp giãn tối đa (2.2fr), ô Nút bấm vừa vặn (1.1fr) */
+    grid-template-columns: 0.7fr 2.2fr 1.1fr; 
+    grid-template-areas: 
+        "q q q"
+        "sys spread btns"
+        "status status status";
+    gap: 8px;
+    background: rgba(0, 0, 0, 0.4);
+    padding: 10px 14px;
+    border-radius: 12px;
+    border: 1px solid var(--border-color);
+    width: 100%;
+}
 
         #user-question { grid-area: q; }
         #reading-style { grid-area: sys; }
