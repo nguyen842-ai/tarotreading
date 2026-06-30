@@ -31,6 +31,7 @@
             text-align: center;
             padding: 16px;
             min-height: 100vh;
+            overflow-x: hidden; /* Ngăn cuộn ngang khi trang trượt */
             -webkit-text-size-adjust: 100%;
         }
 
@@ -51,6 +52,8 @@
             gap: 12px;
             margin: 20px auto 30px auto;
             max-width: 600px;
+            position: relative;
+            z-index: 10;
         }
 
         .tab-btn {
@@ -79,52 +82,81 @@
             box-shadow: 0 0 15px var(--accent-gold);
         }
 
+        /* --- HIỆU ỨNG TRƯỢT TRANG (Thay cho fadeIn cũ) --- */
         .tab-content {
             display: none;
-            animation: fadeIn 0.4s ease-in-out;
+            width: 100%;
+            max-width: 1600px;
+            margin: 0 auto;
         }
 
         .tab-content.active {
             display: block;
         }
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(8px); }
+        @keyframes slideInRight {
+            from { opacity: 0; transform: translateX(80px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        @keyframes slideOutLeft {
+            from { opacity: 1; transform: translateX(0) scale(1); }
+            to { opacity: 0; transform: translateX(-40px) scale(0.98); }
+        }
+
+        /* ── BỐ CỤC 4 Ô GIỚI THIỆU MỚI (GRID LẤP ĐẦY) ── */
+        #intro-container {
+            width: 100%;
+            margin: 0 auto 30px auto;
+        }
+
+        #sheets-content {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr); /* 4 cột bằng nhau */
+            gap: 20px;
+            align-items: stretch; /* Đảm bảo các ô cao bằng nhau */
+        }
+
+        .intro-card {
+            background: rgba(42, 22, 77, 0.7);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 24px;
+            text-align: left;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+            
+            /* Hiệu ứng trượt lên khi load */
+            opacity: 0;
+            transform: translateY(40px);
+            animation: slideUpCard 0.8s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+        }
+
+        /* Tạo độ trễ nghệ thuật cho 4 ô */
+        .intro-card:nth-child(1) { animation-delay: 0.1s; }
+        .intro-card:nth-child(2) { animation-delay: 0.25s; }
+        .intro-card:nth-child(3) { animation-delay: 0.4s; }
+        .intro-card:nth-child(4) { animation-delay: 0.55s; }
+
+        @keyframes slideUpCard {
             to { opacity: 1; transform: translateY(0); }
         }
 
-        /* ── STYLE CHO TAB GIỚI THIỆU CHUNG ── */
-        #intro-container {
-            background: rgba(42, 22, 77, 0.6);
-            padding: 24px;
-            border-radius: 16px;
-            border: 1px solid var(--border-color);
-            text-align: left;
-            max-width: 900px;
-            margin: 0 auto 30px auto;
-            box-shadow: 0 8px 25px rgba(0,0,0,0.3);
-        }
-
-        .sheet-section {
-            margin-bottom: 30px;
-            padding-bottom: 20px;
-            border-bottom: 1px solid rgba(194, 157, 89, 0.2);
-        }
-        .sheet-section:last-child { margin-bottom: 0; padding-bottom: 0; border-bottom: none; }
-        
-        .sheet-section h2 { 
+        .intro-card h2 { 
             color: var(--accent-gold); 
             margin-bottom: 14px; 
-            font-size: 1.4rem; 
-            border-left: 4px solid var(--accent-gold);
-            padding-left: 10px;
+            font-size: 1.3rem; 
+            border-bottom: 1px solid rgba(194, 157, 89, 0.2);
+            padding-bottom: 12px;
             text-shadow: 0 0 10px rgba(194, 157, 89, 0.2);
         }
         
-        .sheet-section p { 
+        .intro-card p { 
             color: var(--text-main); 
             line-height: 1.8; 
-            font-size: 1.05rem; 
+            font-size: 1rem; 
+            flex-grow: 1; /* Đẩy nội dung lấp đầy để nút (nếu có) luôn ở đáy */
         }
 
         /* ── LAYOUT DESKTOP 2 CỘT (TAB BỐC BÀI) ── */
@@ -133,8 +165,6 @@
             gap: 0;
             align-items: stretch;
             min-height: calc(100vh - 180px);
-            max-width: 1600px;
-            margin: 0 auto;
         }
 
         .panel-left {
@@ -154,8 +184,17 @@
             position: relative;
         }
 
-        /* ── MOBILE ── */
-        @media (max-width: 860px) {
+        /* ── MOBILE RESPONSIVE TỔNG HỢP ── */
+        @media (max-width: 992px) {
+            #sheets-content {
+                grid-template-columns: repeat(2, 1fr); /* 2 cột trên iPad */
+            }
+        }
+
+        @media (max-width: 768px) {
+            #sheets-content {
+                grid-template-columns: 1fr; /* 1 cột trên điện thoại để không mất chữ */
+            }
             .app-layout { flex-direction: column; min-height: unset; }
             .panel-left {
                 flex: unset; max-width: 100%; padding: 0 0 24px 0;
@@ -164,7 +203,7 @@
             .panel-right { flex: unset; padding: 0; }
         }
 
-        /* ── CONTROLS ── */
+        /* ── CONTROLS & NÚT BẤM ── */
         .controls {
             margin-bottom: 16px; background: rgba(0, 0, 0, 0.4);
             padding: 16px; border-radius: 12px; display: block; width: 100%; border: 1px solid #4a2b7d;
@@ -172,23 +211,17 @@
 
         .ai-inputs { display: flex; flex-direction: column; gap: 12px; margin-bottom: 15px; }
 
-        input[type="text"] {
+        input[type="text"], select {
             padding: 14px 12px; font-size: 16px; border-radius: 8px;
             background: var(--bg-panel); color: white; border: 1px solid var(--accent-gold);
             width: 100%; outline: none; -webkit-appearance: none; appearance: none;
         }
         input::placeholder { color: #a78bfa; opacity: 0.7; }
+        select { margin-bottom: 12px; cursor: pointer; }
 
         .spread-row { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; justify-content: center; }
         .spread-row label { width: 100%; margin-bottom: 2px; font-size: 0.9rem; color: var(--text-muted); text-align: left; }
         
-        select {
-            padding: 12px 10px; font-size: 16px; border-radius: 8px;
-            background: var(--bg-panel); color: white; border: 1px solid var(--accent-gold);
-            cursor: pointer; outline: none; -webkit-appearance: none; appearance: none;
-            width: 100%; margin-bottom: 12px;
-        }
-
         .btn-row { display: flex; gap: 8px; justify-content: center; margin-top: 10px; flex-wrap: wrap; }
         
         .mystic-btn {
@@ -202,6 +235,9 @@
             .mystic-btn:hover:not(:disabled) { background-color: var(--accent-gold-hover); box-shadow: 0 0 15px var(--accent-gold); }
         }
         .mystic-btn:disabled { background-color: #555; color: #888; cursor: not-allowed; box-shadow: none; }
+
+        /* Nút phụ cho phần giới thiệu */
+        .btn-jump { margin-top: 20px; width: 100%; }
 
         #status-message { font-size: clamp(0.9rem, 1.2vw, 1.05rem); margin-bottom: 16px; font-style: italic; color: var(--text-muted); line-height: 1.5; }
 
@@ -334,16 +370,36 @@
     </div>
 
     <script>
-        // --- LOGIC CHUYỂN TABS ---
+        // --- LOGIC CHUYỂN TABS KÈM HIỆU ỨNG TRƯỢT NGANG ---
         function switchTab(tabId) {
-            document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
-            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            const currentActive = document.querySelector('.tab-content.active');
+            const nextActive = document.getElementById(tabId);
+            
+            if (currentActive === nextActive) return;
 
-            document.getElementById(tabId).classList.add('active');
-            event.currentTarget.classList.add('active');
+            // Đổi trạng thái nút bấm
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                if (btn.getAttribute('onclick').includes(tabId)) {
+                    btn.classList.add('active');
+                } else {
+                    btn.classList.remove('active');
+                }
+            });
+
+            // Gán hiệu ứng trượt ra (slide left)
+            currentActive.style.animation = "slideOutLeft 0.3s cubic-bezier(0.77, 0, 0.175, 1) forwards";
+            
+            // Chờ trượt ra xong thì đổi lớp active và trượt trang mới vào
+            setTimeout(() => {
+                currentActive.classList.remove('active');
+                currentActive.style.animation = ""; // Xóa animation thừa
+                
+                nextActive.classList.add('active');
+                nextActive.style.animation = "slideInRight 0.5s cubic-bezier(0.77, 0, 0.175, 1) forwards";
+            }, 280); 
         }
 
-        // --- GỌI API GOOGLE SHEETS CHO TAB GIỚI THIỆU ---
+        // --- GỌI API GOOGLE SHEETS CHO TAB GIỚI THIỆU (DẠNG 4 Ô) ---
         async function fetchIntroData() {
             const contentDiv = document.getElementById('sheets-content');
             const loadingDiv = document.getElementById('loading-intro');
@@ -356,6 +412,7 @@
                 if (data.valueRanges && data.valueRanges.length > 0) {
                     loadingDiv.style.display = 'none';
                     let htmlOutput = '';
+                    const totalSheets = data.valueRanges.length;
 
                     data.valueRanges.forEach((sheet, index) => {
                         const values = sheet.values || [];
@@ -363,10 +420,18 @@
                         const content = (values[1] && values[1][0]) ? values[1][0] : `Nội dung đang được cập nhật...`;
                         const formattedContent = content.replace(/\n/g, '<br>');
 
+                        let btnHtml = '';
+                        // Nếu là ô cuối cùng (hoặc ô thứ 4), tự động chèn nút chuyển trang bốc bài
+                        if (index === totalSheets - 1 || index === 3) {
+                            btnHtml = `<button class="mystic-btn btn-jump" onclick="switchTab('tab-reading')">🔮 Chuyển sang Bốc Bài</button>`;
+                        }
+
+                        // Áp dụng class intro-card thay cho sheet-section
                         htmlOutput += `
-                            <div class="sheet-section">
+                            <div class="intro-card">
                                 <h2>${title}</h2>
                                 <p>${formattedContent}</p>
+                                ${btnHtml}
                             </div>
                         `;
                     });
@@ -555,7 +620,6 @@
             } else if (spreadMode === "intent_when") {
                 spreadContext = `3 lá Lenormand: ${drawnCardsList[0].name}, ${drawnCardsList[1].name}, ${drawnCardsList[2].name}. Ghép nghĩa 3 lá này lại thành MỘT sự kiện thực tế, coi lá ở giữa làm trọng tâm. Tuần tự liên kết lá ở giữa và các lá bên cạnh, sau đó ghép tất cả sự kiện thành một bức tranh lớn. Trong quá trình luận giải, hãy lưu ý đến pip Inserts để phân loại "Sắc thái năng lượng" ( khi giải bài không được nhắc đến cụm từ pip inserts). Nếu xuất hiện các quân Court, hãy xác định nhân vật xuất hiện trong sự kiện. Trường hợp xuất hiện mâu thuẫn, ứng dụng pip Inserts để gỡ rối. Bắt buộc phải nhắc đến khoảng thời gian ( ví dụ như sự kiện diễn ra nhanh hay chậm, có tính lặp lại hay không, hay vào mùa nào)`;
             } else if (spreadMode === "intent_all") {
-                // Nâng cấp phương thức Toàn Diện (5 lá) theo yêu cầu mới
                 spreadContext = `Trải bài TOÀN DIỆN nâng cấp (5 lá hỗn hợp). Hệ thống phản hồi gồm 3 lá Tarot định vị cốt lõi vấn đề: WHAT (Bản chất): ${drawnCardsList[0].name}${getReversedStr(drawnCardsList[0])}, WHY (Nguyên nhân): ${drawnCardsList[1].name}${getReversedStr(drawnCardsList[1])}, HOW (Hướng hành động cụ thể): ${drawnCardsList[2].name}${getReversedStr(drawnCardsList[2])}. Và kết hợp thêm 2 lá định vị thế giới vật lý thực tế của Lenormand: WHEN (Dự báo thời gian/Tiến trình nhanh chậm): ${drawnCardsList[3].name}, WHO (Đối tượng/Nhân vật liên quan trực tiếp): ${drawnCardsList[4].name}. Hãy đan cài nhịp nhàng bản chất nội tâm từ Tarot và các chi tiết thực tế ngoại cảnh của bộ bài Lenormand để tạo nên một lời luận giải liên kết mạch lạc nhất.`;
             } else if (spreadMode === "intent_mbs") {
                 spreadContext = `Trải bài M.B.S (Tâm linh - Tâm lý - Đời thực). - Spirit (Gốc rễ năng lượng - Chakra Oracle): ${drawnCardsList[0].name}. - Mind (Tâm lý/Bài học - Tarot): ${drawnCardsList[1].name}${getReversedStr(drawnCardsList[1])}. - Body (Sự kiện thực tế - Lenormand): ${drawnCardsList[2].name}. YÊU CẦU: Hãy liên kết sự rung động của Luân Xa dẫn đến trạng thái tâm lý của Tarot, và cuối cùng nó biểu hiện ra đời thực qua lá Lenormand như thế nào.Trong quá trình luận giải, hãy lưu ý đến pip Inserts để phân loại "Sắc thái năng lượng"( khi giải bài không được nhắc đến cụm từ pip inserts). Nếu xuất hiện các quân Court, hãy xác định nhân vật xuất hiện trong sự kiện. Trường hợp xuất hiện mâu thuẫn, ứng dụng pip Inserts để gỡ rối`;
@@ -666,7 +730,6 @@
             } else if (spreadMode === "intent_when") {
                 setupPlan.push(lenormandPop()); setupPlan.push(lenormandPop()); setupPlan.push(lenormandPop());
             } else if (spreadMode === "intent_all") {
-                // Cải tiến hệ thống bốc 5 lá (3 Tarot + 2 Lenormand) cho phương án Toàn Diện
                 setupPlan.push(tarotPop()); setupPlan.push(tarotPop()); setupPlan.push(tarotPop());
                 setupPlan.push(lenormandPop()); setupPlan.push(lenormandPop());
             } else if (spreadMode === "intent_mbs") {
@@ -742,7 +805,6 @@
                 } else if (spreadMode === "intent_mirror") {
                     labelText = ["Bản Ngã", "Tầm Nhìn", "Vị Thế", "Công Chúng", "Sự Thật"][index];
                 }
-                // HỆ THỐNG NHÃN LÁ BÀI CỔ ĐIỂN TRÊN THIẾT BỊ
                 else if (spreadMode === "classic_croix") {
                     labelText = ["Trái (Pour)", "Phải (Contre)", "Trên (État)", "Dưới (Résultats)", "Giữa (Synthèse)"][index];
                 } else if (spreadMode === "classic_ligne") {
