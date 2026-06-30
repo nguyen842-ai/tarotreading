@@ -583,17 +583,17 @@
 
         // --- OPTIONS SPREAD ---
         const modernSpreadsHTML = `
-            <option value="intent_all">💌 TOÀN DIỆN (What, Why, How, When, Who?)</option>
-            <option value="intent_what">💌 WHAT / YES-NO (1 lá Tức thì)</option>
-            <option value="intent_why">💌 WHY / HOW (Gốc rễ, nhân quả)</option>
-            <option value="intent_when">💌 WHEN / WHO (Thời gian & Nhân vật)</option>
-            <option value="intent_mbs">💖 M.B.S (Tâm linh - Tâm lý - Đời thực)</option>
-            <option value="intent_healing">💖 CHỮA LÀNH (Điểm nghẽn năng lượng)</option>
-            <option value="intent_relationship">💖 NHÂN DUYÊN (Sự kiện & Bài học)</option>
-            <option value="intent_dream">🔮 GIẢI MÃ TIỀM THỨC</option>
-            <option value="intent_mirror">🔮 BẢN NGÃ (Vị thế thực tế)</option>
-            <option value="intent_crossroads">🔮 NGÃ RẼ (Hướng A hay B?)</option>
-            <option value="intent_flow">🔮 DÒNG CHẢY SỰ KIỆN</option>
+            <option value="intent_all">💌 TOÀN DIỆN (What, Why, How, When, Who?) 💌</option>
+            <option value="intent_what">💌 WHAT / YES-NO 💌</option>
+            <option value="intent_why">💌 WHY / HOW (Gốc rễ, nhân quả) 💌</option>
+            <option value="intent_when">💌 WHEN / WHO (Thời gian & Nhân vật) 💌</option>
+            <option value="intent_mbs">💖 M.B.S (Tâm linh - Tâm lý - Đời thực) 💖</option>
+            <option value="intent_healing">💖 CHỮA LÀNH (Điểm nghẽn năng lượng) 💖</option>
+            <option value="intent_relationship">💖 NHÂN DUYÊN (Sự kiện & Bài học) 💖</option>
+            <option value="intent_dream">🔮 GIẢI MÃ TIỀM THỨC 🔮</option>
+            <option value="intent_mirror">🔮 BẢN NGÃ (Vị thế thực tế) 🔮</option>
+            <option value="intent_crossroads">🔮 NGÃ RẼ (Hướng A hay B?)🔮</option>
+            <option value="intent_flow">🔮 DÒNG CHẢY SỰ KIỆN 🔮</option>
         `;
         const classicalSpreadsHTML = `
             <option value="classic_croix">⚜️ Chữ Thập (Croix) ⚜️</option>
@@ -611,26 +611,26 @@
 
         // --- THƯ VIỆN POPUP GIỚI THIỆU TRẢI BÀI ---
         const spreadDescriptions = {
-            "intent_all": "<strong>💌 Trải bài Toàn Diện</strong><br><em>3 lá Tarot + 2 lá Lenormand</em><br>5 lá bài tương ứng trả lời nhanh 5 câu hỏi: Chuyện gì đang xảy ra, ở đâu, như thế nào, thời điểm nào, ai đến, ai đi, ai chịu tác động trực tiếp?.",
-            "intent_what": "<strong>💌 Trải bài WHAT / YES-NO</strong><br><em>Random nhanh 1 lá Tarot</em><br>Trả lời nhanh cho câu hỏi có, hoặc không, hoặc chưa xác định, và vì sao?",
-            "intent_why": "<strong>💌 Trải bài WHY / HOW</strong><br><em>Sử dụng 3 lá Tarot thời gian</em><br>Quả ở hiện tại bắt đầu từ nhân gieo ở quá khứ, quả ở tương lai gặt được chính là cái bạn gieo trồng hiện tại.",
-            "intent_when": "<strong>💌 Trải bài WHEN / WHO</strong><br><em>Sử dụng 3 lá Lenormand sự kiện</em><br>Tiên tri về sự kiện, khi nào, ai đến, ai đi, ai tác động, ai chịu tác động?.",
-            "intent_mbs": "<strong>💖 Trải bài M.B.S (Tâm linh - Tâm lý - Đời thực)</strong><br><em>Sử dụng 1 Chakra Oracle + 1 Tarot + 1 Lenormand</em><br>Sự kết hợp hoàn hảo để theo dõi năng lượng tiềm thức (Chakra), biến chuyển tâm trí (Tarot) và sự kiện vật lý ngoài đời thực (Lenormand).",
-            "intent_healing": "<strong>💖 Trải bài Chữa Lành Điểm Nghẽn</strong><br><em>Sử dụng 1 Chakra Oracle + 1 Tarot + 2 lá Lenormand</em><br>Phơi bày vết thương năng lượng trên luân xa, giải mã nguyên nhân sâu xa và chỉ ra hành động thực tế cần làm ngay để khơi thông.",
-            "intent_relationship": "<strong>💖 Trải bài Gương Soi Nhân Duyên</strong><br><em>Sử dụng 2 Tarot + 2 Lenormand + 1 Chakra Oracle</em><br>Soi chiếu tâm lý của bạn và đối phương, dự báo sự kiện thực tế sắp tới và rút ra bài học nghiệp quả chung giữa hai người.",
-            "intent_dream": "<strong>🔮 Trải bài Giải Mã Tiềm Thức</strong><br><em>Sử dụng 1 Chakra Oracle + 1 Tarot + 1 Lenormand</em><br>Kết nối các tín hiệu cảnh báo từ giấc mơ hoặc Higher Self nhằm tìm ra dấu hiệu nhận biết thực tế ngoài đời thực.",
-            "intent_mirror": "<strong>🔮 Trải bài Tấm Gương Bản Ngã</strong><br><em>Sử dụng 5 lá Tarot</em><br>Khai phóng cái tôi sâu bên trong, so sánh góc nhìn cá nhân với vị thế thực tế và hình ảnh của bạn dưới mắt nhìn công chúng.",
-            "intent_crossroads": "<strong>🔮 Trải bài Ngã Rẽ Cuộc Đời</strong><br><em>Sử dụng 3 lá Tarot</em><br>Phân tích và đặt lên bàn cân so sánh giữa hai lựa chọn Hướng A và Hướng B, đi kèm lời khuyên tổng quan từ vũ trụ.",
-            "intent_flow": "<strong>🔮 Trải bài Dòng Chảy Sự Kiện</strong><br><em>Sử dụng 5 lá Lenormand</em><br>Xâu chuỗi tuyến tính 5 giai đoạn liên tục để kể lại một câu chuyện thực tế rõ ràng từ quá khứ xa đến kết quả cuối cùng trong tương lai.",
+            "intent_all": "<strong>💌 Trải bài Toàn Diện 💌</strong><br><em>3 lá Tarot + 2 lá Lenormand</em><br>5 lá bài tương ứng trả lời nhanh 5 câu hỏi: Chuyện gì đang xảy ra, ở đâu, như thế nào, thời điểm nào, ai đến, ai đi, ai chịu tác động trực tiếp?.",
+            "intent_what": "<strong>💌 Trải bài WHAT / YES-NO 💌</strong><br><em>Random nhanh 1 lá Tarot</em><br>Trả lời nhanh cho câu hỏi có, hoặc không, hoặc chưa xác định, và vì sao?",
+            "intent_why": "<strong>💌 Trải bài WHY / HOW 💌</strong><br><em>Sử dụng 3 lá Tarot thời gian</em><br>Quả ở hiện tại bắt đầu từ nhân gieo ở quá khứ, quả ở tương lai gặt được chính là cái bạn gieo trồng hiện tại.",
+            "intent_when": "<strong>💌 Trải bài WHEN / WHO 💌</strong><br><em>Sử dụng 3 lá Lenormand sự kiện</em><br>Tiên tri về sự kiện, khi nào, ai đến, ai đi, ai tác động, ai chịu tác động?.",
+            "intent_mbs": "<strong>💖 Trải bài M.B.S (Tâm linh - Tâm lý - Đời thực) 💖</strong><br><em>Sử dụng 1 Chakra Oracle + 1 Tarot + 1 Lenormand</em><br>Sự kết hợp hoàn hảo để theo dõi năng lượng tiềm thức (Chakra), biến chuyển tâm trí (Tarot) và sự kiện vật lý ngoài đời thực (Lenormand).",
+            "intent_healing": "<strong>💖 Trải bài Chữa Lành Điểm Nghẽn 💖</strong><br><em>Sử dụng 1 Chakra Oracle + 1 Tarot + 2 lá Lenormand</em><br>Phơi bày vết thương năng lượng trên luân xa, giải mã nguyên nhân sâu xa và chỉ ra hành động thực tế cần làm ngay để khơi thông.",
+            "intent_relationship": "<strong>💖 Trải bài Gương Soi Nhân Duyên 💖</strong><br><em>Sử dụng 2 Tarot + 2 Lenormand + 1 Chakra Oracle</em><br>Soi chiếu tâm lý của bạn và đối phương, dự báo sự kiện thực tế sắp tới và rút ra bài học nghiệp quả chung giữa hai người.",
+            "intent_dream": "<strong>🔮 Trải bài Giải Mã Tiềm Thức 🔮</strong><br><em>Sử dụng 1 Chakra Oracle + 1 Tarot + 1 Lenormand</em><br>Kết nối các tín hiệu cảnh báo từ giấc mơ hoặc Higher Self nhằm tìm ra dấu hiệu nhận biết thực tế ngoài đời thực.",
+            "intent_mirror": "<strong>🔮 Trải bài Tấm Gương Bản Ngã 🔮</strong><br><em>Sử dụng 5 lá Tarot</em><br>Khai phóng cái tôi sâu bên trong, so sánh góc nhìn cá nhân với vị thế thực tế và hình ảnh của bạn dưới mắt nhìn công chúng.",
+            "intent_crossroads": "<strong>🔮 Trải bài Ngã Rẽ Cuộc Đời 🔮</strong><br><em>Sử dụng 3 lá Tarot</em><br>Phân tích và đặt lên bàn cân so sánh giữa hai lựa chọn Hướng A và Hướng B, đi kèm lời khuyên tổng quan từ vũ trụ.",
+            "intent_flow": "<strong>🔮 Trải bài Dòng Chảy Sự Kiện 🔮</strong><br><em>Sử dụng 5 lá Lenormand</em><br>Xâu chuỗi tuyến tính 5 giai đoạn liên tục để kể lại một câu chuyện thực tế rõ ràng từ quá khứ xa đến kết quả cuối cùng trong tương lai.",
             "classic_croix": "<strong>⚜️ Trải bài Chữ Thập Cổ Điển ⚜️</strong><br><em>Sử dụng 5 lá Tarot - Sắp xếp hình chữ thập</em><br>Biện chứng sâu sắc hai mặt Thuận lợi (Pour) - Trở ngại (Contre), kết hợp trạng thái Hiện tại để mở ra Kết quả và lá bài Đại cục ở trung tâm.",
             "classic_ligne": "<strong>⚜️ Trải bài Thẳng Hàng Cổ Điển ⚜️</strong><br><em>Sử dụng 3 lá Tarot hàng ngang</em><br>Theo dõi tiến trình vận động, logic nhân quả từ khởi điểm đến thực tại và điểm đến tương lai.",
             "classic_grand_ourse": "<strong>⚜️ Trải bài Đại Hùng Tinh Cổ Điển ⚜️</strong><br><em>Sử dụng 7 lá Tarot</em><br>Mô phỏng hình học 7 ngôi sao Bắc Đẩu để bóc tách 7 góc khuất chiến lược xung quanh gốc rễ, điểm mù và biến chuyển bất ngờ.",
             "classic_astrologique": "<strong>⚜️ Trải bài Thiên Văn Học Cổ Điển ⚜️</strong><br><em>Sử dụng 12 lá Tarot</em><br>Trải rộng toàn diện qua 12 Cung Nhà của Hệ thống Chiêm tinh, cung cấp cái nhìn đa chiều xung quanh tất cả các khía cạnh cuộc sống.",
             "classic_celtique": "<strong>⚜️ Trải bài Celtic Cross Cổ Điển ⚜️</strong><br><em>Sử dụng 10 lá Tarot - Sắp xếp Thập tự & Cột dọc</em><br>Cấu trúc huyền thoại phổ biến nhất của trải bài cổ điển. Dùng trong phân tích toàn diện vòng tròn cốt lõi (tiềm thức, quá khứ, tương lai gần) và trục đứng ngoại cảnh tác động.",
-            "mystic_tree": "<strong>🌳 Tree of Life Spread (Hệ Thần học Kabbalah)</strong><br><em>Sử dụng 10 lá Tarot</em><br>Dựa trên Cây Sự Sống vĩ đại, trải bài này vạch trần toàn bộ dòng chảy năng lượng từ tầng nhận thức thần thánh, qua trí tuệ lý tính, xuống đến thế giới vật lý thực tại.",
-            "mystic_shadow": "<strong>🌑 Shadow Work (Hệ Tâm lý học Jungian)</strong><br><em>Sử dụng 5 lá Tarot</em><br>Khám phá những góc tối bị kìm nén, tổn thương gốc rễ nằm sâu trong vô thức và hướng dẫn cách để bạn chấp nhận, tích hợp bóng tối vào bản ngã ánh sáng.",
-            "mystic_johari": "<strong>🪟 Blind Spot (Cửa sổ Johari - 4 vùng lăng kính)</strong><br><em>Sử dụng 4 lá Tarot</em><br>Phơi bày 4 lăng kính nhận thức: Điều ai cũng thấy (Vùng Mở), Điều người khác thấy nhưng bạn không hay biết (Vùng Mù), Điều bạn giấu kín (Vùng Ẩn) và Tiềm thức sâu thẳm (Vùng Đóng).",
-            "mystic_karmic": "<strong>♾️ Duyên Nợ Tiền Kiếp (Karmic Connections)</strong><br><em>Sử dụng 5 lá Tarot</em><br>Hé lộ các khế ước linh hồn, nợ nghiệp tiền kiếp, nguyên nhân sâu xa của những vòng lặp liên tục ở hiện tại và bài học linh hồn bạn cần tốt nghiệp."
+            "mystic_tree": "<strong>🌳 Tree of Life Spread (Hệ Thần học Kabbalah) 🌳</strong><br><em>Sử dụng 10 lá Tarot</em><br>Dựa trên Cây Sự Sống vĩ đại, trải bài này vạch trần toàn bộ dòng chảy năng lượng từ tầng nhận thức thần thánh, qua trí tuệ lý tính, xuống đến thế giới vật lý thực tại.",
+            "mystic_shadow": "<strong>🌑 Shadow Work (Hệ Tâm lý học Jungian) 🌑</strong><br><em>Sử dụng 5 lá Tarot</em><br>Khám phá những góc tối bị kìm nén, tổn thương gốc rễ nằm sâu trong vô thức và hướng dẫn cách để bạn chấp nhận, tích hợp bóng tối vào bản ngã ánh sáng.",
+            "mystic_johari": "<strong>😈 Blind Spot (Cửa sổ Johari - 4 vùng lăng kính) 😈</strong><br><em>Sử dụng 4 lá Tarot</em><br>Phơi bày 4 lăng kính nhận thức: Điều ai cũng thấy (Vùng Mở), Điều người khác thấy nhưng bạn không hay biết (Vùng Mù), Điều bạn giấu kín (Vùng Ẩn) và Tiềm thức sâu thẳm (Vùng Đóng).",
+            "mystic_karmic": "<strong>♾️ Duyên Nợ Tiền Kiếp (Karmic Connections) ♾️</strong><br><em>Sử dụng 5 lá Tarot</em><br>Hé lộ các khế ước linh hồn, nợ nghiệp tiền kiếp, nguyên nhân sâu xa của những vòng lặp liên tục ở hiện tại và bài học linh hồn bạn cần tốt nghiệp."
         };
 
         function updateSpreadOptions() {
