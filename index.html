@@ -262,36 +262,41 @@
                 transform: none !important;
                 margin-top: 0 !important;
             }
+            /* Tách nhãn của lá số 2 (vắt ngang) ra khỏi lá số 1 trong Celtic Cross */
+.classic_celtique .card-slot:nth-child(2) .card-label {
+    bottom: 140%; /* Đẩy lên cao hẳn để không vướng vào nhãn lá số 1 */
+}
         }
 
-        /* --- BÀN BỐC BÀI & KÍCH THƯỚC LÁ BÀI (THU NHỎ LẠI) --- */
-        .tarot-board { display: flex; flex-wrap: wrap; justify-content: center; gap: 30px 12px; margin: 15px 0; width: 100%; }
-        
-        /* ================= CÁC LAYOUT HÌNH HỌC ĐẶC THÙ ================= */
-        /* 1. TRẢI BÀI CHỮ THẬP CỔ ĐIỂN (classic_croix - 5 lá) */
-        .tarot-board.classic_croix {
-            display: grid;
-            grid-template-columns: 1fr 1fr 1fr;
-            grid-template-rows: auto auto auto;
-            gap: 20px 15px;
-            justify-items: center;
-            align-items: center;
-        }
-        .classic_croix .card-slot:nth-child(1) { grid-area: 2 / 1; } /* Pour - Trái */
-        .classic_croix .card-slot:nth-child(2) { grid-area: 2 / 3; } /* Contre - Phải */
-        .classic_croix .card-slot:nth-child(3) { grid-area: 1 / 2; } /* État - Trên */
-        .classic_croix .card-slot:nth-child(4) { grid-area: 3 / 2; } /* Résultats - Dưới */
-        .classic_croix .card-slot:nth-child(5) { grid-area: 2 / 2; } /* Synthèse - Giữa trung tâm */
+     /* --- BÀN BỐC BÀI & KÍCH THƯỚC LÁ BÀI --- */
+.tarot-board { 
+    display: flex; flex-wrap: wrap; justify-content: center; 
+    gap: 45px 12px; /* Tăng khoảng cách dọc lên 45px */
+    margin: 25px 0; /* Tăng lề trên dưới để có không gian */
+    width: 100%; 
+}
 
-        /* 2. CELTIC CROSS (classic_celtique - 10 lá) */
-        .tarot-board.classic_celtique {
-            display: grid;
-            grid-template-columns: 1fr 1.2fr 1fr 1fr;
-            grid-template-rows: repeat(4, 1fr);
-            gap: 15px 10px;
-            justify-items: center;
-            align-items: center;
-        }
+/* 1. TRẢI BÀI CHỮ THẬP CỔ ĐIỂN (classic_croix - 5 lá) */
+.tarot-board.classic_croix {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-rows: auto auto auto;
+    gap: 45px 15px; /* Tăng khoảng cách dọc lên 45px */
+    justify-items: center;
+    align-items: center;
+}
+/* ... Giữ nguyên phần grid-area của các card-slot bên dưới ... */
+
+/* 2. CELTIC CROSS (classic_celtique - 10 lá) */
+.tarot-board.classic_celtique {
+    display: grid;
+    grid-template-columns: 1fr 1.2fr 1fr 1fr;
+    grid-template-rows: repeat(4, 1fr);
+    gap: 40px 10px; /* Tăng khoảng cách dọc lên 40px */
+    justify-items: center;
+    align-items: center;
+}
+/* ... Giữ nguyên phần grid-area của các card-slot bên dưới ... */
         /* Vòng chữ thập bên trái (Cột 1, 2, 3) */
         .classic_celtique .card-slot:nth-child(1) { grid-area: 2 / 2 / 4 / 3; z-index: 1; margin-top: 20px;} /* Hiện tại - Lõi */
         .classic_celtique .card-slot:nth-child(2) { grid-area: 2 / 2 / 4 / 3; transform: rotate(90deg); z-index: 2; margin-top: 20px;} /* Thách thức - Vắt ngang */
@@ -342,13 +347,23 @@
         }
         
        .card-label {
-            /* Đẩy nhãn lên phía trên lá bài và mở rộng chiều ngang ra một chút để có không gian rớt dòng */
-            position: absolute; bottom: 100%; left: 50%; transform: translateX(-50%); width: 140%;
-            font-size: 0.65rem; color: var(--accent-gold); font-weight: bold;
-            text-transform: uppercase; letter-spacing: 0.5px; text-shadow: 0 0 3px rgba(0,0,0,0.8);
-            text-align: center; padding-bottom: 6px;
-            line-height: 1.3; word-wrap: break-word;
-        }
+    position: absolute; 
+    bottom: calc(100% + 8px); /* Cách mép trên của lá bài một khoảng cố định */
+    left: 50%; 
+    transform: translateX(-50%); 
+    width: 150%; /* Nới rộng một chút để chữ đỡ bị rớt dòng */
+    font-size: 0.65rem; 
+    color: var(--accent-gold); 
+    font-weight: bold;
+    text-transform: uppercase; 
+    letter-spacing: 0.5px; 
+    text-shadow: 0 0 5px rgba(0,0,0,1); /* Viền đen đậm hơn để dễ đọc trên mọi phông nền */
+    text-align: center; 
+    line-height: 1.3; 
+    word-wrap: break-word;
+    z-index: 10; /* Đảm bảo nhãn luôn nổi lên trên cùng */
+    pointer-events: none; /* Tránh cản trở việc click lật bài */
+}
 
         .card-inner { width: 100%; height: 100%; position: relative; transition: transform 0.6s cubic-bezier(0.4, 0.2, 0.2, 1); transform-style: preserve-3d; }
         .card-slot.flipped .card-inner { transform: rotateY(180deg); }
