@@ -180,13 +180,13 @@
         input::placeholder { color: #a78bfa; opacity: 0.7; }
 
         .spread-row { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; justify-content: center; }
-        .spread-row label { width: 100%; margin-bottom: 2px; font-size: 0.9rem; color: var(--text-muted); }
+        .spread-row label { width: 100%; margin-bottom: 2px; font-size: 0.9rem; color: var(--text-muted); text-align: left; }
         
         select {
             padding: 12px 10px; font-size: 16px; border-radius: 8px;
             background: var(--bg-panel); color: white; border: 1px solid var(--accent-gold);
             cursor: pointer; outline: none; -webkit-appearance: none; appearance: none;
-            flex: 1 1 200px; min-width: 0;
+            width: 100%; margin-bottom: 12px;
         }
 
         .btn-row { display: flex; gap: 8px; justify-content: center; margin-top: 10px; flex-wrap: wrap; }
@@ -206,7 +206,7 @@
         #status-message { font-size: clamp(0.9rem, 1.2vw, 1.05rem); margin-bottom: 16px; font-style: italic; color: var(--text-muted); line-height: 1.5; }
 
         /* --- BÀN BỐC BÀI & LÁ BÀI --- */
-.tarot-board { display: flex; flex-wrap: wrap; justify-content: center; gap: 45px 20px; margin: 36px 0 24px 0; padding: 0 4px; }
+        .tarot-board { display: flex; flex-wrap: wrap; justify-content: center; gap: 45px 20px; margin: 36px 0 24px 0; padding: 0 4px; }
         
         .card-slot { perspective: 1000px; width: clamp(90px, 12vw, 140px); height: clamp(158px, 21vw, 245px); cursor: pointer; position: relative; touch-action: manipulation; }
         @media (max-width: 860px) { .card-slot { width: clamp(100px, 28vw, 150px); height: clamp(175px, 49vw, 260px); } }
@@ -267,7 +267,7 @@
     </div>
 
     <div class="tabs-container">
-        <button class="tab-btn active" onclick="switchTab('tab-intro')">📖 Giới Thiệu Chung</button>
+        <button class="tab-btn active" onclick="switchTab('tab-intro')">💌 Giới Thiệu Chung</button>
         <button class="tab-btn" onclick="switchTab('tab-reading')">✨ Bốc Bài & Giải Mã</button>
     </div>
 
@@ -288,23 +288,21 @@
                     <div class="ai-inputs">
                         <input type="text" id="user-question" placeholder="💭 Bạn đang băn khoăn điều gì lúc này?">
                     </div>
+                    
+                    <div class="spread-row">
+                        <label for="reading-style">Hệ thống giải mã:</label>
+                        <select id="reading-style">
+                            <option value="modern" selected>✨ Xem Bài Hiện Đại</option>
+                            <option value="classical">⚜️ Xem TAROT Cổ Điển</option>
+                        </select>
+                    </div>
+
                     <div class="spread-row">
                         <label for="spread-type">Bạn muốn vũ trụ làm rõ điều gì?</label>
                         <select id="spread-type">
-                            <option value="intent_all"> 💌 TOÀN DIỆN (What, Why, When, Who, How?)</option>
-                            <option value="intent_what">💌 WHAT / YES-NO ( 1 lá Tarot thông điệp ngay lập tức)</option>
-                            <option value="intent_why">💌 WHY / HOW (Gốc rễ, nhân quả & Xu hướng sắp tới)</option>
-                            <option value="intent_when">💌 WHEN / WHO (Sự kiện, Thời gian & Con người cụ thể)</option>
-                            <option value="intent_mbs">💖 M.B.S (Tâm linh - Tâm lý - Đời thực)</option>
-                            <option value="intent_healing">💖 CHỮA LÀNH (Điểm nghẽn năng lượng & Giải pháp)</option>
-                            <option value="intent_crossroads">🔮 NGÃ RẼ CUỘC ĐỜI (Công việc/Tình cảm: Hướng A hay B?)</option>
-                            <option value="intent_flow">🔮 DÒNG CHẢY SỰ KIỆN (Tiên tri diễn biến sự kiện thực)</option>
-                            <option value="intent_relationship">💖 GƯƠNG SOI NHÂN DUYÊN (Tâm lý, Sự kiện & Bài học)</option>
-                            <option value="intent_dream">🔮 GIẢI MÃ GIẤC MƠ / TIỀM THỨC</option>
-                            <option value="intent_mirror">💖 BẢN NGÃ (Vị thế & Sự thật )</option>
-
-                        </select>
+                            </select>
                     </div>
+
                     <div class="btn-row">
                         <button id="btn-shuffle" class="mystic-btn">🔀 Xào Bài</button>
                         <button id="btn-draw" class="mystic-btn" disabled>✨ Bốc Bài</button>
@@ -316,7 +314,7 @@
             </div>
 
             <div class="panel-right">
-                <div class="panel-right-label">✦ Thông điệp vũ trụ</div>
+                <div class="panel-right-label">✦ Thông điệp vũ trụ ✦</div>
                 <div class="reading-placeholder" id="reading-placeholder">
                     <div class="placeholder-icon">🔮</div>
                     <div>Thông điệp từ vũ trụ sẽ hiện ra ở đây<br>sau khi bạn lật đủ các lá bài...</div>
@@ -326,7 +324,7 @@
                     <div id="reading-content"></div>
                     <div class="copy-btn-wrap">
                         <button id="btn-copy">
-                            <span id="copy-icon">📋</span>
+                            <span id="copy-icon">🔮</span>
                             <span id="copy-label">Sao chép</span>
                         </button>
                     </div>
@@ -349,7 +347,7 @@
         async function fetchIntroData() {
             const contentDiv = document.getElementById('sheets-content');
             const loadingDiv = document.getElementById('loading-intro');
-            const apiUrl = 'https://tarotreading-eight.vercel.app/api/sheets';// Đường dẫn Serverless Function trên Vercel của bạn
+            const apiUrl = 'https://tarotreading-eight.vercel.app/api/sheets';
 
             try {
                 const response = await fetch(apiUrl);
@@ -361,12 +359,8 @@
 
                     data.valueRanges.forEach((sheet, index) => {
                         const values = sheet.values || [];
-                        
-                        // Quy ước: Ô A1 (hàng 0, cột 0) là Tiêu đề, Ô A2 (hàng 1, cột 0) là Nội dung
                         const title = (values[0] && values[0][0]) ? values[0][0] : `Mục ${index + 1}`;
                         const content = (values[1] && values[1][0]) ? values[1][0] : `Nội dung đang được cập nhật...`;
-
-                        // Format thay thế các dấu xuống dòng xuống dạng HTML <br> để giữ bố cục văn bản từ Sheets
                         const formattedContent = content.replace(/\n/g, '<br>');
 
                         htmlOutput += `
@@ -387,11 +381,9 @@
             }
         }
 
-        // Tự động gọi dữ liệu ngay khi tải xong cây thư mục DOM
         document.addEventListener("DOMContentLoaded", fetchIntroData);
 
-
-        // ================= GIỮ NGUYÊN 100% LOGIC CODE BỐC BÀI CŨ CỦA BẠN =================
+        // ================= DANH SÁCH DỮ LIỆU BÀI GỐC =================
         const tarotDeck = [
             "0thefool", "1themagician", "2thehighpriestess", "3theempress", "4theemperor", 
             "5thehierophant", "6thelovers", "7thechariot", "8strength", "9thehermit", 
@@ -424,7 +416,7 @@
         
         const backTarot = pathTarot + "card-back.PNG";
         const backLenormand = pathLenormand + "card-back-L.jpg"; 
-        const backChakra = pathChakra + "card-back-C.PNG"
+        const backChakra = pathChakra + "card-back-C.PNG";
 
         let currentTarotDeck = [];
         let currentLenormandDeck = [];
@@ -436,15 +428,66 @@
         let cooldownTimer = null; 
         const REVERSAL_THRESHOLD = 30; 
 
+        // --- DOM Elements ---
         const btnShuffle = document.getElementById("btn-shuffle");
         const btnDraw = document.getElementById("btn-draw");
         const board = document.getElementById("tarot-board");
         const statusMsg = document.getElementById("status-message");
+        const readingStyleSelect = document.getElementById("reading-style");
         const spreadSelect = document.getElementById("spread-type");
         const readingBox = document.getElementById("reading-result");
         const readingContent = document.getElementById("reading-content");
         const btnCopy = document.getElementById("btn-copy");
         const readingPlaceholder = document.getElementById("reading-placeholder");
+
+        // --- CẤU CẤU TRÚC DANH SÁCH SPREADS THEO DANH MỤC ICON ---
+        const modernSpreadsHTML = `
+            <option value="intent_all">💌 TOÀN DIỆN (What, Why, How? & When, Who?)</option>
+            <option value="intent_what">💌 WHAT / YES-NO (1 lá Tarot thông điệp ngay lập tức)</option>
+            <option value="intent_why">💌 WHY / HOW (Gốc rễ, nhân quả & Xu hướng sắp tới)</option>
+            <option value="intent_when">💌 WHEN / WHO (Sự kiện, Thời gian & Con người cụ thể)</option>
+            <option value="intent_mbs">💖 M.B.S (Tâm linh - Tâm lý - Đời thực)</option>
+            <option value="intent_healing">💖 CHỮA LÀNH (Điểm nghẽn năng lượng & Giải pháp)</option>
+            <option value="intent_relationship">💖 GƯƠNG SOI NHÂN DUYÊN (Tâm lý, Sự kiện & Bài học)</option>
+            <option value="intent_dream">🔮 GIẢI MÃ GIẤC MƠ / TIỀM THỨC</option>
+            <option value="intent_mirror">🔮 BẢN NGÃ (Vị thế & Sự thật)</option>
+            <option value="intent_crossroads">🔮 NGÃ RẼ CUỘC ĐỜI (Công việc/Tình cảm: Hướng A hay B?)</option>
+            <option value="intent_flow">🔮 DÒNG CHẢY SỰ KIỆN (Tiên tri diễn biến sự kiện thực)</option>
+        `;
+
+        const classicalSpreadsHTML = `
+            <option value="classic_croix">⚜️ Tirage au Croix ⚜️</option>
+            <option value="classic_ligne">⚜️ Tirage en ligne ⚜️</option>
+            <option value="classic_grand_ourse">⚜️ Tirage de Grande Ourse ⚜️</option>
+            <option value="classic_astrologique">⚜️ Tirage astrologique ⚜️</option>
+            <option value="classic_celtique">⚜️ Tirage de Celtique ⚜️</option>
+        `;
+
+        // Đồng bộ danh sách câu hỏi khi thay đổi phong cách hệ thống
+        function updateSpreadOptions() {
+            if (readingStyleSelect.value === "modern") {
+                spreadSelect.innerHTML = modernSpreadsHTML;
+            } else {
+                spreadSelect.innerHTML = classicalSpreadsHTML;
+            }
+            resetBoardState();
+        }
+
+        function resetBoardState() {
+            if (isProcessing) return; 
+            btnDraw.disabled = true;
+            board.innerHTML = "";
+            hideReading();
+            document.body.classList.add("shuffling");
+            setTimeout(() => document.body.classList.remove("shuffling"), 1200);
+            statusMsg.innerText = "Hệ thống đã thay đổi cấu trúc trải bài. Hãy xào bài lại nhé!";
+        }
+
+        readingStyleSelect.addEventListener("change", updateSpreadOptions);
+        spreadSelect.addEventListener("change", resetBoardState);
+        
+        // Khởi tạo danh sách lần đầu tiên khi tải ứng dụng
+        spreadSelect.innerHTML = modernSpreadsHTML;
 
         function showReading() {
             readingBox.style.display = "flex";
@@ -453,6 +496,7 @@
         }
 
         function hideReading() {
+            readingBox.style.none = "none";
             readingBox.style.display = "none";
             if (readingPlaceholder) readingPlaceholder.style.display = "flex";
         }
@@ -487,6 +531,7 @@
             }, 1000);
         }
 
+        // ================= PHẦN ENGINE GIẢI MÃ CHÍNH (PROMPTS) =================
         async function getFullTarotReading() {
             if (isProcessing) return;
             const question = document.getElementById("user-question").value.trim() || "Vũ trụ muốn gửi gắm thông điệp gì cho mình hôm nay?";
@@ -498,10 +543,11 @@
             readingContent.innerHTML = `🔮 <span class="loading-dots">Thông điệp đang được giải mã</span>`;
 
             let spreadContext = "";
-            let roleContext = "Bạn là một Reader Tarot, Lenormand thực tế, có tầm nhìn. Bạn có khả năng liên kết bức tranh tổng quan tốt. Bạn hiểu ý nghĩa của bài Tarot ngược, đọc được thời gian, liên kết được tarot và chiêm tinh học, và hiểu ý nghĩa của Chakra Wisdom Oracle về màu sắc luân xa và năng lượng tiềm thức. ";
+            let roleContext = "Bạn là một Reader Tarot, Lenormand thực tế, có tầm nhìn. Bạn có khả năng liên kết bức tranh tổng quan tốt. Bạn hiểu ý nghĩa của bài Tarot ngược, đọc được thời gian, liên kết được tarot và chiêm tinh học, và hiểu ý nghĩa của Chakra Wisdom Oracle về năng lượng tiềm thức. ";
 
             const getReversedStr = (card) => (card.type === 'tarot' && card.reversed) ? " (ngược)" : "";
 
+            // --- KIỂM TRA PHƯƠNG ÁN ĐỂ ĐƯA VÀO BỐ CỤC PROMPT PHÙ HỢP ---
             if (spreadMode === "intent_what") {
                 spreadContext = `người xem đang cần một câu trả lời dạng WHAT hoặc YES/NO. Lá bài: ${drawnCardsList[0].name}${getReversedStr(drawnCardsList[0])}. Đầu tiên bắt buộc trả lời Yes hoặc No, giải thích vì sao lại là yes hoặc no. nếu nội dung chung chung không thể nói yes hoặc no, hãy gợi ý cho người xem đang vướng mắc ở đâu. Không cần đưa ra lời khuyên`;
             } else if (spreadMode === "intent_why") {
@@ -509,13 +555,13 @@
             } else if (spreadMode === "intent_when") {
                 spreadContext = `3 lá Lenormand: ${drawnCardsList[0].name}, ${drawnCardsList[1].name}, ${drawnCardsList[2].name}. Ghép nghĩa 3 lá này lại thành MỘT sự kiện thực tế, coi lá ở giữa làm trọng tâm. Tuần tự liên kết lá ở giữa và các lá bên cạnh, sau đó ghép tất cả sự kiện thành một bức tranh lớn. Trong quá trình luận giải, hãy lưu ý đến pip Inserts để phân loại "Sắc thái năng lượng" ( khi giải bài không được nhắc đến cụm từ pip inserts). Nếu xuất hiện các quân Court, hãy xác định nhân vật xuất hiện trong sự kiện. Trường hợp xuất hiện mâu thuẫn, ứng dụng pip Inserts để gỡ rối. Bắt buộc phải nhắc đến khoảng thời gian ( ví dụ như sự kiện diễn ra nhanh hay chậm, có tính lặp lại hay không, hay vào mùa nào)`;
             } else if (spreadMode === "intent_all") {
-                spreadContext = `Gốc rễ nội tâm (Tarot): ${drawnCardsList[0].name}${getReversedStr(drawnCardsList[0])}. Sự kiện đời thực (Lenormand): ${drawnCardsList[1].name} và ${drawnCardsList[2].name}. Đan cài sự kiện từ 2 lá Lenormand với năng lượng của lá Tarot.`;
+                // Nâng cấp phương thức Toàn Diện (5 lá) theo yêu cầu mới
+                spreadContext = `Trải bài TOÀN DIỆN nâng cấp (5 lá hỗn hợp). Hệ thống phản hồi gồm 3 lá Tarot định vị cốt lõi vấn đề: WHAT (Bản chất): ${drawnCardsList[0].name}${getReversedStr(drawnCardsList[0])}, WHY (Nguyên nhân): ${drawnCardsList[1].name}${getReversedStr(drawnCardsList[1])}, HOW (Hướng hành động cụ thể): ${drawnCardsList[2].name}${getReversedStr(drawnCardsList[2])}. Và kết hợp thêm 2 lá định vị thế giới vật lý thực tế của Lenormand: WHEN (Dự báo thời gian/Tiến trình nhanh chậm): ${drawnCardsList[3].name}, WHO (Đối tượng/Nhân vật liên quan trực tiếp): ${drawnCardsList[4].name}. Hãy đan cài nhịp nhàng bản chất nội tâm từ Tarot và các chi tiết thực tế ngoại cảnh của bộ bài Lenormand để tạo nên một lời luận giải liên kết mạch lạc nhất.`;
             } else if (spreadMode === "intent_mbs") {
                 spreadContext = `Trải bài M.B.S (Tâm linh - Tâm lý - Đời thực). - Spirit (Gốc rễ năng lượng - Chakra Oracle): ${drawnCardsList[0].name}. - Mind (Tâm lý/Bài học - Tarot): ${drawnCardsList[1].name}${getReversedStr(drawnCardsList[1])}. - Body (Sự kiện thực tế - Lenormand): ${drawnCardsList[2].name}. YÊU CẦU: Hãy liên kết sự rung động của Luân Xa dẫn đến trạng thái tâm lý của Tarot, và cuối cùng nó biểu hiện ra đời thực qua lá Lenormand như thế nào.Trong quá trình luận giải, hãy lưu ý đến pip Inserts để phân loại "Sắc thái năng lượng"( khi giải bài không được nhắc đến cụm từ pip inserts). Nếu xuất hiện các quân Court, hãy xác định nhân vật xuất hiện trong sự kiện. Trường hợp xuất hiện mâu thuẫn, ứng dụng pip Inserts để gỡ rối`;
             } else if (spreadMode === "intent_healing") {
                 spreadContext = `Trải bài CHỮA LÀNH ĐIỂM NGHẼN. - Vết thương/Góc khuất (Chakra Oracle): ${drawnCardsList[0].name}. - Nguyên nhân kìm hãm (Tarot): ${drawnCardsList[1].name}${getReversedStr(drawnCardsList[1])}. - Giải pháp hành động (2 lá Lenormand): ${drawnCardsList[2].name} và ${drawnCardsList[3].name}. YÊU CẦU: Phân tích tổn thương năng lượng qua lá Chakra, phải nói được đây là luân xa gì, chủ về vấn đề gì, bệnh tật thực tế trên cơ thể có thể biểu hiện ra là gì, giải mã nguyên nhân sâu xa từ Tarot. Đặc biệt, hãy ghép 2 lá Lenormand lại thành MỘT hành động cụ thể ở đời thực mà họ CẦN LÀM NGAY để khơi thông điểm nghẽn.Trong quá trình luận giải, hãy lưu ý đến pip Inserts để phân loại "Sắc thái năng lượng"( khi giải bài không được nhắc đến cụm từ pip inserts). Nếu xuất hiện các quân Court, hãy xác định nhân vật xuất hiện trong sự kiện. Trường hợp xuất hiện mâu thuẫn, ứng dụng pip Inserts để gỡ rối`;
-            } 
-            else if (spreadMode === "intent_crossroads") {
+            } else if (spreadMode === "intent_crossroads") {
                 spreadContext = `Trải bài Ngã rẽ cuộc đời (3 lá Tarot). Lá 1 (Kết quả nếu chọn hướng A): ${drawnCardsList[0].name}${getReversedStr(drawnCardsList[0])}. Lá 2 (Kết quả nếu chọn hướng B): ${drawnCardsList[1].name}${getReversedStr(drawnCardsList[1])}. Lá 3 (Lời khuyên tổng quan từ vũ trụ): ${drawnCardsList[2].name}${getReversedStr(drawnCardsList[2])}. Phân tích và so sánh rõ ràng sự khác biệt giữa hai con đường, xác định mối liên kết sau để đưa ra lời luận giải: có xuất hiện lá ẩn chính không, lá ẩn chính đang nằm ở chu kỳ nào?, các yếu tố lặp số hoặc lặp các quân court trong bộ ẩn phụ không, những con số có nằm sát chu kỳ hoàn thành sự kiện không hay bắt đầu?. Tổng quan tụ bài liên quan đến nguyên tố nào, đây sẽ là tiền đề để giải quyết được sự kiện. những lá bài có màu sắc tích cực hay tiêu cực.Sự kiện này sẽ có quý nhân nào hỗ trợ hay không? Khoảng thời gian trong lá tương lai bắt buộc phải trả lời được nằm trong mốc thời gian nào. sau đó đưa ra lời khuyên cuối cùng.`;
             } else if (spreadMode === "intent_flow") {
                 spreadContext = `Trải bài Dòng chảy sự kiện (5 lá Lenormand). Quá khứ xa: ${drawnCardsList[0].name}, Quá khứ gần: ${drawnCardsList[1].name}, Trọng tâm sự kiện: ${drawnCardsList[2].name}, Tương lai gần: ${drawnCardsList[3].name}, Kết quả cuối cùng: ${drawnCardsList[4].name}. Đọc theo chuỗi liên kết các lá bài từ trái sang phải để kể lại một diễn biến sự kiện cụ thể, logic và có kết quả rõ ràng. Áp dụng pip Inserts nếu cần thiết( khi giải bài không được nhắc đến cụm từ pip inserts). Trường hợp xuất hiện mâu thuẫn, ứng dụng pip Inserts để gỡ rối. Bắt buộc phải nhắc đến khoảng thời gian ( ví dụ như sự kiện diễn ra nhanh hay chậm, có tính lặp lại hay không, hay vào mùa nào).`;
@@ -523,9 +569,23 @@
                 spreadContext = `Trải bài Gương soi nhân duyên (5 lá hỗn hợp). Tâm lý của bạn (Tarot): ${drawnCardsList[0].name}${getReversedStr(drawnCardsList[0])}. Tâm lý của người ấy (Tarot): ${drawnCardsList[1].name}${getReversedStr(drawnCardsList[1])}. Sự kiện thực tế sắp tới (2 lá Lenormand): ${drawnCardsList[2].name} và ${drawnCardsList[3].name}. Bài học tâm linh/nghiệp quả (Chakra): ${drawnCardsList[4].name}. Phân tích cảm xúc hai bên, sự kiện sẽ xảy đến ở đời thực và chốt lại bằng bài học cốt lõi mà tụ bài muốn truyền tải.`;
             } else if (spreadMode === "intent_dream") {
                 spreadContext = `Trải bài Giải mã giấc mơ / Thông điệp tiềm thức (3 lá hỗn hợp). Điểm nghẽn năng lượng trong tiềm thức (Chakra): ${drawnCardsList[0].name}. Thông điệp linh hồn / Higher Self muốn nhắn nhủ (Tarot): ${drawnCardsList[1].name}${getReversedStr(drawnCardsList[1])}. Manh mối/Dấu hiệu ở đời thực để nhận biết (Lenormand): ${drawnCardsList[2].name}. Kết nối sự cảnh báo của tiềm thức với thông điệp cao trào và hướng dẫn người xem chú ý đến dấu hiệu vật lý nào.`;
-            }
-            else if (spreadMode === "intent_mirror") {
+            } else if (spreadMode === "intent_mirror") {
                 spreadContext = `Trải bài Tấm Gương Bản Ngã (5 lá Tarot). Bản ngã/Cái tôi bên trong: ${drawnCardsList[0].name}${getReversedStr(drawnCardsList[0])}. Soi chiếu nhìn bản thân: ${drawnCardsList[1].name}${getReversedStr(drawnCardsList[1])}. Vị thế thực tế hiện tại: ${drawnCardsList[2].name}${getReversedStr(drawnCardsList[2])}. Bạn trong mắt công chúng/người khác: ${drawnCardsList[3].name}${getReversedStr(drawnCardsList[3])}. Sự thật cốt lõi & Lời khuyên: ${drawnCardsList[4].name}${getReversedStr(drawnCardsList[4])}. YÊU CẦU: Hãy phân tích sự đối chiếu (và mâu thuẫn nếu có) giữa cách nhìn nhận bản thân, thực tế đang ở vị thế nào, và cách người khác đánh giá. Hãy lưu ý đến các yếu tố lặp số ở bộ ẩn phụ, cung hoàng đạo,The Three Primitives,The Seven Sacred Planets và houses, sau cùng, bạn hãy kiểm tra xem nguyên tố nào chiếm phần lớn tụ bài. Hãy đọc như một nhà chiêm tinh học kiêm tarot reader linh hoạt`;
+            } 
+            
+            // --- HỆ THỐNG PROMPTS GIẢI MÃ CỔ ĐIỂN ---
+            else if (spreadMode === "classic_croix") {
+                spreadContext = `Trải bài Chữ Thập Cổ Điển (Tirage au Croix) bao gồm 5 lá Tarot theo đúng cấu trúc truyền thống pháp: Lá 1 (Bên Trái - Pour: Đại diện cho thế mạnh, nguồn lực thuận lợi thúc đẩy): ${drawnCardsList[0].name}${getReversedStr(drawnCardsList[0])}. Lá 2 (Bên Phải - Contre: Đại diện cho trở ngại, thách thức hoặc phe đối lập): ${drawnCardsList[1].name}${getReversedStr(drawnCardsList[1])}. Lá 3 (Phía Trên - État: Tình cảnh thực tế hiện tại, đỉnh điểm của hoàn cảnh): ${drawnCardsList[2].name}${getReversedStr(drawnCardsList[2])}. Lá 4 (Phía Dưới - Résultats: Kết quả phát triển, diễn tiến tự nhiên tiếp theo): ${drawnCardsList[3].name}${getReversedStr(drawnCardsList[3])}. Lá 5 (Ở Chính Giữa - Synthèse: Lá bài tổng hợp mang tính cốt lõi, giải pháp và lời khuyên kết luận): ${drawnCardsList[4].name}${getReversedStr(drawnCardsList[4])}. Hãy thực hiện biện chứng sâu sắc hai mặt Pour-Contre kết hợp với tình huống hiện tại để khai mở toàn bộ kết quả tổng hòa từ lá bài trung tâm.`;
+            } else if (spreadMode === "classic_ligne") {
+                spreadContext = `Trải bài Thẳng Hàng Cổ Điển (Tirage en Ligne) với chuỗi 3 lá bài Tarot phân tích tiến trình vận động liên tục: Lá 1 (Khởi điểm / Quá khứ nguồn cơn): ${drawnCardsList[0].name}${getReversedStr(drawnCardsList[0])}, Lá 2 (Điểm nút hành động / Thực tại): ${drawnCardsList[1].name}${getReversedStr(drawnCardsList[1])}, Lá 3 (Điểm đến / Xu hướng tương lai): ${drawnCardsList[2].name}${getReversedStr(drawnCardsList[2])}. Hãy phân tích sợi dây liên kết thời gian và logic nhân quả chặt chẽ giữa 3 lá bài để giúp người xem nắm vững dòng năng lượng đang di chuyển.`;
+            } else if (spreadMode === "classic_grand_ourse") {
+                spreadContext = `Trải bài Đại Hùng Tinh Cổ Điển (Tirage de Grande Ourse) nương theo năng lượng mô phỏng hình học 7 ngôi sao của chòm Bắc Đẩu với 7 lá bài Tarot: Lá 1 (Bản chất gốc rễ của câu hỏi): ${drawnCardsList[0].name}${getReversedStr(drawnCardsList[0])}, Lá 2 (Mối nguy hại, điểm mù ẩn khuất): ${drawnCardsList[1].name}${getReversedStr(drawnCardsList[1])}, Lá 3 (Lực cản hoặc sự hỗ trợ từ ngoại cảnh bên ngoài): ${drawnCardsList[2].name}${getReversedStr(drawnCardsList[2])}, Lá 4 (Giải pháp, vũ khí cốt lõi có thể vận dụng): ${drawnCardsList[3].name}${getReversedStr(drawnCardsList[3])}, Lá 5 (Biến chuyển ngắn hạn sắp tới): ${drawnCardsList[4].name}${getReversedStr(drawnCardsList[4])}, Lá 6 (Năng lượng bất ngờ kích hoạt/Yếu tố phát sinh đột ngột): ${drawnCardsList[5].name}${getReversedStr(drawnCardsList[5])}, Lá 7 (Kết luận chung cuộc lâu dài): ${drawnCardsList[6].name}${getReversedStr(drawnCardsList[6])}. Vui lòng tổng hợp bức tranh thiên văn 7 góc nhìn này thành hướng dẫn chiến lược thực tế nhất.`;
+            } else if (spreadMode === "classic_astrologique") {
+                spreadContext = `Trải bài Thiên Văn Học Cổ Điển (Tirage Astrologique) tương ứng cấu trúc 12 Cung Nhà Hệ Thống Chiêm Tinh Học bằng 12 lá bài Tarot: 
+                Nhà 1 (Cái tôi, bản ngã hiện tại): ${drawnCardsList[0].name}${getReversedStr(drawnCardsList[0])}, Nhà 2 (Tài sản, tài chính, giá trị cá nhân): ${drawnCardsList[1].name}${getReversedStr(drawnCardsList[1])}, Nhà 3 (Môi trường giao tiếp, tư duy học tập ngắn hạn): ${drawnCardsList[2].name}${getReversedStr(drawnCardsList[2])}, Nhà 4 (Gia đạo, tổ ấm, gốc rễ thầm kín): ${drawnCardsList[3].name}${getReversedStr(drawnCardsList[3])}, Nhà 5 (Sự sáng tạo, niềm vui cá nhân, chuyện tình cảm lãng mạn): ${drawnCardsList[4].name}${getReversedStr(drawnCardsList[4])}, Nhà 6 (Công việc thường nhật, sức khỏe thể chất): ${drawnCardsList[5].name}${getReversedStr(drawnCardsList[5])}, Nhà 7 (Mối quan hệ song phương, đối tác, người phối ngẫu): ${drawnCardsList[6].name}${getReversedStr(drawnCardsList[6])}, Nhà 8 (Sự chuyển hóa sâu sắc, khủng hoảng, tiền bạc người khác): ${drawnCardsList[7].name}${getReversedStr(drawnCardsList[7])}, Nhà 9 (Học vấn cao, triết lý sống, chuyến đi xa/định hướng lớn): ${drawnCardsList[8].name}${getReversedStr(drawnCardsList[8])}, Nhà 10 (Sự nghiệp, danh tiếng cá nhân, vị thế xã hội): ${drawnCardsList[9].name}${getReversedStr(drawnCardsList[9])}, Nhà 11 (Mạng lưới xã hội, bạn bè, lý tưởng tương lai): ${drawnCardsList[10].name}${getReversedStr(drawnCardsList[10])}, Nhà 12 (Góc tối khuất lấp, chướng ngại nghiệp quả, tiềm thức sâu): ${drawnCardsList[11].name}${getReversedStr(drawnCardsList[11])}. Hãy đan cài và kết nối các nhà chiêm tinh một cách linh hoạt để đưa ra cái nhìn tổng quan đa chiều nhất xung quanh thắc mắc của người xem.`;
+            } else if (spreadMode === "classic_celtique") {
+                spreadContext = `Trải bài Celtic Cross Thập Tự Celtic Cổ Điển (Tirage de Celtique) phân tích cấu trúc phức tạp bằng 10 lá bài Tarot: 
+                Lá 1 (Tình cảnh trung tâm cốt lõi): ${drawnCardsList[0].name}${getReversedStr(drawnCardsList[0])}, Lá 2 (Lực tác động chéo/Thử thách hoặc đòn bẩy trực tiếp): ${drawnCardsList[1].name}${getReversedStr(drawnCardsList[1])}, Lá 3 (Ý thức tối cao hoặc mục tiêu đỉnh điểm hướng tới): ${drawnCardsList[2].name}${getReversedStr(drawnCardsList[2])}, Lá 4 (Nền tảng tiềm thức sâu xa/Căn cơ sự việc): ${drawnCardsList[3].name}${getReversedStr(drawnCardsList[3])}, Lá 5 (Quá khứ gần vừa rời xa): ${drawnCardsList[4].name}${getReversedStr(drawnCardsList[4])}, Lá 6 (Tương lai gần chuẩn bị hiển lộ): ${drawnCardsList[5].name}${getReversedStr(drawnCardsList[5])}, Lá 7 (Vị thế hiện tại, tâm lý thật của người hỏi): ${drawnCardsList[6].name}${getReversedStr(drawnCardsList[6])}, Lá 8 (Môi trường bên ngoài, người xung quanh tác động): ${drawnCardsList[7].name}${getReversedStr(drawnCardsList[7])}, Lá 9 (Hy vọng thầm kín hoặc nỗi sợ kìm hãm): ${drawnCardsList[8].name}${getReversedStr(drawnCardsList[8])}, Lá 10 (Kết luận chung cuộc dài hạn cuối cùng): ${drawnCardsList[9].name}${getReversedStr(drawnCardsList[9])}. Liên kết chặt chẽ phần vòng tròn thập tự (Lá 1 đến 6) và trục đứng kết quả (Lá 7 đến 10) để đưa ra câu trả lời chi tiết và thấu triệt toàn diện.`;
             }
 
             const promptText = `${roleContext} Người dùng đặt câu hỏi: "${question}". Trong quẻ này, ${spreadContext} Hãy viết bài luận giải bằng tiếng việt, phân tách các phần rõ ràng, ngôn từ thực tế (20% thiên thời ( có đúng lúc không?), 30% địa lợi ( có được trợ giúp, trợ lực nào không?), 40% nhân hòa ( có tiềm lực, năng lực không, có ý chí không?), không nhắc đến các cụm từ thiên thời địa lợi nhân hòa và % khi giải bài). Xưng hô là "mình" và "bạn". Tuyệt đối không nhắc đến các từ ngữ lập trình.`;
@@ -585,6 +645,7 @@
             }, 1200);
         }
 
+        // ================= CẤU HÌNH PHÂN PHỐI LÁ BÀI & CẤU TRÚC LOGIC PHÂN BỔ =================
         function drawCards() {
             board.innerHTML = ""; 
             hideReading();
@@ -605,14 +666,14 @@
             } else if (spreadMode === "intent_when") {
                 setupPlan.push(lenormandPop()); setupPlan.push(lenormandPop()); setupPlan.push(lenormandPop());
             } else if (spreadMode === "intent_all") {
-                setupPlan.push(tarotPop()); setupPlan.push(lenormandPop()); setupPlan.push(lenormandPop());
+                // Cải tiến hệ thống bốc 5 lá (3 Tarot + 2 Lenormand) cho phương án Toàn Diện
+                setupPlan.push(tarotPop()); setupPlan.push(tarotPop()); setupPlan.push(tarotPop());
+                setupPlan.push(lenormandPop()); setupPlan.push(lenormandPop());
             } else if (spreadMode === "intent_mbs") {
                 setupPlan.push(chakraPop()); setupPlan.push(tarotPop()); setupPlan.push(lenormandPop());
             } else if (spreadMode === "intent_healing") {
                 setupPlan.push(chakraPop()); setupPlan.push(tarotPop()); setupPlan.push(lenormandPop()); setupPlan.push(lenormandPop());
-            } 
-            // CẤU HÌNH BỐC BÀI MỚI
-            else if (spreadMode === "intent_crossroads") {
+            } else if (spreadMode === "intent_crossroads") {
                 setupPlan.push(tarotPop()); setupPlan.push(tarotPop()); setupPlan.push(tarotPop());
             } else if (spreadMode === "intent_flow") {
                 setupPlan.push(lenormandPop()); setupPlan.push(lenormandPop()); setupPlan.push(lenormandPop()); setupPlan.push(lenormandPop()); setupPlan.push(lenormandPop());
@@ -620,11 +681,21 @@
                 setupPlan.push(tarotPop()); setupPlan.push(tarotPop()); setupPlan.push(lenormandPop()); setupPlan.push(lenormandPop()); setupPlan.push(chakraPop());
             } else if (spreadMode === "intent_dream") {
                 setupPlan.push(chakraPop()); setupPlan.push(tarotPop()); setupPlan.push(lenormandPop());
-            }
-              else if (spreadMode === "intent_mirror") {
+            } else if (spreadMode === "intent_mirror") {
                 setupPlan.push(tarotPop()); setupPlan.push(tarotPop()); setupPlan.push(tarotPop()); setupPlan.push(tarotPop()); setupPlan.push(tarotPop());
             }
-
+            // PHÂN PHỐI LÁ BÀI HỆ CỔ ĐIỂN
+            else if (spreadMode === "classic_croix") {
+                setupPlan.push(tarotPop()); setupPlan.push(tarotPop()); setupPlan.push(tarotPop()); setupPlan.push(tarotPop()); setupPlan.push(tarotPop());
+            } else if (spreadMode === "classic_ligne") {
+                setupPlan.push(tarotPop()); setupPlan.push(tarotPop()); setupPlan.push(tarotPop());
+            } else if (spreadMode === "classic_grand_ourse") {
+                for(let i = 0; i < 7; i++) setupPlan.push(tarotPop());
+            } else if (spreadMode === "classic_astrologique") {
+                for(let i = 0; i < 12; i++) setupPlan.push(tarotPop());
+            } else if (spreadMode === "classic_celtique") {
+                for(let i = 0; i < 10; i++) setupPlan.push(tarotPop());
+            }
 
             drawnCardsList = setupPlan;
             totalCardsToDraw = setupPlan.length;
@@ -655,14 +726,12 @@
                 } else if (spreadMode === "intent_when") {
                     labelText = `Sự Kiện ${index + 1}`;
                 } else if (spreadMode === "intent_all") {
-                    labelText = cardObj.type === 'tarot' ? "Gốc Rễ Nội Tâm" : `Sự Kiện Thực Tế ${index}`;
+                    labelText = ["WHAT (Tarot)", "WHY (Tarot)", "HOW (Tarot)", "WHEN (Lenormand)", "WHO (Lenormand)"][index];
                 } else if (spreadMode === "intent_mbs") {
                     labelText = ["Spirit (Luân Xa)", "Mind (Tâm Trí)", "Body (Hành Động)"][index];
                 } else if (spreadMode === "intent_healing") {
                     labelText = ["Vết Thương", "Nguyên Nhân", "Giải Pháp", "Bổ Trợ"][index];
-                }
-                // NHÃN CHO BÀI MỚI
-                else if (spreadMode === "intent_crossroads") {
+                } else if (spreadMode === "intent_crossroads") {
                     labelText = ["Hướng A", "Hướng B", "Lời Khuyên"][index];
                 } else if (spreadMode === "intent_flow") {
                     labelText = ["Quá Khứ Xa", "Quá Khứ Gần", "Trọng Tâm", "Tương Lai Gần", "Kết Quả"][index];
@@ -670,11 +739,21 @@
                     labelText = ["Tâm Lý Bạn", "Tâm Lý Họ", "Sự Kiện 1", "Sự Kiện 2", "Bài Học"][index];
                 } else if (spreadMode === "intent_dream") {
                     labelText = ["Tiềm Thức", "Higher Self", "Dấu Hiệu"][index];
-                }
-                  else if (spreadMode === "intent_mirror") {
+                } else if (spreadMode === "intent_mirror") {
                     labelText = ["Bản Ngã", "Tầm Nhìn", "Vị Thế", "Công Chúng", "Sự Thật"][index];
                 }
-
+                // HỆ THỐNG NHÃN LÁ BÀI CỔ ĐIỂN TRÊN THIẾT BỊ
+                else if (spreadMode === "classic_croix") {
+                    labelText = ["Trái (Pour)", "Phải (Contre)", "Trên (État)", "Dưới (Résultats)", "Giữa (Synthèse)"][index];
+                } else if (spreadMode === "classic_ligne") {
+                    labelText = ["Khởi Điểm", "Điểm Nút", "Phát Triển"][index];
+                } else if (spreadMode === "classic_grand_ourse") {
+                    labelText = `Sao Bắc Đẩu ${index + 1}`;
+                } else if (spreadMode === "classic_astrologique") {
+                    labelText = `Cung Nhà ${index + 1}`;
+                } else if (spreadMode === "classic_celtique") {
+                    labelText = `Vị Trí C.C ${index + 1}`;
+                }
 
                 cardSlot.innerHTML = `
                     <div class="card-label">${labelText}</div>
@@ -707,16 +786,6 @@
 
         btnShuffle.addEventListener("click", shuffleDeck);
         btnDraw.addEventListener("click", drawCards);
-
-        spreadSelect.addEventListener("change", () => {
-            if (isProcessing) return; 
-            btnDraw.disabled = true;
-            board.innerHTML = "";
-            hideReading();
-            document.body.classList.add("shuffling");
-            setTimeout(() => document.body.classList.remove("shuffling"), 1200);
-            statusMsg.innerText = "Bạn đã thay đổi câu hỏi. Hãy xào bài lại nhé!";
-        });
     </script>
 </body>
 </html>
