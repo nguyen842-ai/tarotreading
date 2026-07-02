@@ -493,8 +493,36 @@
             .classic_celtique .card-slot:nth-child(2) {
                 transform: none !important;
                 margin-top: 0 !important;
-            }
-        }
+        /* 1. TĂNG CỠ CHỮ CHO NỘI DUNG ĐỌC VÀ CHỐNG TRÀN */
+    .intro-card p, 
+    #reading-result {
+        font-size: 1.05rem !important; /* Tương đương gần 17px, chuẩn đọc trên mobile */
+        line-height: 1.65; /* Tăng khoảng cách dòng để dễ quét mắt */
+        overflow-wrap: break-word; /* Ép các từ quá dài phải rớt dòng, không chọc thủng khung */
+        word-wrap: break-word;
+    }
+
+    /* 2. CHẶN LỖI TỰ ĐỘNG ZOOM KHI NHẬP CÂU HỎI */
+    /* Nút bấm, input, select BẮT BUỘC tối thiểu 16px (1rem) trên mobile */
+    input[type="text"], 
+    select,
+    .tab-btn,
+    .mystic-btn {
+        font-size: 1rem !important; 
+    }
+
+    /* 3. TĂNG KÍCH THƯỚC NHÃN LÁ BÀI (Để người dùng không phải căng mắt) */
+    .card-label {
+        font-size: 0.75rem !important; /* To hơn mức 0.65rem cũ */
+        min-width: 100px; /* Nới rộng khung chứa chữ để chữ không bị dồn cục */
+        bottom: calc(100% + 12px); /* Đẩy nhãn lên cao một chút để không đè vào bài */
+    }
+    
+    /* 4. MỞ RỘNG KHÔNG GIAN THỞ CHO KHUNG KẾT QUẢ */
+    #reading-result {
+        padding: 20px 15px !important;
+    }
+}
     </style>
 </head>
 <body>
