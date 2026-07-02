@@ -453,47 +453,49 @@
         }
 
         @media (max-width: 768px) {
-            /* 4. Tiến trình Linear Flow: Tiêu đề -> Ô câu hỏi -> Các lá bài -> Giải mã */
-            .app-layout { 
-                flex-direction: column !important; 
-                min-height: unset !important; 
-                gap: 25px;
-            }
-            
-            /* Khu vực chứa các lá bài (Nằm ở trên) */
-            .panel-left { 
-                flex: unset !important; 
-                max-width: 100% !important; 
-                border-right: none !important; 
-                border-bottom: 1px dashed var(--border-color); 
-                padding-right: 0 !important; 
-                padding-bottom: 25px; 
-                margin-bottom: 10px; 
-            }
-            
-            /* Khu vực chứa thông điệp giải mã (Nằm ở dưới cùng) */
-            .panel-right { 
-                flex: unset !important; 
-                width: 100% !important;
-            }
-            #reading-result {
-                max-height: unset !important; /* Mở rộng thoải mái theo chiều dài text trên mobile */
-            }
+    /* 4. Tiến trình Linear Flow: Tiêu đề -> Ô câu hỏi -> Các lá bài -> Giải mã */
+    .app-layout { 
+        flex-direction: column !important; 
+        min-height: unset !important; 
+        gap: 25px;
+    }
+    
+    /* Khu vực chứa các lá bài (Nằm ở trên) */
+    .panel-left { 
+        flex: unset !important; 
+        max-width: 100% !important; 
+        border-right: none !important; 
+        border-bottom: 1px dashed var(--border-color); 
+        padding-right: 0 !important; 
+        padding-bottom: 25px; 
+        margin-bottom: 10px; 
+    }
+    
+    /* Khu vực chứa thông điệp giải mã (Nằm ở dưới cùng) */
+    .panel-right { 
+        flex: unset !important; 
+        width: 100% !important;
+    }
+    #reading-result {
+        max-height: unset !important; /* Mở rộng thoải mái theo chiều dài text trên mobile */
+    }
 
-            /* Chuyển các mô hình lưới phức tạp sang Flexbox trên Mobile để chống vỡ khung hình và chống chồng đè chữ */
-            .tarot-board.classic_croix,
-            .tarot-board.classic_celtique,
-            .tarot-board.mystic_tree {
-                display: flex !important; 
-                flex-wrap: wrap !important; 
-                justify-content: center !important;
-                gap: 52px 16px !important; /* Giãn khoảng cách dọc rộng rãi để hiển thị nhãn chữ */
-                padding-top: 15px;
-            }
-            .classic_celtique .card-slot:nth-child(2) {
-                transform: none !important;
-                margin-top: 0 !important;
-       /* 1. TĂNG CỠ CHỮ LÊN MỨC ~19.2px (1.2rem) */
+    /* Chuyển các mô hình lưới phức tạp sang Flexbox trên Mobile để chống vỡ khung hình và chống chồng đè chữ */
+    .tarot-board.classic_croix,
+    .tarot-board.classic_celtique,
+    .tarot-board.mystic_tree {
+        display: flex !important; 
+        flex-wrap: wrap !important; 
+        justify-content: center !important;
+        gap: 52px 16px !important; /* Giãn khoảng cách dọc rộng rãi để hiển thị nhãn chữ */
+        padding-top: 15px;
+    }
+    .classic_celtique .card-slot:nth-child(2) {
+        transform: none !important;
+        margin-top: 0 !important;
+    } /* <-- MÌNH ĐÃ BỔ SUNG DẤU ĐÓNG NGOẶC NÀY */
+
+    /* 1. TĂNG CỠ CHỮ LÊN MỨC ~19.2px (1.2rem) */
     .intro-card p, 
     #reading-result {
         font-size: 1.2rem !important; 
