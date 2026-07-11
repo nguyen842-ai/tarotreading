@@ -851,40 +851,157 @@
             const getReversedStr = (card) => (card.type === 'tarot' && card.reversed) ? " (ngược)" : "";
 
             if (spreadMode === "intent_what") {
-                spreadContext = `người xem đang cần một câu trả lời dạng WHAT hoặc YES/NO. Lá bài: ${drawnCardsList[0].name}${getReversedStr(drawnCardsList[0])}. Đầu tiên bắt buộc trả lời Yes hoặc No, giải thích vì sao lại là yes hoặc no. nếu nội dung chung chung không thể nói yes hoặc no, hãy gợi ý cho người xem đang vướng mắc ở đâu. Không cần đưa ra lời khuyên`;
+                spreadContext = `người xem đang cần một câu trả lời dạng WHAT hoặc YES/NO. Lá bài: ${drawnCardsList[0].name}${getReversedStr(drawnCardsList[0])}. 
+                Đầu tiên bắt buộc trả lời Yes hoặc No, giải thích vì sao lại là yes hoặc no. nếu nội dung chung chung không thể nói yes hoặc no, hãy gợi ý cho người xem đang vướng mắc ở đâu. Không cần đưa ra lời khuyên`;
             } else if (spreadMode === "intent_why") {
-                spreadContext = `Trải bài 3 lá Tarot: Quá khứ gần: ${drawnCardsList[0].name}${getReversedStr(drawnCardsList[0])}, Hiện tại: ${drawnCardsList[1].name}${getReversedStr(drawnCardsList[1])}, Tương lai gần: ${drawnCardsList[2].name}${getReversedStr(drawnCardsList[2])}. 1. Nhìn một lượt qua 3 lá bài, xác định mối liên kết sau để đưa ra lời luận giải: có xuất hiện lá ẩn chính không, lá ẩn chính đang nằm ở chu kỳ nào?, các yếu tố lặp số hoặc lặp các quân court trong bộ ẩn phụ không, những con số có nằm sát chu kỳ hoàn thành sự kiện không hay bắt đầu?. Hãy kiểm tra xem nguyên tố nào chiếm phần lớn tụ bài? những lá bài có màu sắc tích cực hay tiêu cực.Sự kiện này sẽ có quý nhân nào hỗ trợ hay không? Khoảng thời gian trong lá tương lai bắt buộc phải trả lời được nằm trong mốc thời gian nào. Hãy đọc như một nhà chiêm tinh học kiêm tarot reader linh hoạt`;
+                spreadContext = `Trải bài 3 lá Tarot: 
+                Quá khứ gần: ${drawnCardsList[0].name}${getReversedStr(drawnCardsList[0])}, 
+                Hiện tại: ${drawnCardsList[1].name}${getReversedStr(drawnCardsList[1])}, 
+                Tương lai gần: ${drawnCardsList[2].name}${getReversedStr(drawnCardsList[2])}. 
+                1. Nhìn một lượt qua 3 lá bài, xác định mối liên kết sau để đưa ra lời luận giải: có xuất hiện lá ẩn chính không, lá ẩn chính đang nằm ở chu kỳ nào?, 
+                các yếu tố lặp số hoặc lặp các quân court trong bộ ẩn phụ không, những con số có nằm sát chu kỳ hoàn thành sự kiện không hay bắt đầu?
+                Hãy kiểm tra xem nguyên tố nào chiếm phần lớn tụ bài? những lá bài có màu sắc tích cực hay tiêu cực.Sự kiện này sẽ có quý nhân nào hỗ trợ hay không? 
+                Khoảng thời gian trong lá tương lai bắt buộc phải trả lời được nằm trong mốc thời gian nào. Hãy đọc như một nhà chiêm tinh học kiêm tarot reader linh hoạt`;
             } else if (spreadMode === "intent_when") {
-                spreadContext = `3 lá Lenormand: ${drawnCardsList[0].name}, ${drawnCardsList[1].name}, ${drawnCardsList[2].name}. Ghép nghĩa 3 lá này lại thành MỘT sự kiện thực tế, coi lá ở giữa làm trọng tâm. Tuần tự liên kết lá ở giữa và các lá bên cạnh, sau đó ghép tất cả sự kiện thành một bức tranh lớn. Trong quá trình luận giải, hãy lưu ý đến pip Inserts để phân loại "Sắc thái năng lượng" ( khi giải bài không được nhắc đến cụm từ pip inserts). Nếu xuất hiện các quân Court, hãy xác định nhân vật xuất hiện trong sự kiện. Trường hợp xuất hiện mâu thuẫn, ứng dụng pip Inserts để gỡ rối. Bắt buộc phải nhắc đến Timing và khoảng thời gian ( ví dụ như sự kiện diễn ra nhanh hay chậm, có tính lặp lại hay không, hay vào mùa nào)`;
+                spreadContext = `3 lá Lenormand: ${drawnCardsList[0].name}, ${drawnCardsList[1].name}, ${drawnCardsList[2].name}. 
+                Ghép nghĩa 3 lá này lại thành MỘT sự kiện thực tế, coi lá ở giữa làm trọng tâm. Tuần tự liên kết lá ở giữa và các lá bên cạnh, sau đó ghép tất cả sự kiện thành một bức tranh lớn. 
+                Trong quá trình luận giải, hãy lưu ý đến pip Inserts để phân loại "Sắc thái năng lượng" ( khi giải bài không được nhắc đến cụm từ pip inserts). 
+                Nếu xuất hiện các quân Court, hãy xác định nhân vật xuất hiện trong sự kiện. Trường hợp xuất hiện mâu thuẫn, ứng dụng pip Inserts để gỡ rối. 
+                Bắt buộc phải nhắc đến Timing và khoảng thời gian ( ví dụ như sự kiện diễn ra nhanh hay chậm, có tính lặp lại hay không, hay vào mùa nào)`;
             } else if (spreadMode === "intent_all") {
-                spreadContext = `Trải bài TOÀN DIỆN nâng cấp (5 lá hỗn hợp). Hệ thống phản hồi gồm 3 lá Tarot định vị cốt lõi vấn đề: WHAT (Bản chất): ${drawnCardsList[0].name}${getReversedStr(drawnCardsList[0])}, WHY (Nguyên nhân): ${drawnCardsList[1].name}${getReversedStr(drawnCardsList[1])}, HOW (Hướng hành động cụ thể): ${drawnCardsList[2].name}${getReversedStr(drawnCardsList[2])}. Và kết hợp thêm 2 lá định vị thế giới vật lý thực tế của Lenormand: WHEN (Dự báo thời gian/Tiến trình nhanh chậm): ${drawnCardsList[3].name}, WHO (Đối tượng/Nhân vật liên quan trực tiếp): ${drawnCardsList[4].name}. Hãy đan cài nhịp nhàng bản chất nội tâm từ Tarot và các chi tiết thực tế ngoại cảnh của bộ bài Lenormand để tạo nên một lời luận giải liên kết mạch lạc nhất. Bắt buộc phải nhắc đến Timing và khoảng thời gian ( ví dụ như sự kiện diễn ra nhanh hay chậm, có tính lặp lại hay không, hay vào mùa nào)`;
+                spreadContext = `Trải bài TOÀN DIỆN nâng cấp (5 lá hỗn hợp). 
+                Hệ thống phản hồi gồm 3 lá Tarot định vị cốt lõi vấn đề: 
+                WHAT (Bản chất): ${drawnCardsList[0].name}${getReversedStr(drawnCardsList[0])}, 
+                WHY (Nguyên nhân): ${drawnCardsList[1].name}${getReversedStr(drawnCardsList[1])}, 
+                HOW (Hướng hành động cụ thể): ${drawnCardsList[2].name}${getReversedStr(drawnCardsList[2])}. 
+                Và kết hợp thêm 2 lá định vị thế giới vật lý thực tế của Lenormand: 
+                WHEN (Dự báo thời gian/Tiến trình nhanh chậm): ${drawnCardsList[3].name}, 
+                WHO (Đối tượng/Nhân vật liên quan trực tiếp): ${drawnCardsList[4].name}. 
+                Hãy đan cài nhịp nhàng bản chất nội tâm từ Tarot và các chi tiết thực tế ngoại cảnh của bộ bài Lenormand để tạo nên một lời luận giải liên kết mạch lạc nhất. 
+                Bắt buộc phải nhắc đến Timing và khoảng thời gian ( ví dụ như sự kiện diễn ra nhanh hay chậm, có tính lặp lại hay không, hay vào mùa nào)`;
             } else if (spreadMode === "intent_mbs") {
-                spreadContext = `Trải bài M.B.S (Tâm linh - Tâm lý - Đời thực). - Spirit (Gốc rễ năng lượng - Chakra Oracle): ${drawnCardsList[0].name}. - Mind (Tâm lý/Bài học - Tarot): ${drawnCardsList[1].name}${getReversedStr(drawnCardsList[1])}. - Body (Sự kiện thực tế - Lenormand): ${drawnCardsList[2].name}. YÊU CẦU: Hãy liên kết sự rung động của Luân Xa dẫn đến trạng thái tâm lý của Tarot, và cuối cùng nó biểu hiện ra đời thực qua lá Lenormand như thế nào.Trong quá trình luận giải, hãy lưu ý đến pip Inserts để phân loại "Sắc thái năng lượng"( khi giải bài không được nhắc đến cụm từ pip inserts). Nếu xuất hiện các quân Court, hãy xác định nhân vật xuất hiện trong sự kiện. Trường hợp xuất hiện mâu thuẫn, ứng dụng pip Inserts để gỡ rối. Bắt buộc phải nhắc đến Timing và khoảng thời gian ( ví dụ như sự kiện diễn ra nhanh hay chậm, có tính lặp lại hay không, hay vào mùa nào)`;
+                spreadContext = `Trải bài M.B.S (Tâm linh - Tâm lý - Đời thực).
+                - Spirit (Gốc rễ năng lượng - Chakra Oracle): ${drawnCardsList[0].name}.
+                - Mind (Tâm lý/Bài học - Tarot): ${drawnCardsList[1].name}${getReversedStr(drawnCardsList[1])}.
+                - Body (Sự kiện thực tế - Lenormand): ${drawnCardsList[2].name}.
+                YÊU CẦU: Hãy liên kết sự rung động của Luân Xa dẫn đến trạng thái tâm lý của Tarot, và cuối cùng nó biểu hiện ra đời thực qua lá Lenormand như thế nào.
+                Trong quá trình luận giải, hãy lưu ý đến pip Inserts để phân loại "Sắc thái năng lượng"( khi giải bài không được nhắc đến cụm từ pip inserts).
+                Nếu xuất hiện các quân Court, hãy xác định nhân vật xuất hiện trong sự kiện. Trường hợp xuất hiện mâu thuẫn, ứng dụng pip Inserts để gỡ rối. 
+                Bắt buộc phải nhắc đến Timing và khoảng thời gian ( ví dụ như sự kiện diễn ra nhanh hay chậm, có tính lặp lại hay không, hay vào mùa nào)`;
             } else if (spreadMode === "intent_healing") {
-                spreadContext = `Trải bài CHỮA LÀNH ĐIỂM NGHẽN. - Vết thương/Góc khuất (Chakra Oracle): ${drawnCardsList[0].name}. - Nguyên nhân kìm hãm (Tarot): ${drawnCardsList[1].name}${getReversedStr(drawnCardsList[1])}. - Giải pháp hành động (2 lá Lenormand): ${drawnCardsList[2].name} và ${drawnCardsList[3].name}. YÊU CẦU: Phân tích tổn thương năng lượng qua lá Chakra, phải nói được đây là luân xa gì, chủ về vấn đề gì, bệnh tật thực tế trên cơ thể có thể biểu hiện ra là gì, giải mã nguyên nhân sâu xa từ Tarot. Đặc biệt, hãy ghép 2 lá Lenormand lại thành MỘT hành động cụ thể ở đời thực mà họ CẦN LÀM NGAY để khơi thông điểm nghẽn.Trong quá trình luận giải, hãy lưu ý đến pip Inserts để phân loại "Sắc thái năng lượng"( khi giải bài không được nhắc đến cụm từ pip inserts). Nếu xuất hiện các quân Court, hãy xác định nhân vật xuất hiện trong sự kiện. Trường hợp xuất hiện mâu thuẫn, ứng dụng pip Inserts để gỡ rối. Bắt buộc phải nhắc đến Timing và khoảng thời gian ( ví dụ như sự kiện diễn ra nhanh hay chậm, có tính lặp lại hay không, hay vào mùa nào)`;
+                spreadContext = `Trải bài CHỮA LÀNH ĐIỂM NGHẽN.
+                - Vết thương/Góc khuất (Chakra Oracle): ${drawnCardsList[0].name}.
+                - Nguyên nhân kìm hãm (Tarot): ${drawnCardsList[1].name}${getReversedStr(drawnCardsList[1])}.
+                - Giải pháp hành động (2 lá Lenormand): ${drawnCardsList[2].name} và ${drawnCardsList[3].name}.
+                YÊU CẦU: Phân tích tổn thương năng lượng qua lá Chakra, phải nói được đây là luân xa gì, chủ về vấn đề gì, bệnh tật thực tế trên cơ thể có thể biểu hiện ra là gì, giải mã nguyên nhân sâu xa từ Tarot.
+                Đặc biệt, hãy ghép 2 lá Lenormand lại thành MỘT hành động cụ thể ở đời thực mà họ CẦN LÀM NGAY để khơi thông điểm nghẽn.
+                Trong quá trình luận giải, hãy lưu ý đến pip Inserts để phân loại "Sắc thái năng lượng"( khi giải bài không được nhắc đến cụm từ pip inserts).
+                Nếu xuất hiện các quân Court, hãy xác định nhân vật xuất hiện trong sự kiện. Trường hợp xuất hiện mâu thuẫn, ứng dụng pip Inserts để gỡ rối.
+                Bắt buộc phải nhắc đến Timing và khoảng thời gian ( ví dụ như sự kiện diễn ra nhanh hay chậm, có tính lặp lại hay không, hay vào mùa nào)`;
             } else if (spreadMode === "intent_crossroads") {
-                spreadContext = `Trải bài Ngã rẽ cuộc đời (3 lá Tarot). Lá 1 (Kết quả nếu chọn hướng A): ${drawnCardsList[0].name}${getReversedStr(drawnCardsList[0])}. Lá 2 (Kết quả nếu chọn hướng B): ${drawnCardsList[1].name}${getReversedStr(drawnCardsList[1])}. Lá 3 (Lời khuyên tổng quan từ vũ trụ): ${drawnCardsList[2].name}${getReversedStr(drawnCardsList[2])}. Phân tích và so sánh rõ ràng sự khác biệt giữa hai con đường, xác định mối liên kết sau để đưa ra lời luận giải: có xuất hiện lá ẩn chính không, lá ẩn chính đang nằm ở chu kỳ nào?, các yếu tố lặp số hoặc lặp các quân court trong bộ ẩn phụ không, những con số có nằm sát chu kỳ hoàn thành sự kiện không hay bắt đầu?. Tổng quan tụ bài liên quan đến nguyên tố nào, đây sẽ là tiền đề để giải quyết được sự kiện. những lá bài có màu sắc tích cực hay tiêu cực.Sự kiện này sẽ có quý nhân nào hỗ trợ hay không? Khoảng thời gian trong lá tương lai bắt buộc phải trả lời được nằm trong mốc thời gian nào. sau đó đưa ra lời khuyên cuối cùng.`;
+                spreadContext = `Trải bài Ngã rẽ cuộc đời (3 lá Tarot).
+                Lá 1 (Kết quả nếu chọn hướng A): ${drawnCardsList[0].name}${getReversedStr(drawnCardsList[0])}.
+                Lá 2 (Kết quả nếu chọn hướng B): ${drawnCardsList[1].name}${getReversedStr(drawnCardsList[1])}.
+                Lá 3 (Lời khuyên tổng quan từ vũ trụ): ${drawnCardsList[2].name}${getReversedStr(drawnCardsList[2])}.
+                Phân tích và so sánh rõ ràng sự khác biệt giữa hai con đường, xác định mối liên kết sau để đưa ra lời luận giải: có xuất hiện lá ẩn chính không, lá ẩn chính đang nằm ở chu kỳ nào?,
+                các yếu tố lặp số hoặc lặp các quân court trong bộ ẩn phụ không, những con số có nằm sát chu kỳ hoàn thành sự kiện không hay bắt đầu?.
+                Tổng quan tụ bài liên quan đến nguyên tố nào, đây sẽ là tiền đề để giải quyết được sự kiện. 
+                Tụ bài nhìn chung có màu sắc tích cực hay tiêu cực.Sự kiện này sẽ có quý nhân nào hỗ trợ hay không? Khoảng thời gian trong lá tương lai bắt buộc phải trả lời được nằm trong mốc thời gian nào. sau đó đưa ra lời khuyên cuối cùng.`;
             } else if (spreadMode === "intent_flow") {
-                spreadContext = `Trải bài Dòng chảy sự kiện (5 lá Lenormand). Quá khứ xa: ${drawnCardsList[0].name}, Quá khứ gần: ${drawnCardsList[1].name}, Trọng tâm sự kiện: ${drawnCardsList[2].name}, Tương lai gần: ${drawnCardsList[3].name}, Kết quả cuối cùng: ${drawnCardsList[4].name}. Đọc theo chuỗi liên kết các lá bài từ trái sang phải để kể lại một diễn biến sự kiện cụ thể, logic và có kết quả rõ ràng. Áp dụng pip Inserts nếu cần thiết( khi giải bài không được nhắc đến cụm từ pip inserts). Trường hợp xuất hiện mâu thuẫn, ứng dụng pip Inserts để gỡ rối. Bắt buộc phải nhắc đến Timing và khoảng thời gian ( ví dụ như sự kiện diễn ra nhanh hay chậm, có tính lặp lại hay không, hay vào mùa nào)`;
+                spreadContext = `Trải bài Dòng chảy sự kiện (5 lá Lenormand).
+                Quá khứ xa: ${drawnCardsList[0].name},
+                Quá khứ gần: ${drawnCardsList[1].name},
+                Trọng tâm sự kiện: ${drawnCardsList[2].name},
+                Tương lai gần: ${drawnCardsList[3].name},
+                Kết quả cuối cùng: ${drawnCardsList[4].name}.
+                Đọc theo chuỗi liên kết các lá bài từ trái sang phải để kể lại một diễn biến sự kiện cụ thể, logic và có kết quả rõ ràng.
+                Áp dụng pip Inserts nếu cần thiết( khi giải bài không được nhắc đến cụm từ pip inserts). Trường hợp xuất hiện mâu thuẫn, ứng dụng pip Inserts để gỡ rối.
+                Bắt buộc phải nhắc đến Timing và khoảng thời gian ( ví dụ như sự kiện diễn ra nhanh hay chậm, có tính lặp lại hay không, hay vào mùa nào)`;
             } else if (spreadMode === "intent_relationship") {
-                spreadContext = `Trải bài Gương soi nhân duyên (5 lá hỗn hợp). Tâm lý của bạn (Tarot): ${drawnCardsList[0].name}${getReversedStr(drawnCardsList[0])}. Tâm lý của người ấy (Tarot): ${drawnCardsList[1].name}${getReversedStr(drawnCardsList[1])}. Sự kiện thực tế sắp tới (2 lá Lenormand): ${drawnCardsList[2].name} và ${drawnCardsList[3].name}. Bài học tâm linh/nghiệp quả (Chakra): ${drawnCardsList[4].name}. Phân tích cảm xúc hai bên, sự kiện sẽ xảy đến ở đời thực và chốt lại bằng bài học cốt lõi mà tụ bài muốn truyền tải.`;
+                spreadContext = `Trải bài Gương soi nhân duyên (5 lá hỗn hợp).
+                Tâm lý của bạn (Tarot): ${drawnCardsList[0].name}${getReversedStr(drawnCardsList[0])}.
+                Tâm lý của người ấy (Tarot): ${drawnCardsList[1].name}${getReversedStr(drawnCardsList[1])}.
+                Sự kiện thực tế sắp tới (2 lá Lenormand): ${drawnCardsList[2].name} và ${drawnCardsList[3].name}.
+                Bài học tâm linh/nghiệp quả (Chakra): ${drawnCardsList[4].name}.
+                Phân tích cảm xúc hai bên, sự kiện sẽ xảy đến ở đời thực và chốt lại bằng bài học cốt lõi mà tụ bài muốn truyền tải.`;
             } else if (spreadMode === "intent_dream") {
-                spreadContext = `Trải bài Giải mã giấc mơ / Thông điệp tiềm thức (3 lá hỗn hợp). Điểm nghẽn năng lượng trong tiềm thức (Chakra): ${drawnCardsList[0].name}. Thông điệp linh hồn / Higher Self muốn nhắn nhủ (Tarot): ${drawnCardsList[1].name}${getReversedStr(drawnCardsList[1])}. Manh mối/Dấu hiệu ở đời thực để nhận biết (Lenormand): ${drawnCardsList[2].name}. Kết nối sự cảnh báo của tiềm thức với thông điệp cao trào và hướng dẫn người xem chú ý đến dấu hiệu vật lý nào.`;
+                spreadContext = `Trải bài Giải mã giấc mơ / Thông điệp tiềm thức (3 lá hỗn hợp).
+                Điểm nghẽn năng lượng trong tiềm thức (Chakra): ${drawnCardsList[0].name}.
+                Thông điệp linh hồn / Higher Self muốn nhắn nhủ (Tarot): ${drawnCardsList[1].name}${getReversedStr(drawnCardsList[1])}.
+                Manh mối/Dấu hiệu ở đời thực để nhận biết (Lenormand): ${drawnCardsList[2].name}. Kết nối sự cảnh báo của tiềm thức với thông điệp cao trào và hướng dẫn người xem chú ý đến dấu hiệu vật lý nào.`;
             } else if (spreadMode === "intent_mirror") {
-                spreadContext = `Trải bài Tấm Gương Bản Ngã (5 lá Tarot). Bản ngã/Cái tôi bên trong: ${drawnCardsList[0].name}${getReversedStr(drawnCardsList[0])}. Soi chiếu nhìn bản thân: ${drawnCardsList[1].name}${getReversedStr(drawnCardsList[1])}. Vị thế thực tế hiện tại: ${drawnCardsList[2].name}${getReversedStr(drawnCardsList[2])}. Bạn trong mắt công chúng/người khác: ${drawnCardsList[3].name}${getReversedStr(drawnCardsList[3])}. Sự thật cốt lõi & Lời khuyên: ${drawnCardsList[4].name}${getReversedStr(drawnCardsList[4])}. YÊU CẦU: Hãy phân tích sự đối chiếu (và mâu thuẫn nếu có) giữa cách nhìn nhận bản thân, thực tế đang ở vị thế nào, và cách người khác đánh giá. Hãy lưu ý đến các yếu tố lặp số ở bộ ẩn phụ, cung hoàng đạo,The Three Primitives,The Seven Sacred Planets và houses, sau cùng, bạn hãy kiểm tra xem nguyên tố nào chiếm phần lớn tụ bài. Hãy đọc như một nhà chiêm tinh học kiêm tarot reader linh hoạt`;
+                spreadContext = `Trải bài Tấm Gương Bản Ngã (5 lá Tarot).
+                Bản ngã/Cái tôi bên trong: ${drawnCardsList[0].name}${getReversedStr(drawnCardsList[0])}.
+                Soi chiếu nhìn bản thân: ${drawnCardsList[1].name}${getReversedStr(drawnCardsList[1])}.
+                Vị thế thực tế hiện tại: ${drawnCardsList[2].name}${getReversedStr(drawnCardsList[2])}.
+                Bạn trong mắt công chúng/người khác: ${drawnCardsList[3].name}${getReversedStr(drawnCardsList[3])}.
+                Sự thật cốt lõi & Lời khuyên: ${drawnCardsList[4].name}${getReversedStr(drawnCardsList[4])}.
+                YÊU CẦU: Hãy phân tích sự đối chiếu (và mâu thuẫn nếu có) giữa cách nhìn nhận bản thân, thực tế đang ở vị thế nào, và cách người khác đánh giá.
+                Hãy lưu ý đến các yếu tố lặp số ở bộ ẩn phụ, cung hoàng đạo,The Three Primitives,The Seven Sacred Planets và houses, sau cùng, bạn hãy kiểm tra xem nguyên tố nào chiếm phần lớn tụ bài.
+                Hãy đọc như một nhà chiêm tinh học kiêm tarot reader linh hoạt nhunwg giọng điệu vẫn tích cực, nhẹ nhàng`;
             } 
             else if (spreadMode === "classic_croix") {
-                spreadContext = `Trải bài Chữ Thập Cổ Điển (Tirage au Croix) bao gồm 5 lá Tarot theo đúng cấu trúc truyền thống pháp: Lá 1 (Bên Trái - Pour: Đại diện cho thế mạnh, nguồn lực thuận lợi thúc đẩy): ${drawnCardsList[0].name}${getReversedStr(drawnCardsList[0])}. Lá 2 (Bên Phải - Contre: Đại diện cho trở ngại, thách thức hoặc phe đối lập): ${drawnCardsList[1].name}${getReversedStr(drawnCardsList[1])}. Lá 3 (Phía Trên - État: Tình cảnh thực tế hiện tại, đỉnh điểm của hoàn cảnh): ${drawnCardsList[2].name}${getReversedStr(drawnCardsList[2])}. Lá 4 (Phía Dưới - Résultats: Kết quả phát triển, diễn tiến tự nhiên tiếp theo): ${drawnCardsList[3].name}${getReversedStr(drawnCardsList[3])}. Lá 5 (Ở Chính Giữa - Synthèse: Lá bài tổng hợp mang tính cốt lõi, giải pháp và lời khuyên kết luận): ${drawnCardsList[4].name}${getReversedStr(drawnCardsList[4])}. Hãy thực hiện biện chứng sâu sắc hai mặt Pour-Contre kết hợp with tình huống hiện tại, xác định mối liên kết sau để đưa ra lời luận giải: có xuất hiện lá ẩn chính không, lá ẩn chính đang nằm ở chu kỳ nào?, các yếu tố lặp số hoặc lặp các quân court trong bộ ẩn phụ không, những con số có nằm sát chu kỳ hoàn thành sự kiện không hay bắt đầu?. Hãy kiểm tra xem nguyên tố nào chiếm phần lớn tụ bài? Cả tụ bài có màu sắc tích cực hay tiêu cực Khoảng thời gian trong lá tương lai bắt buộc phải trả lời được nằm trong mốc thời gian nào. để khai mở toàn bộ kết quả tổng hòa từ lá bài trung tâm.`;
+                spreadContext = `Trải bài Chữ Thập Cổ Điển (Tirage au Croix) bao gồm 5 lá Tarot theo đúng cấu trúc truyền thống pháp:
+                Lá 1 (Bên Trái - Pour: Đại diện cho thế mạnh, nguồn lực thuận lợi thúc đẩy): ${drawnCardsList[0].name}${getReversedStr(drawnCardsList[0])}.
+                Lá 2 (Bên Phải - Contre: Đại diện cho trở ngại, thách thức hoặc phe đối lập): ${drawnCardsList[1].name}${getReversedStr(drawnCardsList[1])}.
+                Lá 3 (Phía Trên - État: Tình cảnh thực tế hiện tại, đỉnh điểm của hoàn cảnh): ${drawnCardsList[2].name}${getReversedStr(drawnCardsList[2])}.
+                Lá 4 (Phía Dưới - Résultats: Kết quả phát triển, diễn tiến tự nhiên tiếp theo): ${drawnCardsList[3].name}${getReversedStr(drawnCardsList[3])}.
+                Lá 5 (Ở Chính Giữa - Synthèse: Lá bài tổng hợp mang tính cốt lõi, giải pháp và lời khuyên kết luận): ${drawnCardsList[4].name}${getReversedStr(drawnCardsList[4])}.
+                Hãy thực hiện biện chứng sâu sắc hai mặt Pour-Contre kết hợp with tình huống hiện tại, xác định mối liên kết sau để đưa ra lời luận giải: có xuất hiện lá ẩn chính không, lá ẩn chính đang nằm ở chu kỳ nào?
+                Các yếu tố lặp số hoặc lặp các quân court trong bộ ẩn phụ không, những con số có nằm sát chu kỳ hoàn thành sự kiện không hay bắt đầu?
+                Hãy kiểm tra xem nguyên tố nào chiếm phần lớn tụ bài? Cả tụ bài có màu sắc tích cực hay tiêu cực Khoảng thời gian trong lá tương lai bắt buộc phải trả lời được nằm trong mốc thời gian nào. Khai mở toàn bộ kết quả tổng hòa từ lá bài trung tâm.`;
             } else if (spreadMode === "classic_ligne") {
-                spreadContext = `Trải bài Thẳng Hàng Cổ Điển (Tirage en Ligne) with chuỗi 3 lá bài Tarot phân tích tiến trình vận động liên tục: Lá 1 (Khởi điểm / Quá khứ nguồn cơn): ${drawnCardsList[0].name}${getReversedStr(drawnCardsList[0])}, Lá 2 (Điểm nút hành động / Thực tại): ${drawnCardsList[1].name}${getReversedStr(drawnCardsList[1])}, Lá 3 (Điểm đến / Xu hướng tương lai): ${drawnCardsList[2].name}${getReversedStr(drawnCardsList[2])}. Hãy phân tích sợi dây liên kết thời gian và logic nhân quả chặt chẽ giữa 3 lá bài để giúp người xem nắm vững dòng năng lượng đang di chuyển.`;
+                spreadContext = `Trải bài Thẳng Hàng Cổ Điển (Tirage en Ligne) with chuỗi 3 lá bài Tarot phân tích tiến trình vận động liên tục:
+                Lá 1 (Khởi điểm / Quá khứ nguồn cơn): ${drawnCardsList[0].name}${getReversedStr(drawnCardsList[0])},
+                Lá 2 (Điểm nút hành động / Thực tại): ${drawnCardsList[1].name}${getReversedStr(drawnCardsList[1])},
+                Lá 3 (Điểm đến / Xu hướng tương lai): ${drawnCardsList[2].name}${getReversedStr(drawnCardsList[2])}.
+                Hãy phân tích sợi dây liên kết thời gian và logic nhân quả chặt chẽ giữa 3 lá bài để giúp người xem nắm vững dòng năng lượng đang di chuyển.`;
             } else if (spreadMode === "classic_grand_ourse") {
-                spreadContext = `Trải bài Đại Hùng Tinh Cổ Điển (Tirage de Grande Ourse) nương theo năng lượng mô phỏng hình học 7 ngôi sao của chòm Bắc Đẩu with 7 lá bài Tarot: Lá 1 (Bản chất gốc rễ của câu hỏi): ${drawnCardsList[0].name}${getReversedStr(drawnCardsList[0])}, Lá 2 (Mối nguy hại, điểm mù ẩn khuất): ${drawnCardsList[1].name}${getReversedStr(drawnCardsList[1])}, Lá 3 (Lực cản hoặc sự hỗ trợ từ ngoại cảnh bên ngoài): ${drawnCardsList[2].name}${getReversedStr(drawnCardsList[2])}, Lá 4 (Giải pháp, vũ khí cốt lõi có thể vận dụng): ${drawnCardsList[3].name}${getReversedStr(drawnCardsList[3])}, Lá 5 (Biến chuyển ngắn hạn sắp tới): ${drawnCardsList[4].name}${getReversedStr(drawnCardsList[4])}, Lá 6 (Năng lượng bất ngờ kích hoạt/Yếu tố phát sinh đột ngột): ${drawnCardsList[5].name}${getReversedStr(drawnCardsList[5])}, Lá 7 (Kết luận chung cuộc lâu dài): ${drawnCardsList[6].name}${getReversedStr(drawnCardsList[6])}. xác định mối liên kết sau để đưa ra lời luận giải: có xuất hiện lá ẩn chính không, lá ẩn chính đang nằm ở chu kỳ nào?, các yếu tố lặp số hoặc lặp các quân court trong bộ ẩn phụ không, những con số có nằm sát chu kỳ hoàn thành sự kiện không hay bắt đầu?. Hãy kiểm tra xem nguyên tố nào chiếm phần lớn tụ bài? Cả tụ bài có màu sắc tích cực hay tiêu cực Khoảng thời gian trong lá tương lai bắt buộc phải trả lời được nằm trong mốc thời gian nào tổng hợp bức tranh thiên văn 7 góc nhìn này thành hướng dẫn chiến lược thực tế nhất.`;
+                spreadContext = `Trải bài Đại Hùng Tinh Cổ Điển (Tirage de Grande Ourse) nương theo năng lượng mô phỏng hình học 7 ngôi sao của chòm Bắc Đẩu with 7 lá bài Tarot:
+                Lá 1 (Bản chất gốc rễ của câu hỏi): ${drawnCardsList[0].name}${getReversedStr(drawnCardsList[0])},
+                Lá 2 (Mối nguy hại, điểm mù ẩn khuất): ${drawnCardsList[1].name}${getReversedStr(drawnCardsList[1])},
+                Lá 3 (Lực cản hoặc sự hỗ trợ từ ngoại cảnh bên ngoài): ${drawnCardsList[2].name}${getReversedStr(drawnCardsList[2])},
+                Lá 4 (Giải pháp, vũ khí cốt lõi có thể vận dụng): ${drawnCardsList[3].name}${getReversedStr(drawnCardsList[3])},
+                Lá 5 (Biến chuyển ngắn hạn sắp tới): ${drawnCardsList[4].name}${getReversedStr(drawnCardsList[4])},
+                Lá 6 (Năng lượng bất ngờ kích hoạt/Yếu tố phát sinh đột ngột): ${drawnCardsList[5].name}${getReversedStr(drawnCardsList[5])},
+                Lá 7 (Kết luận chung cuộc lâu dài): ${drawnCardsList[6].name}${getReversedStr(drawnCardsList[6])}.
+                Xác định mối liên kết sau để đưa ra lời luận giải: có xuất hiện lá ẩn chính không, lá ẩn chính đang nằm ở chu kỳ nào?
+                Có các yếu tố lặp số hoặc lặp các quân court trong bộ ẩn phụ không, những con số có nằm sát chu kỳ hoàn thành sự kiện không hay bắt đầu?
+                Hãy kiểm tra xem nguyên tố nào chiếm phần lớn tụ bài? Cả tụ bài có màu sắc tích cực hay tiêu cực.
+                Khoảng thời gian trong lá tương lai bắt buộc phải trả lời được nằm trong mốc thời gian nào tổng hợp bức tranh thiên văn 7 góc nhìn này thành hướng dẫn chiến lược thực tế nhất.`;
             } else if (spreadMode === "classic_astrologique") {
                 spreadContext = `Trải bài Thiên Văn Học Cổ Điển (Tirage Astrologique) tương ứng cấu trúc 12 Cung Nhà Hệ Thống Chiêm Tinh Học bằng 12 lá bài Tarot: 
-                Nhà 1 (Cái tôi, bản ngã hiện tại): ${drawnCardsList[0].name}${getReversedStr(drawnCardsList[0])}, Nhà 2 (Tài sản, tài chính, giá trị cá nhân): ${drawnCardsList[1].name}${getReversedStr(drawnCardsList[1])}, Nhà 3 (Môi trường giao tiếp, tư duy học tập ngắn hạn): ${drawnCardsList[2].name}${getReversedStr(drawnCardsList[2])}, Nhà 4 (Gia đạo, tổ ấm, gốc rễ thầm kín): ${drawnCardsList[3].name}${getReversedStr(drawnCardsList[3])}, Nhà 5 (Sự sáng tạo, niềm vui cá nhân, chuyện tình cảm lãng mạn): ${drawnCardsList[4].name}${getReversedStr(drawnCardsList[4])}, Nhà 6 (Công việc thường nhật, sức khỏe thể chất): ${drawnCardsList[5].name}${getReversedStr(drawnCardsList[5])}, Nhà 7 (Mối quan hệ song phương, đối tác, người phối ngẫu): ${drawnCardsList[6].name}${getReversedStr(drawnCardsList[6])}, Nhà 8 (Sự chuyển hóa sâu sắc, khủng hoảng, tiền bạc người khác): ${drawnCardsList[7].name}${getReversedStr(drawnCardsList[7])}, Nhà 9 (Học vấn cao, triết lý sống, chuyến đi xa/định hướng lớn): ${drawnCardsList[8].name}${getReversedStr(drawnCardsList[8])}, Nhà 10 (Sự nghiệp, danh tiếng cá nhân, vị thế xã hội): ${drawnCardsList[9].name}${getReversedStr(drawnCardsList[9])}, Nhà 11 (Mạng lưới xã hội, bạn bè, lý tưởng tương lai): ${drawnCardsList[10].name}${getReversedStr(drawnCardsList[10])}, Nhà 12 (Góc tối khuất lấp, chướng ngại nghiệp quả, tiềm thức sâu): ${drawnCardsList[11].name}${getReversedStr(drawnCardsList[11])}. xác định mối liên kết sau để đưa ra lời luận giải: có xuất hiện lá ẩn chính không, lá ẩn chính đang nằm ở chu kỳ nào?, các yếu tố lặp số hoặc lặp các quân court trong bộ ẩn phụ không, những con số có nằm sát chu kỳ hoàn thành sự kiện không hay bắt đầu?. Hãy kiểm tra xem nguyên tố nào chiếm phần lớn tụ bài? Cả tụ bài có màu sắc tích cực hay tiêu cực Khoảng thời gian trong lá tương lai bắt buộc phải trả lời được nằm trong mốc thời gian nào. Hãy đan cài và kết nối các nhà chiêm tinh một cách linh hoạt để đưa ra cái nhìn tổng quan đa chiều nhất xung quanh thắc mắc của người xem.`;
+                Nhà 1 (Cái tôi, bản ngã hiện tại): ${drawnCardsList[0].name}${getReversedStr(drawnCardsList[0])},
+                Nhà 2 (Tài sản, tài chính, giá trị cá nhân): ${drawnCardsList[1].name}${getReversedStr(drawnCardsList[1])},
+                Nhà 3 (Môi trường giao tiếp, tư duy học tập ngắn hạn): ${drawnCardsList[2].name}${getReversedStr(drawnCardsList[2])},
+                Nhà 4 (Gia đạo, tổ ấm, gốc rễ thầm kín): ${drawnCardsList[3].name}${getReversedStr(drawnCardsList[3])},
+                Nhà 5 (Sự sáng tạo, niềm vui cá nhân, chuyện tình cảm lãng mạn): ${drawnCardsList[4].name}${getReversedStr(drawnCardsList[4])},
+                Nhà 6 (Công việc thường nhật, sức khỏe thể chất): ${drawnCardsList[5].name}${getReversedStr(drawnCardsList[5])},
+                Nhà 7 (Mối quan hệ song phương, đối tác, người phối ngẫu): ${drawnCardsList[6].name}${getReversedStr(drawnCardsList[6])},
+                Nhà 8 (Sự chuyển hóa sâu sắc, khủng hoảng, tiền bạc người khác): ${drawnCardsList[7].name}${getReversedStr(drawnCardsList[7])},
+                Nhà 9 (Học vấn cao, triết lý sống, chuyến đi xa/định hướng lớn): ${drawnCardsList[8].name}${getReversedStr(drawnCardsList[8])},
+                Nhà 10 (Sự nghiệp, danh tiếng cá nhân, vị thế xã hội): ${drawnCardsList[9].name}${getReversedStr(drawnCardsList[9])},
+                Nhà 11 (Mạng lưới xã hội, bạn bè, lý tưởng tương lai): ${drawnCardsList[10].name}${getReversedStr(drawnCardsList[10])},
+                Nhà 12 (Góc tối khuất lấp, chướng ngại nghiệp quả, tiềm thức sâu): ${drawnCardsList[11].name}${getReversedStr(drawnCardsList[11])}.
+                Xác định mối liên kết sau để đưa ra lời luận giải: có xuất hiện lá ẩn chính không, lá ẩn chính đang nằm ở chu kỳ nào? 
+                Các yếu tố lặp số hoặc lặp các quân court trong bộ ẩn phụ không, những con số có nằm sát chu kỳ hoàn thành sự kiện không hay bắt đầu?
+                Hãy kiểm tra xem nguyên tố nào chiếm phần lớn tụ bài? Cả tụ bài có màu sắc tích cực hay tiêu cực Khoảng thời gian trong lá tương lai bắt buộc phải trả lời được nằm trong mốc thời gian nào.
+                Hãy đan cài và kết nối các nhà chiêm tinh một cách linh hoạt để đưa ra cái nhìn tổng quan đa chiều nhất xung quanh thắc mắc của người xem.`;
             } else if (spreadMode === "classic_celtique") {
                 spreadContext = `Trải bài Celtic Cross Thập Tự Celtic Cổ Điển (Tirage de Celtique) phân tích cấu trúc phức tạp bằng 10 lá bài Tarot: 
-                Lá 1 (Tình cảnh trung tâm cốt lõi): ${drawnCardsList[0].name}${getReversedStr(drawnCardsList[0])}, Lá 2 (Lực tác động chéo/Thử thách hoặc đòn bẩy trực tiếp): ${drawnCardsList[1].name}${getReversedStr(drawnCardsList[1])}, Lá 3 (Ý thức tối cao hoặc mục tiêu đỉnh điểm hướng tới): ${drawnCardsList[2].name}${getReversedStr(drawnCardsList[2])}, Lá 4 (Nền tảng tiềm thức sâu xa/Căn cơ sự việc): ${drawnCardsList[3].name}${getReversedStr(drawnCardsList[3])}, Lá 5 (Quá khứ gần vừa rời xa): ${drawnCardsList[4].name}${getReversedStr(drawnCardsList[4])}, Lá 6 (Tương lai gần chuẩn bị hiển lộ): ${drawnCardsList[5].name}${getReversedStr(drawnCardsList[5])}, Lá 7 (Vị thế hiện tại, tâm lý thật của người hỏi): ${drawnCardsList[6].name}${getReversedStr(drawnCardsList[6])}, Lá 8 (Môi trường bên ngoài, người xung quanh tác động): ${drawnCardsList[7].name}${getReversedStr(drawnCardsList[7])}, Lá 9 (Hy vọng thầm kín hoặc nỗi sợ kìm hãm): ${drawnCardsList[8].name}${getReversedStr(drawnCardsList[8])}, Lá 10 (Kết luận chung cuộc dài hạn cuối cùng): ${drawnCardsList[9].name}${getReversedStr(drawnCardsList[9])}. Liên kết chặt chẽ phần vòng tròn thập tự (Lá 1 đến 6) và trục đứng kết quả (Lá 7 đến 10). xác định mối liên kết sau để đưa ra lời luận giải: có xuất hiện lá ẩn chính không, lá ẩn chính đang nằm ở chu kỳ nào?, các yếu tố lặp số hoặc lặp các quân court trong bộ ẩn phụ không, những con số có nằm sát chu kỳ hoàn thành sự kiện không hay bắt đầu?. Hãy kiểm tra xem nguyên tố nào chiếm phần lớn tụ bài? Cả tụ bài có màu sắc tích cực hay tiêu cực Khoảng thời gian trong lá tương lai bắt buộc phải trả lời được nằm trong mốc thời gian nào, để đưa ra câu trả lời chi tiết và thấu triệt toàn diện.`;
+                Lá 1 (Tình cảnh trung tâm cốt lõi): ${drawnCardsList[0].name}${getReversedStr(drawnCardsList[0])},
+                Lá 2 (Lực tác động chéo/Thử thách hoặc đòn bẩy trực tiếp): ${drawnCardsList[1].name}${getReversedStr(drawnCardsList[1])},
+                Lá 3 (Ý thức tối cao hoặc mục tiêu đỉnh điểm hướng tới): ${drawnCardsList[2].name}${getReversedStr(drawnCardsList[2])},
+                Lá 4 (Nền tảng tiềm thức sâu xa/Căn cơ sự việc): ${drawnCardsList[3].name}${getReversedStr(drawnCardsList[3])},
+                Lá 5 (Quá khứ gần vừa rời xa): ${drawnCardsList[4].name}${getReversedStr(drawnCardsList[4])},
+                Lá 6 (Tương lai gần chuẩn bị hiển lộ): ${drawnCardsList[5].name}${getReversedStr(drawnCardsList[5])},
+                Lá 7 (Vị thế hiện tại, tâm lý thật của người hỏi): ${drawnCardsList[6].name}${getReversedStr(drawnCardsList[6])},
+                Lá 8 (Môi trường bên ngoài, người xung quanh tác động): ${drawnCardsList[7].name}${getReversedStr(drawnCardsList[7])},
+                Lá 9 (Hy vọng thầm kín hoặc nỗi sợ kìm hãm): ${drawnCardsList[8].name}${getReversedStr(drawnCardsList[8])},
+                Lá 10 (Kết luận chung cuộc dài hạn cuối cùng): ${drawnCardsList[9].name}${getReversedStr(drawnCardsList[9])}.
+                Liên kết chặt chẽ phần vòng tròn thập tự (Lá 1 đến 6) và trục đứng kết quả (Lá 7 đến 10). xác định mối liên kết sau để đưa ra lời luận giải: có xuất hiện lá ẩn chính không, lá ẩn chính đang nằm ở chu kỳ nào?
+                Các yếu tố lặp số hoặc lặp các quân court trong bộ ẩn phụ không, những con số có nằm sát chu kỳ hoàn thành sự kiện không hay bắt đầu?
+                Hãy kiểm tra xem nguyên tố nào chiếm phần lớn tụ bài? Cả tụ bài có màu sắc tích cực hay tiêu cực Khoảng thời gian trong lá tương lai bắt buộc phải trả lời được nằm trong mốc thời gian nào, để đưa ra câu trả lời chi tiết và thấu triệt toàn diện.`;
             }
             else if (spreadMode === "mystic_tree") {
                 spreadContext = `Trải bài Tree of Life (Kabbalah) - 10 lá Tarot: 
@@ -898,7 +1015,9 @@
                 Lá 8 (Hod - Lý trí/Giao tiếp): ${drawnCardsList[7].name}${getReversedStr(drawnCardsList[7])}.
                 Lá 9 (Yesod - Tiềm thức/Nền tảng sắp biểu hiện): ${drawnCardsList[8].name}${getReversedStr(drawnCardsList[8])}.
                 Lá 10 (Malkuth - Kết quả vật lý/Thực tại biểu hiện): ${drawnCardsList[9].name}${getReversedStr(drawnCardsList[9])}.
-                YÊU CẦU: Bạn là một reader hiểu về huyền học và Do Thái. Phân tích tiến trình năng lượng chảy từ nhận thức bậc cao (Kether) xuống thế giới vật lý (Malkuth), đánh giá các trụ cột năng lượng xem sự việc có được hiện thực hóa một cách toàn vẹn không. Lưu ý liên kết giữa các lá ẩn chính với 22 con đường, 4 suit và 4 Thế Giới Kabbalah, các Court Cards và cấu trúc gia đình/thứ bậc vận hành bên trong 4 thế giới, vị trí của các lá ẩn phụ trong 10 Sephiroth để định vị được vị trí mắc kẹt trong thế bài, đưa ra nhận định mang tính huyền học nhưng thực tế `;
+                YÊU CẦU: Bạn là một reader hiểu về huyền học và Do Thái. Phân tích tiến trình năng lượng chảy từ nhận thức bậc cao (Kether) xuống thế giới vật lý (Malkuth), đánh giá các trụ cột năng lượng xem sự việc có được hiện thực hóa một cách toàn vẹn không.
+                Lưu ý liên kết giữa các lá ẩn chính với 22 con đường, 4 suit và 4 Thế Giới Kabbalah, các Court Cards và cấu trúc gia đình/thứ bậc vận hành bên trong 4 thế giới,
+                vị trí của các lá ẩn phụ trong 10 Sephiroth để định vị được vị trí mắc kẹt trong thế bài, đưa ra nhận định mang tính huyền học nhưng thực tế `;
             } else if (spreadMode === "mystic_shadow") {
                 spreadContext = `Trải bài Shadow Work (Tâm lý học Jungian) - 5 lá Tarot:
                 Lá 1 (Mặt Nạ/Conscious - Cái tôi bạn trình diễn ra ngoài): ${drawnCardsList[0].name}${getReversedStr(drawnCardsList[0])}.
@@ -906,14 +1025,17 @@
                 Lá 3 (Tổn Thương Cốt Lõi/Root - Nguồn gốc hình thành bóng tối): ${drawnCardsList[2].name}${getReversedStr(drawnCardsList[2])}.
                 Lá 4 (Bài Học - Điều bóng tối đang cố gắng bảo vệ hoặc dạy bạn): ${drawnCardsList[3].name}${getReversedStr(drawnCardsList[3])}.
                 Lá 5 (Tích Hợp - Làm sao để hòa giải và hợp nhất bóng tối thành sức mạnh): ${drawnCardsList[4].name}${getReversedStr(drawnCardsList[4])}.
-                YÊU CẦU: Dựa trên sự tương đồng giữa các Nguyên mẫu (Archetypes) trong Vô thức tập thể và hệ thống biểu tượng vô thức của các lá bài, liên kết các lá ẩn phụ và Hành trình Anh hùng và Tiến trình Cá nhân hóa phân tích sâu tâm lý người xem, tập trung khai thác nỗi đau gốc rễ và đưa ra giải pháp chữa lành mang tính xoa dịu nhưng thực tế.`;
+                YÊU CẦU: Dựa trên sự tương đồng giữa các Nguyên mẫu (Archetypes) trong Vô thức tập thể và hệ thống biểu tượng vô thức của các lá bài,
+                liên kết các lá ẩn phụ và Hành trình Anh hùng và Tiến trình Cá nhân hóa phân tích sâu tâm lý người xem, tập trung khai thác nỗi đau gốc rễ và đưa ra giải pháp chữa lành mang tính xoa dịu nhưng thực tế.`;
             } else if (spreadMode === "mystic_johari") {
                 spreadContext = `Trải bài Blind Spot (Cửa Sổ Johari) - 4 lá Tarot:
                 Lá 1 (Vùng Mở - Điều bạn biết và người khác cũng thấy): ${drawnCardsList[0].name}${getReversedStr(drawnCardsList[0])}.
                 Lá 2 (Vùng Mù - Nhược điểm/sức mạnh người khác thấy nhưng bạn lại không nhận ra): ${drawnCardsList[1].name}${getReversedStr(drawnCardsList[1])}.
                 Lá 3 (Vùng Ẩn - Bí mật/Cảm xúc bạn cố che giấu không cho ai biết): ${drawnCardsList[2].name}${getReversedStr(drawnCardsList[2])}.
                 Lá 4 (Vùng Đóng - Tiềm thức sâu thẳm, chướng ngại hoặc tiềm năng chưa từng được bộc lộ): ${drawnCardsList[3].name}${getReversedStr(drawnCardsList[3])}.
-                YÊU CẦU: Đọc bài như một nhà phân tích tâm lý, liên kết 4 lá với 4 ô: Open Area, Blind Spot, Hidden Area, Unknown Area.Soi xét kỹ lưỡng: có xuất hiện lá ẩn chính không, lá ẩn chính đang nằm ở chu kỳ nào?, các yếu tố lặp số hoặc lặp các quân court trong bộ ẩn phụ không, những con số có nằm sát chu kỳ hoàn thành sự kiện không hay bắt đầu?. Hãy kiểm tra xem nguyên tố nào chiếm phần lớn tụ bài? những lá bài này xuất hiện ở vị trí đó mang ý nghĩa gì. Tổng quan bài học tâm lí này là gì`;
+                YÊU CẦU: Đọc bài như một nhà phân tích tâm lý, liên kết 4 lá với 4 ô: Open Area, Blind Spot, Hidden Area, Unknown Area.
+                Soi xét kỹ lưỡng: có xuất hiện lá ẩn chính không, lá ẩn chính đang nằm ở chu kỳ nào?, các yếu tố lặp số hoặc lặp các quân court trong bộ ẩn phụ không, những con số có nằm sát chu kỳ hoàn thành sự kiện không hay bắt đầu?
+                Hãy kiểm tra xem nguyên tố nào chiếm phần lớn tụ bài? những lá bài này xuất hiện ở vị trí đó mang ý nghĩa gì. Tổng quan bài học tâm lí này là gì`;
             } else if (spreadMode === "mystic_karmic") {
                 spreadContext = `Trải bài Duyên Nợ Tiền Kiếp (Karmic Connections) - 5 lá Tarot:
                 Lá 1 (Năng lượng Tiền kiếp - Quá khứ gốc rễ của câu chuyện này): ${drawnCardsList[0].name}${getReversedStr(drawnCardsList[0])}.
@@ -921,10 +1043,18 @@
                 Lá 3 (Khế Ước Linh Hồn - Lý do sự việc/con người này xuất hiện hiện tại): ${drawnCardsList[2].name}${getReversedStr(drawnCardsList[2])}.
                 Lá 4 (Bài Học Nhân Quả - Điều bạn bắt buộc phải nhận ra để không lặp lại): ${drawnCardsList[3].name}${getReversedStr(drawnCardsList[3])}.
                 Lá 5 (Giải Phóng - Hành động để cắt đứt nghiệp quả hoặc nâng cấp linh hồn): ${drawnCardsList[4].name}${getReversedStr(drawnCardsList[4])}.
-                YÊU CẦU: Luận giải sâu sắc về góc độ tâm linh, nhân quả nghiệp báo, đưa ra định hướng tháo gỡ nghiệp lực một cách tỉnh thức. Bắt buộc phải tập trung giải bài theo hướng sự ảnh hưởng nặng hay nhẹ, và sự liên kết mạnh hay yếu về liên kết tinh thần, năng lượng, thần thức, và hình thức đối xử/ ứng xử giữa các đối tượng được hỏi. Lưu ý liên kết giữa các lá ẩn chính và Các Giao ước Định mệnh, bộ ẩn phụ với Cách Nghiệp vận hành ở đời thực, Sự kết thúc chu kỳ Nghiệp, liên kết giữa các suits đóng vai trò chủ đạo với nghiệp quả.`;
+                YÊU CẦU: Luận giải sâu sắc về góc độ tâm linh, nhân quả nghiệp báo, đưa ra định hướng tháo gỡ nghiệp lực một cách tỉnh thức.
+                Bắt buộc phải tập trung giải bài theo hướng sự ảnh hưởng nặng hay nhẹ, và sự liên kết mạnh hay yếu về liên kết tinh thần, năng lượng, thần thức, và hình thức đối xử/ ứng xử giữa các đối tượng được hỏi.
+                Lưu ý liên kết giữa các lá ẩn chính và Các Giao ước Định mệnh, bộ ẩn phụ với Cách Nghiệp vận hành ở đời thực, Sự kết thúc chu kỳ Nghiệp, liên kết giữa các suits đóng vai trò chủ đạo với nghiệp quả.`;
             }
 
-            const promptText = `${roleContext} Người dùng đặt câu hỏi: "${question}". Trong quẻ này, ${spreadContext} Hãy viết bài luận giải bằng tiếng việt, phân tách các phần rõ ràng, ngôn từ thực tế (20% thiên thời ( có đúng lúc không?), 30% địa lợi ( có được trợ giúp, trợ lực nào không?), 40% nhân hòa ( có tiềm lực, năng lực không, có ý chí không? Tuyệt đối không nhắc đến các cụm từ thiên thời địa lợi nhân hòa và % khi giải bài). Xưng hô là "mình" và "bạn". Nếu câu hỏi theo chủ đề tình cảm, cảm xúc cá nhân, hãy sử dụng ngôn ngữ mềm mại, luôn tập trung xoay quanh vấn đề tình cảm giữa các đối tượng. nếu câu hỏi liên quan đến các chủ đề công việc, học tập, hãy dùng ngôn từ quyết đoán. Tuyệt đối không nhắc đến các từ ngữ lập trình.`;
+            const promptText = `${roleContext} Người dùng đặt câu hỏi: "${question}". Trong quẻ này, ${spreadContext} 
+            Hãy viết bài luận giải bằng tiếng việt, phân tách các phần rõ ràng, ngôn từ thực tế nhưng vẫn mang tính nhẹ nhàng, chữa lành,
+            Nếu câu hỏi có dấu hiệu hỏi về người khác, hãy hướng câu hỏi về vai trò của người dùng trong mối quan hệ đó 20%, tiết lộ một chút bí mật cá nhân người dùng 20%, tiết lộ một chút bí mật của người được hỏi đến 30%, 
+            liên kết và phản ánh mối tương quan 30% ( tuyệt đối không nhắc đến % trong trải bài)
+            Nếu câu hỏi theo chủ đề tình cảm, cảm xúc cá nhân, hãy sử dụng ngôn ngữ mềm mại, luôn tập trung xoay quanh vấn đề tình cảm giữa các đối tượng.
+            (20% thiên thời ( có đúng lúc không?), 30% địa lợi ( có được trợ giúp, trợ lực nào không?), 40% nhân hòa ( có tiềm lực, năng lực không, có ý chí không? Tuyệt đối không nhắc đến các cụm từ thiên thời địa lợi nhân hòa và % khi giải bài).
+            Xưng hô là "mình" và "bạn". Ngôn từ đời thực, nhưng cũng có chút nhẹ nhàng. Tuyệt đối không nhắc đến các từ ngữ lập trình.`;
 
             const apiUrl = "https://tarotreading-eight.vercel.app/api/gemini";
 
