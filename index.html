@@ -121,11 +121,12 @@
         /* ── BẢNG ĐIỀU KHIỂN (THU GỌN LÊN TOP NAV) ── */
         .controls-inner {
             display: grid;
-            grid-template-columns: 1.3fr 1.6fr 1.1fr; 
+            grid-template-columns: 1fr 1fr; 
             grid-template-areas: 
-                "q q q"
-                "sys spread btns"
-                "status status status";
+                "q q"
+                "reader sys"
+                "spread btns"
+                "status status";
             gap: 8px;
             background: rgba(0, 0, 0, 0.4);
             padding: 10px 14px;
@@ -135,6 +136,7 @@
         }
 
         #user-question { grid-area: q; }
+        #reader-persona { grid-area: reader; border-color: #c4b5fd; }
         #reading-style { grid-area: sys; }
         #spread-type { grid-area: spread; }
         .btn-group { grid-area: btns; display: flex; gap: 6px; }
@@ -460,6 +462,7 @@
             .controls-inner { 
                 grid-template-areas: 
                     "q" 
+                    "reader"
                     "sys" 
                     "spread" 
                     "btns" 
@@ -559,17 +562,27 @@
         <div class="controls-group" id="controls-group">
             <div class="controls-inner">
                 <input type="text" id="user-question" placeholder="💭 Bạn băn khoăn điều gì lúc này?">
+                
+                <!-- DROPDOWN CHỌN 3 READER & MENTOR -->
+                <select id="reader-persona">
+                    <option value="amelia">🌸 Reader Amelia (Thấu Cảm & Chữa Lành)</option>
+                    <option value="michael">🧙‍♂️ Reader Michael (Huyền Học & Chuyên Sâu)</option>
+                    <option value="joey">📚 Mentor Joey (Học & Giải Mã Chiêm Tinh - Tarot)</option>
+                </select>
+
                 <select id="reading-style">
                     <option value="modern" selected>✨ Hiện Đại ✨</option>
                     <option value="classical">⚜️ Cổ Điển Pháp ⚜️</option>
                     <option value="mystic">🌌 Huyền Học 🌌</option>
                 </select>
+                
                 <select id="spread-type"></select>
+                
                 <div class="btn-group">
                     <button id="btn-shuffle" class="mystic-btn">🔀 Xào Bài</button>
                     <button id="btn-draw" class="mystic-btn" disabled>✨ Bốc Bài</button>
                 </div>
-                <div id="status-message">✨ Đặt câu hỏi và ấn "Xào Bài"... ✨</div>
+                <div id="status-message">✨ Đặt câu hỏi, chọn Reader và ấn "Xào Bài"... ✨</div>
             </div>
         </div>
     </header>
@@ -605,11 +618,11 @@
                         </button>
                     </div>
 
-                    <!-- KHUNG CHAT HỎI ĐÁP TIẾP NỐI OVERLAY BÊN DƯỚI -->
+                    <!-- KHUNG CHAT HỎI ĐÁP TIẾP NỐI VỚI READER OVERLAY BÊN DƯỚI -->
                     <div id="chat-followup-container">
                         <div id="chat-history"></div>
                         <div style="display: flex; gap: 8px; align-items: center;">
-                            <input type="text" id="followup-input" placeholder="💭 Hỏi rõ hơn về tụ bài này (nhấn Enter để gửi)..." style="flex: 1;">
+                            <input type="text" id="followup-input" placeholder="💭 Hỏi thêm về tụ bài (nhấn Enter để gửi)..." style="flex: 1;">
                             <button id="btn-followup-send" class="mystic-btn" style="flex: 0 0 auto; min-width: 80px;">Gửi ✨</button>
                         </div>
                     </div>
@@ -745,6 +758,7 @@
         const btnDraw = document.getElementById("btn-draw");
         const board = document.getElementById("tarot-board");
         const statusMsg = document.getElementById("status-message");
+        const readerSelect = document.getElementById("reader-persona");
         const readingStyleSelect = document.getElementById("reading-style");
         const spreadSelect = document.getElementById("spread-type");
         const readingBox = document.getElementById("reading-result");
@@ -821,7 +835,7 @@
             btnDraw.disabled = true;
             board.className = "tarot-board"; 
             
-            const introText = spreadDescriptions[spreadSelect.value] || "<strong>✨ Sẵn sàng kết nối</strong><br>Hãy nhấn 'Xào Bài' để khởi động trường năng lượng.";
+            const introText = spreadDescriptions[spreadSelect.value] || "<strong>✨ Sẵn sàng kết nối</strong><br>Hãy chọn Reader, nhấn 'Xào Bài' để khởi động trường năng lượng.";
             board.innerHTML = `<div class="spread-intro-popup">${introText}</div>`;
             
             hideReading();
@@ -830,6 +844,9 @@
 
         readingStyleSelect.addEventListener("change", updateSpreadOptions);
         spreadSelect.addEventListener("change", resetBoardState);
+        readerSelect.addEventListener("change", () => {
+            if (!btnDraw.disabled) statusMsg.innerText = "Đã thay đổi Reader. Hãy ấn Bốc Bài!";
+        });
 
         function showReading() {
             readingBox.style.display = "flex";
@@ -873,11 +890,12 @@
             }, 1000);
         }
 
-        // ================= HỆ THỐNG PROMPT GIẢI MÃ (TÁI CẤU TRÚC GỌN & THẤU CẢM) =================
+        // ================= HỆ THỐNG PROMPT GIẢI MÃ TỐI ƯU 3 READER =================
         async function getFullTarotReading() {
             if (isProcessing) return;
             const question = document.getElementById("user-question").value.trim() || "Vũ trụ muốn gửi gắm thông điệp gì cho mình?";
             const spreadMode = spreadSelect.value;
+            const selectedReader = readerSelect.value;
             
             showReading();
             isProcessing = true;
@@ -973,25 +991,67 @@
                 spreadContext = `- Duyên Nợ Tiền Kiếp (5 lá Tarot): Năng lượng tiền kiếp (${drawnCardsList[0].name}), Nợ nghiệp (${drawnCardsList[1].name}), Khế ước linh hồn (${drawnCardsList[2].name}), Bài học nhân quả (${drawnCardsList[3].name}), Hướng giải phóng (${drawnCardsList[4].name}).`;
             }
 
-            const promptText = `BẠN LÀ AI:
-            Bạn là một Reader Tarot, Lenormand và Huyền học thực tế, thấu cảm và có tầm nhìn sâu sắc. Giọng văn của bạn như một người bạn tri kỷ, nhẹ nhàng, sâu sắc, chữa lành nhưng thẳng thắn và mang tính ứng dụng thực tế cao.
+            // CHỌN PERSONA VÀ BỐ CỤC THEO READER
+            let personaPrompt = "";
+            let readerNameDisplay = "";
 
-            TƯ DUY NGẦM (CHỈ ĐỂ PHÂN TÍCH, KHÔNG VIẾT RẬP KHUÔN RA BÀI):
-            - Hãy tự quan sát tổng thể tụ bài (yếu tố Hoàng đạo, chu kỳ số, sự trội/thiếu của các nguyên tố, lá Ẩn chính hay bộ Hoàng gia) để hiểu sâu dòng chảy năng lượng.
-            - Dùng Tarot để đọc tâm lý/bài học, Lenormand để đọc sự kiện thực tế/thời gian (timing), và Chakra Oracle (nếu có) để đọc tổn thương tiềm thức.
-            - Ràng buộc: Tuyệt đối KHÔNG nhắc đến các từ khóa kỹ thuật như "pip inserts", "ẩn chính/phụ", "tỷ lệ %", "thiên thời địa lợi". KHÔNG giải thích rời rạc từng lá bài theo kiểu liệt kê, mà hãy xâu chuỗi chúng thành một câu chuyện liền mạch.
+            if (selectedReader === "amelia") {
+                readerNameDisplay = "🌸 <b>READER AMELIA (Thấu Cảm & Chữa Lành):</b>";
+                personaPrompt = `
+                BẠN LÀ READER AMELIA:
+                - Phong cách: Bạn là một Reader thiên về tâm lý học và chữa lành cảm xúc. Giọng văn ấm áp, dịu dàng, thấu cảm như một người bạn tri kỷ.
+                - Trọng tâm luận giải: Thế giới cảm xúc, các mối quan hệ, nỗi sợ thầm kín và cách buông bỏ/chữa lành tổn thương.
+                - Yêu cầu: Xoa dịu người xem, dùng ngôn từ mềm mại, lãng mạn nhưng thực tế. Nối các lá bài thành dòng chảy cảm xúc liền mạch.
+                - Bố cục 3 phần trình bày:
+                  1. 🌌 **Năng lượng cảm xúc chủ đạo:** Bản chất tình huống dưới góc nhìn của tâm hồn & tổn thương.
+                  2. 🔮 **Câu chuyện tâm lý & mối quan hệ:** Diễn biến cảm xúc và sự thật bên trong các bên liên quan.
+                  3. ✨ **Lời khuyên chữa lành & Thời gian (Timing):** Hướng buông bỏ/hành động mềm mỏng và nhịp độ sự kiện.
+                `;
+            } else if (selectedReader === "michael") {
+                readerNameDisplay = "🧙‍♂️ <b>READER MICHAEL (Huyền Học & Chuyên Sâu):</b>";
+                personaPrompt = `
+                BẠN LÀ READER MICHAEL:
+                - Phong cách: Bạn là một nhà nghiên cứu Huyền học, Chiêm tinh và Chiến lược gia. Giọng văn điềm tĩnh, sắc sảo, khách quan và trí tuệ.
+                - Trọng tâm luận giải: Bóc tách sâu cấu trúc lá bài, điểm mù lý trí, quy luật nhân quả và giải pháp chiến lược thực tế.
+                - Yêu cầu: Phân tích thẳng thắn, không nói nước đôi, đưa ra hướng đi chiến lược mang tính ứng dụng cao.
+                - Bố cục 3 phần trình bày:
+                  1. 🌌 **Bản chất đại cục & Thực trạng:** Phân tích cấu trúc sự việc dưới lăng kính quy luật thực tế.
+                  2. 🔮 **Phân tích điểm mù & Logic nhân quả:** Nguyên nhân gốc rễ, cạm bẫy lý trí và xu hướng phát triển.
+                  3. ✨ **Chiến lược hành động & Thời gian (Timing):** Giải pháp hành động rõ ràng và mốc thời gian cụ thể.
+                `;
+            } else if (selectedReader === "joey") {
+                readerNameDisplay = "📚 <b>MENTOR JOEY (Học & Giải Mã Chiêm Tinh - Tarot):</b>";
+                personaPrompt = `
+                BẠN LÀ MENTOR JOEY (TAROT & ASTROLOGY EDUCATOR):
+                - Phong cách: Bạn là một người thầy, một mentor nhiệt huyết, thông thái và tràn đầy năng lượng. Bạn không chỉ trả lời câu hỏi mà đang DẠY người xem cách hiểu ngôn ngữ của bài Tarot và Lenormand.
+                - Trọng tâm giảng dạy:
+                  + Chỉ rõ mối liên hệ Chiêm tinh học (Hành tinh chủ quản, Cung Hoàng Đạo, tương ứng Cung Nhà 1-12 trong bản đồ sao).
+                  + Phân tích cơ chế Xuôi / Ngược (tại sao lá ngược ở vị trí này lại tạo ra sự ách tắc hoặc bộc lộ Shadow).
+                  + Nghệ thuật liên kết bài (Card Synthesis): Cách nguyên tố/con số của lá này tương tác, bổ trợ hoặc xung khắc với lá kia.
+                  + Mở rộng sự kiện: Từ biểu tượng huyền học, hãy chỉ ra cách nó "hình dung hóa" thành sự kiện/hành động vật lý thực tế ở đời thực.
+                - Yêu cầu: Viết sinh động, mạch lạc, giúp người đọc vừa có câu trả lời vừa "học" được cách đọc bài.
+                - Bố cục 3 phần trình bày chuyên biệt của Joey:
+                  1. 🪐 **Bản Đồ Chiêm Tinh & Nguyên Tố:** Tóm tắt cấu trúc chiêm tinh, cung hoàng đạo và nguyên tố chủ đạo của tụ bài ảnh hưởng thế nào đến câu hỏi.
+                  2. 🔍 **Giải Phẫu Lá Bài & Nghệ Thuật Liên Kết:** Đi sâu vào từng lá bài (xuôi/ngược), cách chúng móc nối với nhau và ý nghĩa các Cung Nhà liên quan.
+                  3. 📖 **Mở Rộng Sự Kiện & Bài Học Ứng Dụng:** Dịch chuyển ý nghĩa biểu tượng thành sự kiện thực tế sắp xảy ra ở đời thực và mốc thời gian (Timing).
+                `;
+            }
+
+            const promptText = `
+            ${personaPrompt}
+
+            TƯ DUY NGẦM (KHÔNG VIẾT RẬP KHUÔN RA BÀI):
+            - Tuyệt đối KHÔNG nhắc đến các từ khóa lập trình hay kỹ thuật như "pip inserts", "tỷ lệ %", "thiên thời địa lợi".
+            - Xưng hô là "mình" (hoặc tự xưng là Amelia / Michael / Joey) và "bạn".
 
             CẤU TRÚC TRẢI BÀI CỦA NGƯỜI DÙNG:
-            - Câu hỏi của người dùng: "${question}"
-            - Chi tiết trải bài & các lá bài vừa lật:
+            - Câu hỏi: "${question}"
+            - Các lá bài vừa lật:
             ${spreadContext}
 
-            YÊU CẦU TRÌNH BÀY (BẰNG TIẾNG VIỆT):
-            Hãy viết lời luận giải chia làm 3 phần rõ ràng, tự nhiên:
-            1. 🌌 **Năng lượng chủ đạo & Bức tranh tổng quan:** Mở đầu đồng cảm với hoàn cảnh hiện tại của người xem, chỉ ra bản chất sự việc đang diễn ra dưới góc nhìn của vũ trụ.
-            2. 🔮 **Giải mã dòng chảy sự kiện:** Đi sâu vào câu chuyện mà các lá bài đang kể (tâm lý các bên liên quan, nhân quả, diễn biến tiếp theo).
-            3. ✨ **Lời khuyên thực tế & Thông điệp thời gian (Timing):** Đưa ra một hướng hành động cụ thể ở đời thực và dự báo mốc thời gian hoặc nhịp độ (nhanh/chậm/chu kỳ) của sự kiện.
-            Xưng hô là "mình" và "bạn".`;
+            YÊU CẦU TRÌNH BÀY (TIẾNG VIỆT - GỌN GÀNG, ĐÚNG CHẤT VÀ BỐ CỤC CỦA READER ĐÃ CHỌN):
+            Hãy trình bày đúng theo bố cục 3 phần chuyên biệt của nhân vật đã được giao ở trên. Viết cách dòng thoáng, rõ ý, in đậm các từ khóa quan trọng.
+            `;
 
             const apiUrl = "https://tarotreading-eight.vercel.app/api/gemini";
 
@@ -1015,11 +1075,13 @@
                     let aiResponse = data.candidates[0].content.parts[0].text;
                     aiResponse = aiResponse.replace(/\*\*(.*?)\*\*/g, '<b>$1</b>'); 
                     aiResponse = aiResponse.replace(/\n/g, '<br>'); 
-                    readingContent.innerHTML = `✨ <b>THÔNG ĐIỆP TỪ VŨ TRỤ:</b><br><br>${aiResponse}`;
+                    
+                    readingContent.innerHTML = `${readerNameDisplay}<br><br>${aiResponse}`;
 
                     // LƯU NGỮ CẢNH VÀ HIỆN KHUNG CHAT FOLLOW-UP
                     currentSessionContext = `
                     [NGỮ CẢNH TỤ BÀI ĐÃ BỐC]
+                    - Reader đang tư vấn: ${selectedReader === 'amelia' ? 'Reader Amelia' : selectedReader === 'michael' ? 'Reader Michael' : 'Mentor Joey'}
                     - Câu hỏi gốc: "${question}"
                     - Các lá bài: ${drawnCardsList.map(c => c.name + (c.reversed ? ' (ngược)' : '')).join(", ")}
                     - Lời luận giải trước đó: "${aiResponse}"
@@ -1034,17 +1096,29 @@
             }
         }
 
-        // ================= HỆ THỐNG CHAT FOLLOW-UP VỚI VŨ TRỤ =================
+        // ================= HỆ THỐNG CHAT FOLLOW-UP VỚI READER ĐÃ CHỌN =================
         async function sendFollowupQuestion() {
             const userMsg = followupInput.value.trim();
             if (!userMsg || isProcessing) return;
+
+            const selectedReader = readerSelect.value;
+            let readerTitle = "🌸 Reader Amelia";
+            let readerStyleDesc = "ấm áp, thấu cảm, xoa dịu cảm xúc";
+
+            if (selectedReader === "michael") {
+                readerTitle = "🧙‍♂️ Reader Michael";
+                readerStyleDesc = "sắc sảo, lý trí, phân tích sâu góc độ huyền học/chiến lược";
+            } else if (selectedReader === "joey") {
+                readerTitle = "📚 Mentor Joey";
+                readerStyleDesc = "mang tính giảng dạy, giải thích rõ chiêm tinh học, cung nhà, ý nghĩa xuôi/ngược và cách liên kết bài";
+            }
 
             chatHistory.innerHTML += `
                 <div class="chat-bubble-user">
                     <b>👤 Bạn:</b> ${userMsg}
                 </div>
                 <div id="ai-typing" style="color: var(--text-muted); font-style: italic; padding: 4px; font-size: 0.85rem;">
-                    🔮 Vũ trụ đang lắng nghe và kết nối...
+                    🔮 ${readerTitle} đang lắng nghe và suy ngẫm...
                 </div>
             `;
 
@@ -1053,12 +1127,12 @@
             btnFollowupSend.disabled = true;
 
             const followUpPrompt = `
-            Bạn đang tiếp tục cuộc trò chuyện với người xem Tarot/Lenormand về chính tụ bài vừa xem.
+            Bạn đang là ${readerTitle}, tiếp tục trò chuyện với người xem về chính tụ bài vừa bốc.
             ${currentSessionContext}
             
-            Người xem vừa đặt CÂU HỎI TIẾP NỐI về tụ bài trên: "${userMsg}"
+            Người xem vừa đặt CÂU HỎI TIẾP NỔI về tụ bài trên: "${userMsg}"
             
-            Hãy trả lời thẳng vào câu hỏi phụ này dựa trên năng lượng của các lá bài đã bốc ở trên. Giữ giọng điệu thấu cảm, như người bạn tri kỷ đang tư vấn sâu hơn. Không cần chào hỏi lại từ đầu, hãy trả lời súc tích, thực tế và dễ hiểu.
+            Hãy trả lời ngắn gọn, thẳng vào câu hỏi phụ này dựa trên năng lượng của các lá bài đã bốc ở trên. Giữ đúng giọng điệu và phương pháp của ${readerTitle} (${readerStyleDesc}). Không cần chào hỏi lại từ đầu, hãy trả lời súc tích, rõ ý và dễ hiểu.
             `;
 
             try {
@@ -1078,7 +1152,7 @@
                     let aiMsg = data.candidates[0].content.parts[0].text.replace(/\*\*(.*?)\*\*/g, '<b>$1</b>').replace(/\n/g, '<br>');
                     chatHistory.innerHTML += `
                         <div class="chat-bubble-ai">
-                            <b>✨ Trạm Lắng Nghe:</b><br>${aiMsg}
+                            <b>${readerTitle}:</b><br>${aiMsg}
                         </div>
                     `;
                 }
