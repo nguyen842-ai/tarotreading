@@ -5,551 +5,288 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Trạm Lắng Nghe Vũ Trụ © 2026 All Rights Reserved - developed by Nguyen842</title>
     <link rel="icon" type="image/png" href="favicon.PNG">
+    
+    <!-- TÍCH HỢP THƯ VIỆN ANIMATE.CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+
     <style>
-        /* ================= CSS VARIABLES ================= */
+        /* ================= BẢNG MÀU PANTONE TÍM ================= */
         :root {
-            --bg-main: #1a0b2e;
-            --bg-panel: #2a164d;
-            --text-main: #e5d3b3;
-            --accent-gold: #c29d59;
-            --accent-gold-hover: #e5d3b3; 
-            --text-muted: #c4b5fd;
-            --border-color: rgba(74, 43, 125, 0.5);
+            --p1: #4c00b0;
+            --p2: #7600bc;
+            --p3: #8a00c2;
+            --p4: #a000c8;
+            --p5: #b100cd;
+            --p6: #be2ed6;
+            --p7: #ca5cdd;
+            --p8: #da8ee7;
+            --p9: #e8bcf0;
+            
+            --bg-main: #090a0f; 
+            --bg-panel: rgba(76, 0, 176, 0.4);
+            --text-main: var(--p9);
+            --accent-gold: var(--p6);
+            --accent-gold-hover: var(--p8); 
+            --text-muted: var(--p7);
+            --border-color: rgba(138, 0, 194, 0.5);
         }
 
         /* ================= RESET & CƠ BẢN ================= */
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            -webkit-tap-highlight-color: transparent;
-        }
-
+        * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
         body {
-            background-color: var(--bg-main);
-            color: var(--text-main);
+            background-color: var(--bg-main); color: var(--text-main);
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            padding: 10px 16px; 
-            min-height: 100vh;
-            overflow-x: hidden; 
-            -webkit-text-size-adjust: 100%;
+            padding: 10px 16px; min-height: 100vh; overflow-x: hidden; -webkit-text-size-adjust: 100%;
         }
 
-        /* ================= HEADER ĐỘNG (ANIMATED HEADER) ================= */
-        #app-header {
-            display: flex;
-            flex-wrap: wrap;
-            width: 100%;
-            transition: all 0.6s cubic-bezier(0.25, 1, 0.5, 1);
-            margin-bottom: 15px;
-        }
-
-        .title-tab-group {
-            display: flex;
-            flex-direction: column;
-            transition: all 0.6s cubic-bezier(0.25, 1, 0.5, 1);
-        }
-
-        h1 {
-            margin-bottom: 5px;
-            font-size: clamp(1.3rem, 2.5vw, 1.8rem); 
-            text-shadow: 0 0 15px var(--accent-gold);
-            line-height: 1.2;
-            transition: all 0.4s ease;
-        }
-
-        .tabs-container {
-            display: flex;
-            gap: 8px;
-            transition: all 0.4s ease;
-        }
-
-        .tab-btn {
-            background: var(--bg-panel);
-            color: var(--text-muted);
-            border: 1px solid var(--border-color);
-            padding: 8px 16px; 
-            border-radius: 20px;
-            cursor: pointer;
-            font-size: 0.85rem;
-            font-weight: bold;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-        }
-
-        .tab-btn:hover { color: var(--accent-gold-hover); border-color: var(--accent-gold); background: rgba(74, 43, 125, 0.3); }
-        .tab-btn.active { background: var(--accent-gold); color: var(--bg-main); border-color: var(--accent-gold); box-shadow: 0 0 10px var(--accent-gold); }
-
-        /* --- TRẠNG THÁI HEADER KHI Ở TAB GIỚI THIỆU --- */
-        #app-header.intro-mode .title-tab-group {
-            width: 100%;
-            align-items: center;
-            justify-content: center;
-            margin-top: 1vh;
-        }
-        #app-header.intro-mode .controls-group {
-            width: 0%;
-            opacity: 0;
-            transform: translateX(30px);
-            pointer-events: none;
-            height: 0;
+        /* ================= BACKGROUND BÀN TRẢI BÀI ================= */
+        .bg-universe {
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: -1;
+            background: radial-gradient(ellipse at bottom, var(--p1) 0%, #090a0f 100%);
             overflow: hidden;
         }
+        @keyframes animStar { from { transform: translateY(0px); } to { transform: translateY(-2000px); } }
+        #stars, #stars2, #stars3 { background: transparent; position: absolute; }
+        #stars { width: 1px; height: 1px; box-shadow: 100px 200px #fff, 300px 400px #fff, 500px 600px #fff, 800px 900px #fff, 1200px 1500px #fff, 1800px 1900px #fff, 450px 120px #fff, 900px 800px #fff, 1400px 300px #fff, 200px 1800px #fff, 1600px 1100px #fff, 750px 1600px #fff; animation: animStar 50s linear infinite; }
+        #stars:after { content: " "; position: absolute; top: 2000px; width: 1px; height: 1px; box-shadow: inherit; }
+        #stars2 { width: 2px; height: 2px; box-shadow: 150px 250px #fff, 350px 450px #fff, 550px 650px #fff, 850px 950px #fff, 1250px 1550px #fff, 250px 850px #fff, 650px 1350px #fff, 1050px 250px #fff, 1450px 1750px #fff, 1750px 550px #fff; animation: animStar 100s linear infinite; }
+        #stars2:after { content: " "; position: absolute; top: 2000px; width: 2px; height: 2px; box-shadow: inherit; }
+        #stars3 { width: 3px; height: 3px; box-shadow: 200px 300px #fff, 400px 500px #fff, 600px 700px #fff, 900px 1000px #fff, 100px 1300px #fff, 1300px 600px #fff, 1800px 1400px #fff, 700px 1900px #fff; animation: animStar 150s linear infinite; }
+        #stars3:after { content: " "; position: absolute; top: 2000px; width: 3px; height: 3px; box-shadow: inherit; }
 
-        /* --- TRẠNG THÁI HEADER KHI Ở TAB BỐC BÀI (TRƯỢT LÊN GÓC) --- */
-        #app-header.reading-mode {
-            flex-direction: row;
-            align-items: center;
-            justify-content: space-between;
-            border-bottom: 1px solid rgba(194, 157, 89, 0.2);
-            padding-bottom: 12px;
-        }
-        #app-header.reading-mode .title-tab-group {
-            width: 32%; 
-            align-items: flex-start;
-        }
-        #app-header.reading-mode h1 { text-align: left; }
+        /* ================= HEADER ĐỘNG ================= */
+        #app-header { display: flex; flex-direction: column; align-items: center; width: 100%; margin-bottom: 15px; }
+        .title-tab-group { display: flex; flex-direction: column; align-items: center; width: 100%; transition: all 0.5s ease; }
         
-        #app-header.reading-mode .controls-group {
-            width: 66%; 
-            opacity: 1;
-            transform: translateX(0);
-            pointer-events: auto;
-            height: auto;
+        h1 { 
+            margin-bottom: 10px; font-size: clamp(1.3rem, 2.5vw, 1.8rem); 
+            text-shadow: 0 0 15px var(--accent-gold); line-height: 1.2; color: #fff; text-align: center;
+        }
+        .tabs-container { display: flex; gap: 8px; justify-content: center; margin-bottom: 15px; }
+        
+        .tab-btn {
+            background: var(--bg-panel); color: var(--text-muted); border: 1px solid var(--border-color);
+            padding: 8px 16px; border-radius: 20px; cursor: pointer; font-size: 0.85rem; font-weight: bold;
+            transition: all 0.3s ease; box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+        }
+        .tab-btn:hover { color: var(--accent-gold-hover); border-color: var(--accent-gold); background: rgba(76, 0, 176, 0.6); }
+        .tab-btn.active { background: var(--accent-gold); color: #fff; border-color: var(--accent-gold); box-shadow: 0 0 10px var(--accent-gold); }
+
+        /* --- TRẠNG THÁI INTRO --- */
+        #app-header.intro-mode .controls-group { display: none; }
+        
+        /* --- TRẠNG THÁI READING (Đã fix mượt mà và căn giữa) --- */
+        #app-header.reading-mode h1 { 
+            font-size: clamp(1.8rem, 4vw, 2.8rem); /* To hơn */
+            margin-top: -10px; /* Xích lên trên */
+        }
+        #app-header.reading-mode .controls-group { 
+            display: block; width: 100%; max-width: 900px; /* Khống chế độ rộng để UI gọn gàng */
         }
 
-        /* ── BẢNG ĐIỀU KHIỂN (THU GỌN LÊN TOP NAV) ── */
+        /* ================= BẢNG ĐIỀU KHIỂN ================= */
         .controls-inner {
-            display: grid;
-            grid-template-columns: 1fr 1fr; 
-            grid-template-areas: 
-                "q q"
-                "reader sys"
-                "spread btns"
-                "status status";
-            gap: 8px;
-            background: rgba(0, 0, 0, 0.4);
-            padding: 10px 14px;
-            border-radius: 12px;
-            border: 1px solid var(--border-color);
-            width: 100%;
+            display: grid; grid-template-columns: 1fr 1fr; 
+            grid-template-areas: "q q" "reader sys" "spread btns" "status status";
+            gap: 12px; background: rgba(0, 0, 0, 0.5); padding: 14px 18px; border-radius: 12px;
+            border: 1px solid var(--border-color); width: 100%; box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+            animation-duration: 0.8s;
         }
 
         #user-question { grid-area: q; }
-        #reader-persona { grid-area: reader; border-color: #c4b5fd; }
-        #reading-style { grid-area: sys; }
+        #ui-reader-group { grid-area: reader; }
+        #ui-style-group { grid-area: sys; }
         #spread-type { grid-area: spread; }
-        .btn-group { grid-area: btns; display: flex; gap: 6px; }
-        
-        #status-message { 
-            grid-area: status; 
-            margin: 0; 
-            font-size: 0.85rem; 
-            font-style: italic; 
-            color: var(--text-muted); 
-            text-align: left;
-            padding-left: 4px;
-        }
+        .btn-group { grid-area: btns; display: flex; gap: 8px; }
+        #status-message { grid-area: status; margin: 0; font-size: 0.85rem; font-style: italic; color: var(--text-muted); text-align: center; }
 
+        /* ── NEO-BRUTALISM INPUT ── */
         input[type="text"], select {
-            padding: 8px 12px; 
-            font-size: 0.9rem; 
-            border-radius: 6px;
-            background: var(--bg-panel); color: white; border: 1px solid var(--accent-gold);
-            width: 100%; outline: none; -webkit-appearance: none; appearance: none;
+            width: 100%; padding: 12px; font-size: 0.95rem; font-family: 'Courier New', monospace;
+            color: var(--p7); background-color: #000; border: 2px solid var(--p5); border-radius: 0;
+            outline: none; transition: all 0.3s ease; box-shadow: 4px 4px 0 var(--p4); -webkit-appearance: none; appearance: none;
         }
-        input::placeholder { color: #a78bfa; opacity: 0.7; }
-        select { cursor: pointer; }
+        input::placeholder { color: var(--p4); }
+        input[type="text"]:hover, select:hover { transform: translate(-2px, -2px); box-shadow: 6px 6px 0 var(--p3); }
+        input[type="text"]:focus, select:focus { border-color: var(--p7); box-shadow: 4px 4px 0 var(--p6); color: var(--p9); animation: shake 0.5s ease-in-out; }
+        
+        @keyframes shake {
+            0% { transform: translateX(0); } 25% { transform: translateX(-4px) rotate(-2deg); }
+            50% { transform: translateX(4px) rotate(2deg); } 75% { transform: translateX(-4px) rotate(-2deg); }
+            100% { transform: translateX(0); }
+        }
+        @keyframes glitch {
+            0%, 10%, 27%, 35%, 50%, 72%, 80%, 100% { transform: none; opacity: 1; }
+            7% { transform: skew(-0.5deg, -0.9deg); opacity: 0.75; }
+            30% { transform: skew(0.8deg, -0.1deg); opacity: 0.75; }
+            55% { transform: skew(-1deg, 0.2deg); opacity: 0.75; }
+            75% { transform: skew(0.4deg, 1deg); opacity: 0.75; }
+        }
+        input[type="text"]:not(:placeholder-shown) { font-weight: bold; letter-spacing: 1px; animation: glitch 1.5s linear infinite; }
 
+        /* ── KHUNG LỰA CHỌN GRADIENT RADIO ── */
+        .radio-wrapper { display: flex; gap: 4px; border: 2px solid var(--p4); border-radius: 10px; background: #000; padding: 4px; user-select: none; }
+        .radio-label { flex: 1; display: flex; cursor: pointer; }
+        .radio-input { display: none; }
+        .radio-text {
+            flex: 1; text-align: center; font-weight: bold; font-size: 0.85rem;
+            color: var(--p6); padding: 8px; border-radius: 8px; transition: 0.2s ease-in-out;
+        }
+        .radio-input:checked + .radio-text {
+            background: linear-gradient(to right, var(--p4), var(--p6)); color: white;
+            box-shadow: 0 2px 10px rgba(138, 0, 194, 0.5); letter-spacing: 1px;
+        }
+
+        /* ── BUTTONS ── */
         .mystic-btn {
-            padding: 8px 12px; font-size: 0.85rem; font-weight: bold; color: var(--bg-main);
-            background-color: var(--accent-gold); border: none; border-radius: 6px;
-            cursor: pointer; transition: all 0.2s;
-            flex: 1; min-height: 34px; white-space: nowrap;
+            padding: 10px 12px; font-size: 0.85rem; font-weight: bold; color: #fff; font-family: 'Courier New', monospace;
+            background-color: var(--p3); border: 3px solid #000; border-radius: 0;
+            cursor: pointer; transition: all 0.2s; flex: 1; box-shadow: 4px 4px 0 var(--p1); white-space: nowrap;
         }
-        .mystic-btn:active:not(:disabled) { transform: scale(0.95); background-color: var(--accent-gold-hover); }
-        @media (hover: hover) {
-            .mystic-btn:hover:not(:disabled) { background-color: var(--accent-gold-hover); box-shadow: 0 0 10px var(--accent-gold); }
-        }
-        .mystic-btn:disabled { background-color: #555; color: #888; cursor: not-allowed; }
+        .mystic-btn:active:not(:disabled) { transform: translate(2px, 2px); box-shadow: 2px 2px 0 #000; }
+        @media (hover: hover) { .mystic-btn:hover:not(:disabled) { transform: translate(-2px, -2px); box-shadow: 6px 6px 0 var(--p2); background-color: var(--p4); } }
+        .mystic-btn:disabled { background-color: #444; border-color: #222; color: #888; box-shadow: none; cursor: not-allowed; }
 
-        /* ================= NỘI DUNG TABS ================= */
-        .tab-content {
-            width: 100%;
-            margin: 0 auto;
+        /* ================= THẺ THÔNG TIN TRẢI BÀI (GLOWING CARD) ================= */
+        .info-card-wrap {
+            width: 100%; max-width: 400px; min-height: 200px;
+            background-image: linear-gradient(163deg, var(--p3) 0%, var(--p7) 100%);
+            border-radius: 20px; transition: all .3s; padding: 3px; margin: 40px auto;
+            animation-duration: 0.8s; 
         }
+        /* Fix cho hiệu ứng hinge */
+        .animate__hinge { animation-duration: 2s; transform-origin: top left; }
+
+        .info-card-inner {
+            width: 100%; height: 100%; min-height: 194px;
+            background-color: #1a1a1a; border-radius: 17px; transition: all .2s;
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            padding: 25px 20px; text-align: center; color: #ccc; font-size: 0.9rem; line-height: 1.5;
+        }
+        .info-card-inner:hover { transform: scale(0.98); border-radius: 17px; }
+        .info-card-wrap:hover { box-shadow: 0px 0px 30px 1px rgba(190, 46, 214, 0.4); }
+        
+        .info-card-inner strong { color: var(--p8); font-size: 1.1rem; font-weight: bold; margin-bottom: 12px; text-transform: uppercase; letter-spacing: 1px; display: block; }
+        .info-card-inner em { color: var(--p6); font-size: 0.95rem; font-weight: bold; margin-bottom: 12px; border-bottom: 1px dashed var(--p4); padding-bottom: 8px; display: inline-block; font-style: normal; }
+
+        /* ================= TABS NỘI DUNG & GRID GIỚI THIỆU ================= */
+        .tab-content { width: 100%; margin: 0 auto; }
         #tab-reading { display: none; }
         .tab-content.active { display: block; }
 
-        @keyframes slideInRight { from { opacity: 0; transform: translateX(60px); } to { opacity: 1; transform: translateX(0); } }
-        @keyframes slideOutLeft { from { opacity: 1; transform: translateX(0) scale(1); } to { opacity: 0; transform: translateX(-30px) scale(0.98); } }
-
-        /* ── BỐ CỤC 4 Ô GIỚI THIỆU ── */
-        #intro-container {
-            width: 100%; max-width: 100%; 
-            min-height: calc(100vh - 120px); 
-            display: flex; flex-direction: column;
-            margin: 0 auto;
-        }
-
-        #sheets-content {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr); 
-            gap: 16px; 
-            width: 100%;
-            flex-grow: 1; 
-        }
-
-        .intro-card {
-            background: rgba(42, 22, 77, 0.7); border: 1px solid var(--border-color);
-            border-radius: 12px; padding: 18px; text-align: left;
-            display: flex; flex-direction: column; box-shadow: 0 6px 15px rgba(0,0,0,0.3);
-            opacity: 0; transform: translateY(30px);
-            animation: slideUpCard 0.6s cubic-bezier(0.25, 1, 0.5, 1) forwards;
-        }
-        .intro-card:nth-child(1) { animation-delay: 0.1s; } .intro-card:nth-child(2) { animation-delay: 0.2s; }
-        .intro-card:nth-child(3) { animation-delay: 0.3s; } .intro-card:nth-child(4) { animation-delay: 0.4s; }
-
-        @keyframes slideUpCard { to { opacity: 1; transform: translateY(0); } }
-
-        .intro-card h2 { color: var(--accent-gold); margin-bottom: 10px; font-size: 1.1rem; border-bottom: 1px solid rgba(194, 157, 89, 0.2); padding-bottom: 8px; }
+        #intro-container { width: 100%; max-width: 100%; min-height: calc(100vh - 120px); display: flex; flex-direction: column; margin: 0 auto; }
+        #sheets-content { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; width: 100%; flex-grow: 1; }
+        .intro-card { background: var(--bg-panel); border: 1px solid var(--border-color); border-radius: 12px; padding: 18px; text-align: left; display: flex; flex-direction: column; box-shadow: 0 6px 15px rgba(0,0,0,0.5); backdrop-filter: blur(5px); }
+        .intro-card h2 { color: var(--accent-gold); margin-bottom: 10px; font-size: 1.1rem; border-bottom: 1px solid rgba(190, 46, 214, 0.3); padding-bottom: 8px; }
         .intro-card p { color: var(--text-main); line-height: 1.6; font-size: 0.9rem; flex-grow: 1; }
-        .btn-jump { margin-top: 15px; width: 100%; font-size: 0.9rem; padding: 10px; }
+        .btn-jump { margin-top: 15px; width: 100%; font-size: 0.9rem; padding: 10px; border-radius: 8px; }
 
-        /* ── LAYOUT DESKTOP 2 CỘT CHO TAB BỐC BÀI ── */
-        .app-layout {
-            display: flex;
-            gap: 15px; 
-            align-items: stretch;
-            min-height: calc(100vh - 150px);
-        }
+        /* ================= BỐ CỤC TRẢI BÀI ================= */
+        .app-layout { display: flex; gap: 15px; align-items: stretch; min-height: calc(100vh - 150px); }
+        .panel-left { flex: 0 0 50%; max-width: 50%; display: flex; flex-direction: column; border-right: 1px solid rgba(138, 0, 194, 0.3); padding-right: 15px; }
+        .panel-right { flex: 1 1 50%; display: flex; flex-direction: column; position: relative; }
 
-        .panel-left {
-            flex: 0 0 50%; 
-            max-width: 50%;
-            display: flex; flex-direction: column;
-            border-right: 1px solid rgba(194, 157, 89, 0.15);
-            padding-right: 15px;
-        }
-
-        .panel-right {
-            flex: 1 1 50%; 
-            display: flex; flex-direction: column;
-            position: relative;
-        }
-
-        /* --- BÀN BỐC BÀI & KÍCH THƯỚC LÁ BÀI --- */
-        .tarot-board { 
-            display: flex; flex-wrap: wrap; justify-content: center; 
-            gap: 45px 12px; 
-            margin: 25px 0; 
-            width: 100%; 
-        }
+        .tarot-board { display: flex; flex-wrap: wrap; justify-content: center; gap: 45px 12px; margin: 25px 0; width: 100%; }
         
-        /* ================= CÁC LAYOUT HÌNH HỌC ĐẶC THÙ ================= */
-        .tarot-board.classic_croix {
-            display: grid;
-            grid-template-columns: 1fr 1fr 1fr;
-            grid-template-rows: auto auto auto;
-            gap: 45px 15px;
-            justify-items: center;
-            align-items: center;
-        }
-        .classic_croix .card-slot:nth-child(1) { grid-area: 2 / 1; } 
-        .classic_croix .card-slot:nth-child(2) { grid-area: 2 / 3; } 
-        .classic_croix .card-slot:nth-child(3) { grid-area: 1 / 2; } 
-        .classic_croix .card-slot:nth-child(4) { grid-area: 3 / 2; } 
-        .classic_croix .card-slot:nth-child(5) { grid-area: 2 / 2; } 
+        .tarot-board.classic_croix { display: grid; grid-template-columns: 1fr 1fr 1fr; grid-template-rows: auto auto auto; gap: 45px 15px; justify-items: center; align-items: center; }
+        .classic_croix .card-slot:nth-child(1) { grid-area: 2 / 1; } .classic_croix .card-slot:nth-child(2) { grid-area: 2 / 3; } .classic_croix .card-slot:nth-child(3) { grid-area: 1 / 2; } .classic_croix .card-slot:nth-child(4) { grid-area: 3 / 2; } .classic_croix .card-slot:nth-child(5) { grid-area: 2 / 2; } 
+        .tarot-board.classic_celtique { display: grid; grid-template-columns: 1fr 1.2fr 1fr 1fr; grid-template-rows: repeat(4, 1fr); gap: 40px 10px; justify-items: center; align-items: center; }
+        .classic_celtique .card-slot:nth-child(1) { grid-area: 2 / 2 / 4 / 3; z-index: 1; margin-top: 20px;} .classic_celtique .card-slot:nth-child(2) { grid-area: 2 / 2 / 4 / 3; transform: rotate(90deg); z-index: 2; margin-top: 20px;} .classic_celtique .card-slot:nth-child(3) { grid-area: 1 / 2 / 2 / 3; } .classic_celtique .card-slot:nth-child(4) { grid-area: 4 / 2 / 5 / 3; } .classic_celtique .card-slot:nth-child(5) { grid-area: 2 / 1 / 4 / 2; } .classic_celtique .card-slot:nth-child(6) { grid-area: 2 / 3 / 4 / 4; } .classic_celtique .card-slot:nth-child(7) { grid-area: 4 / 4 / 5 / 5; } .classic_celtique .card-slot:nth-child(8) { grid-area: 3 / 4 / 4 / 5; } .classic_celtique .card-slot:nth-child(9) { grid-area: 2 / 4 / 3 / 5; } .classic_celtique .card-slot:nth-child(10) { grid-area: 1 / 4 / 2 / 5; }
+        .tarot-board.mystic_tree { display: grid; grid-template-columns: 1fr 1fr 1fr; grid-template-rows: repeat(7, auto); gap: 45px 15px; justify-items: center; align-items: center; margin: 25px 0; width: 100%; }
+        .mystic_tree .card-slot:nth-child(1) { grid-area: 1 / 2; } .mystic_tree .card-slot:nth-child(2) { grid-area: 2 / 3; } .mystic_tree .card-slot:nth-child(3) { grid-area: 2 / 1; } .mystic_tree .card-slot:nth-child(4) { grid-area: 3 / 3; } .mystic_tree .card-slot:nth-child(5) { grid-area: 3 / 1; } .mystic_tree .card-slot:nth-child(6) { grid-area: 4 / 2; } .mystic_tree .card-slot:nth-child(7) { grid-area: 5 / 3; } .mystic_tree .card-slot:nth-child(8) { grid-area: 5 / 1; } .mystic_tree .card-slot:nth-child(9) { grid-area: 6 / 2; } .mystic_tree .card-slot:nth-child(10) { grid-area: 7 / 2; }
 
-        .tarot-board.classic_celtique {
-            display: grid;
-            grid-template-columns: 1fr 1.2fr 1fr 1fr;
-            grid-template-rows: repeat(4, 1fr);
-            gap: 40px 10px;
-            justify-items: center;
-            align-items: center;
-        }
-        .classic_celtique .card-slot:nth-child(1) { grid-area: 2 / 2 / 4 / 3; z-index: 1; margin-top: 20px;} 
-        .classic_celtique .card-slot:nth-child(2) { grid-area: 2 / 2 / 4 / 3; transform: rotate(90deg); z-index: 2; margin-top: 20px;} 
-        .classic_celtique .card-slot:nth-child(3) { grid-area: 1 / 2 / 2 / 3; } 
-        .classic_celtique .card-slot:nth-child(4) { grid-area: 4 / 2 / 5 / 3; } 
-        .classic_celtique .card-slot:nth-child(5) { grid-area: 2 / 1 / 4 / 2; } 
-        .classic_celtique .card-slot:nth-child(6) { grid-area: 2 / 3 / 4 / 4; } 
-        .classic_celtique .card-slot:nth-child(7) { grid-area: 4 / 4 / 5 / 5; } 
-        .classic_celtique .card-slot:nth-child(8) { grid-area: 3 / 4 / 4 / 5; } 
-        .classic_celtique .card-slot:nth-child(9) { grid-area: 2 / 4 / 3 / 5; } 
-        .classic_celtique .card-slot:nth-child(10) { grid-area: 1 / 4 / 2 / 5; }
-
-        .tarot-board.mystic_tree {
-            display: grid;
-            grid-template-columns: 1fr 1fr 1fr;
-            grid-template-rows: repeat(7, auto);
-            gap: 45px 15px; 
-            justify-items: center;
-            align-items: center;
-            margin: 25px 0;
-            width: 100%;
-        }
-        .mystic_tree .card-slot:nth-child(1) { grid-area: 1 / 2; } 
-        .mystic_tree .card-slot:nth-child(2) { grid-area: 2 / 3; } 
-        .mystic_tree .card-slot:nth-child(3) { grid-area: 2 / 1; } 
-        .mystic_tree .card-slot:nth-child(4) { grid-area: 3 / 3; } 
-        .mystic_tree .card-slot:nth-child(5) { grid-area: 3 / 1; } 
-        .mystic_tree .card-slot:nth-child(6) { grid-area: 4 / 2; } 
-        .mystic_tree .card-slot:nth-child(7) { grid-area: 5 / 3; } 
-        .mystic_tree .card-slot:nth-child(8) { grid-area: 5 / 1; } 
-        .mystic_tree .card-slot:nth-child(9) { grid-area: 6 / 2; } 
-        .mystic_tree .card-slot:nth-child(10) { grid-area: 7 / 2; }
-
-        /* ================= POPUP GIỚI THIỆU TRẢI BÀI ================= */
-        .spread-intro-popup {
-            background: rgba(26, 11, 46, 0.9);
-            border: 1px dashed var(--accent-gold);
-            padding: 22px 30px;
-            border-radius: 12px;
-            color: var(--text-main);
-            text-align: center;
-            max-width: 500px;
-            margin: 40px auto;
-            box-shadow: 0 0 25px rgba(194, 157, 89, 0.15);
-            animation: fadeInPopup 0.5s ease forwards;
-            line-height: 1.6;
-            font-size: 0.95rem;
-            width: 100%;
-        }
-        .spread-intro-popup strong {
-            color: var(--accent-gold);
-            font-size: 1.2rem;
-            display: block;
-            margin-bottom: 10px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-        @keyframes fadeInPopup {
-            from { opacity: 0; transform: translateY(-10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        /* ================= THIẾT KẾ LÁ BÀI & NHÃN CHỮ CẢI TIẾN ================= */
+        /* ================= THIẾT KẾ LÁ BÀI ================= */
         .card-slot { 
-            perspective: 1000px; 
-            width: clamp(65px, 9vw, 95px); 
-            height: clamp(113px, 15vw, 166px); 
+            perspective: 1000px; width: clamp(65px, 9vw, 95px); height: clamp(113px, 15vw, 166px); 
             cursor: pointer; position: relative; touch-action: manipulation; 
         }
         
-       .card-label {
-            position: absolute; 
-            bottom: calc(100% + 8px); 
-            left: 50%; 
-            transform: translateX(-50%); 
-            width: 120%;
-            min-width: 90px;
-            white-space: normal;
-            font-size: 0.65rem; 
-            color: var(--accent-gold); 
-            font-weight: bold;
-            text-transform: uppercase; 
-            letter-spacing: 0.5px; 
-            text-shadow: 0 0 5px rgba(0,0,0,1);
-            text-align: center; 
-            line-height: 1.4;
-            z-index: 10;
-            pointer-events: none;
-        }
+        .card-slot:not(.flipped):hover { transform: scale(1.05) rotate(-2deg); }
+        .card-slot:not(.flipped):hover .card-inner { box-shadow: 0 0 20px var(--p6); }
 
-        .card-inner { width: 100%; height: 100%; position: relative; transition: transform 0.6s cubic-bezier(0.4, 0.2, 0.2, 1); transform-style: preserve-3d; }
+        .card-label {
+            position: absolute; bottom: calc(100% + 8px); left: 50%; transform: translateX(-50%); width: 120%; min-width: 90px;
+            white-space: normal; font-size: 0.65rem; color: var(--p9); font-weight: bold; text-transform: uppercase; 
+            letter-spacing: 0.5px; text-shadow: 0 0 5px #000, 0 0 10px var(--p4); text-align: center; line-height: 1.4; 
+            z-index: 10; opacity: 0; transition: 0.3s ease; pointer-events: none;
+        }
+        .card-slot:hover .card-label, .card-slot.flipped .card-label { opacity: 1; bottom: calc(100% + 15px); }
+
+        .card-inner { width: 100%; height: 100%; position: relative; transition: transform 0.8s cubic-bezier(0.4, 0.2, 0.2, 1); transform-style: preserve-3d; border-radius: 8px;}
         .card-slot.flipped .card-inner { transform: rotateY(180deg); }
+        
         .card-front, .card-back {
             width: 100%; height: 100%; position: absolute; backface-visibility: hidden; -webkit-backface-visibility: hidden;
-            border-radius: 6px; box-shadow: 0 4px 8px rgba(0,0,0,0.5); border: 1.5px solid var(--accent-gold);
+            border-radius: 8px; box-shadow: 0 8px 14px 0 rgba(0,0,0,0.4); border: 2px solid var(--p6);
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
         }
-        .card-front { background-color: var(--bg-panel); }
-        .card-front img, .card-back img { width: 100%; height: 100%; object-fit: cover; border-radius: 4px; pointer-events: none; }
-        .card-back { transform: rotateY(180deg); background-color: #fff; }
+        
+        .card-front { background: linear-gradient(120deg, var(--p1) 20%, var(--p3) 88%, var(--p2) 40%, var(--p5) 48%); }
+        .card-back { transform: rotateY(180deg); background-color: #fff; border: 2px solid var(--p8); }
+        
+        .card-front img, .card-back img { width: 100%; height: 100%; object-fit: cover; border-radius: 6px; pointer-events: none; }
         .card-slot .card-inner .card-back img.card-reversed { transform: rotate(180deg); }
 
-        /* --- KẾT QUẢ GIẢI BÀI --- */
+        /* ================= VÙNG HIỂN THỊ KẾT QUẢ ================= */
         .loading-dots::after { content: ''; animation: dots 1.4s infinite; }
         @keyframes dots { 0% {content:'';} 25% {content:'.';} 50% {content:'..';} 75% {content:'...';} }
 
-        .reading-placeholder {
-            display: flex; flex-direction: column; align-items: center; justify-content: center;
-            flex: 1; color: rgba(196, 181, 253, 0.3); font-size: 0.9rem; font-style: italic; gap: 10px; padding: 20px; min-height: 200px;
-        }
-        .placeholder-icon { font-size: 2.5rem; opacity: 0.25; }
+        .reading-placeholder { display: flex; flex-direction: column; align-items: center; justify-content: center; flex: 1; color: var(--p4); font-size: 0.9rem; font-style: italic; gap: 10px; padding: 20px; min-height: 200px; }
+        .placeholder-icon { font-size: 2.5rem; opacity: 0.4; }
 
         #reading-result {
-            background: rgba(42, 22, 77, 0.7); border: 1px solid var(--accent-gold); padding: 16px; border-radius: 10px;
-            text-align: left; line-height: 1.7; font-size: 0.9rem; 
-            display: none; box-shadow: 0 0 20px rgba(194, 157, 89, 0.1); flex: 1; overflow-y: auto; max-height: calc(100vh - 160px);
+            background: var(--bg-panel); border: 1px solid var(--p5); padding: 16px; border-radius: 10px;
+            text-align: left; line-height: 1.7; font-size: 0.9rem; display: none; box-shadow: 0 0 20px rgba(138,0,194,0.2); 
+            flex: 1; overflow-y: auto; max-height: calc(100vh - 160px); backdrop-filter: blur(5px);
         }
 
-        .copy-btn-wrap { display: flex; justify-content: flex-end; margin-top: 15px; padding-top: 10px; border-top: 1px solid rgba(194, 157, 89, 0.3); }
-        #btn-copy { display: flex; align-items: center; gap: 4px; padding: 6px 12px; font-size: 0.8rem; font-weight: bold; color: var(--bg-main); background-color: var(--accent-gold); border: none; border-radius: 6px; cursor: pointer; transition: 0.2s; }
-        #btn-copy:active { transform: scale(0.96); background-color: var(--accent-gold-hover); }
-        #btn-copy.copied { background-color: #4ade80; color: var(--bg-main); }
+        .copy-btn-wrap { display: flex; justify-content: flex-end; margin-top: 15px; padding-top: 10px; border-top: 1px dashed var(--p4); }
+        #btn-copy { display: flex; align-items: center; gap: 4px; padding: 6px 12px; font-size: 0.8rem; font-weight: bold; color: #fff; background-color: var(--p3); border: 2px solid #000; border-radius: 0; cursor: pointer; transition: 0.2s; box-shadow: 2px 2px 0 #000;}
+        #btn-copy:active { transform: translate(1px, 1px); box-shadow: 1px 1px 0 #000; }
+        #btn-copy.copied { background-color: var(--p6); color: #000; }
 
         #reading-result::-webkit-scrollbar { width: 4px; }
         #reading-result::-webkit-scrollbar-track { background: rgba(255,255,255,0.02); }
-        #reading-result::-webkit-scrollbar-thumb { background: rgba(194, 157, 89, 0.4); border-radius: 4px; }
+        #reading-result::-webkit-scrollbar-thumb { background: var(--p5); border-radius: 4px; }
 
         /* --- STYLE CHO KHUNG CHAT FOLLOW-UP --- */
-        #chat-followup-container {
-            display: none;
-            margin-top: 20px;
-            border-top: 1px dashed rgba(194, 157, 89, 0.4);
-            padding-top: 18px;
-        }
-        #chat-history {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-            margin-bottom: 15px;
-        }
-        .chat-bubble-user {
-            background: rgba(0, 0, 0, 0.35);
-            padding: 12px 14px;
-            border-radius: 10px;
-            border-left: 3px solid var(--accent-gold);
-            font-size: 0.9rem;
-            line-height: 1.6;
-        }
-        .chat-bubble-ai {
-            background: rgba(194, 157, 89, 0.1);
-            padding: 14px;
-            border-radius: 10px;
-            border-left: 3px solid #c4b5fd;
-            font-size: 0.9rem;
-            line-height: 1.7;
-        }
+        #chat-followup-container { display: none; margin-top: 20px; border-top: 1px dashed var(--p4); padding-top: 18px; }
+        #chat-history { display: flex; flex-direction: column; gap: 12px; margin-bottom: 15px; }
+        .chat-bubble-user { background: rgba(0, 0, 0, 0.6); padding: 12px 14px; border-radius: 10px; border-left: 3px solid var(--p6); font-size: 0.9rem; line-height: 1.6; }
+        .chat-bubble-ai { background: rgba(190, 46, 214, 0.15); padding: 14px; border-radius: 10px; border-left: 3px solid var(--p8); font-size: 0.9rem; line-height: 1.7; }
 
-        /* ================================================================= */
-        /* ================= TÁI CẤU TRÚC UX/UI CHO ĐIỆN THOẠI ================= */
-        /* ================================================================= */
+        /* ================= RESPONSIVE ================= */
         @media (max-width: 992px) {
-            #sheets-content { 
-                grid-template-columns: 1fr !important; 
-                gap: 20px;
-            }
-
-            #app-header.reading-mode { 
-                flex-direction: column !important; 
-                align-items: center !important;
-                justify-content: center !important;
-                text-align: center !important;
-            }
-            #app-header.reading-mode .title-tab-group { 
-                width: 100% !important; 
-                align-items: center !important;
-                justify-content: center !important;
-                margin-bottom: 12px;
-            }
-            #app-header.reading-mode h1 { 
-                text-align: center !important; 
-            }
-
-            #app-header.reading-mode .controls-group { 
-                width: 100% !important; 
-                opacity: 1;
-                transform: none;
-                pointer-events: auto;
-                height: auto;
-            }
-            .controls-inner { 
-                grid-template-areas: 
-                    "q" 
-                    "reader"
-                    "sys" 
-                    "spread" 
-                    "btns" 
-                    "status" !important; 
-                grid-template-columns: 1fr !important; 
-                width: 100% !important;
-                padding: 12px;
-            }
-            .btn-group { 
-                width: 100% !important; 
-            }
-            .mystic-btn {
-                padding: 10px 14px;
-                font-size: 0.9rem;
-            }
+            #sheets-content { grid-template-columns: 1fr !important; gap: 20px; }
+            .controls-inner { grid-template-areas: "q" "reader" "sys" "spread" "btns" "status" !important; grid-template-columns: 1fr !important; width: 100% !important; padding: 12px; }
+            .btn-group { width: 100% !important; }
         }
 
         @media (max-width: 768px) {
-            .app-layout { 
-                flex-direction: column !important; 
-                min-height: unset !important; 
-                gap: 25px;
-            }
-            
-            .panel-left { 
-                flex: unset !important; 
-                max-width: 100% !important; 
-                border-right: none !important; 
-                border-bottom: 1px dashed var(--border-color); 
-                padding-right: 0 !important; 
-                padding-bottom: 25px; 
-                margin-bottom: 10px; 
-            }
-            
-            .panel-right { 
-                flex: unset !important; 
-                width: 100% !important;
-            }
-            #reading-result {
-                max-height: unset !important; 
-            }
-
-            .tarot-board.classic_croix,
-            .tarot-board.classic_celtique,
-            .tarot-board.mystic_tree {
-                display: flex !important; 
-                flex-wrap: wrap !important; 
-                justify-content: center !important;
-                gap: 52px 16px !important; 
-                padding-top: 15px;
-            }
-            .classic_celtique .card-slot:nth-child(2) {
-                transform: none !important;
-                margin-top: 0 !important;
-            }
-
-            .intro-card p, 
-            #reading-result,
-            .chat-bubble-user,
-            .chat-bubble-ai {
-                font-size: 1.2rem !important; 
-                line-height: 1.75; 
-                overflow-wrap: break-word; 
-                word-wrap: break-word;
-            }
-
-            input[type="text"], 
-            select,
-            .tab-btn,
-            .mystic-btn {
-                font-size: 1.05rem !important; 
-            }
-
-            .card-label {
-                font-size: 0.8rem !important; 
-                min-width: 100px; 
-                bottom: calc(100% + 12px); 
-            }
-            
-            #reading-result {
-                padding: 20px 15px !important;
-            }
+            .app-layout { flex-direction: column !important; min-height: unset !important; gap: 25px; }
+            .panel-left { flex: unset !important; max-width: 100% !important; border-right: none !important; border-bottom: 1px dashed var(--border-color); padding-right: 0 !important; padding-bottom: 25px; margin-bottom: 10px; }
+            .panel-right { flex: unset !important; width: 100% !important; }
+            #reading-result { max-height: unset !important; }
+            .tarot-board.classic_croix, .tarot-board.classic_celtique, .tarot-board.mystic_tree { display: flex !important; flex-wrap: wrap !important; justify-content: center !important; gap: 52px 16px !important; padding-top: 15px; }
+            .classic_celtique .card-slot:nth-child(2) { transform: none !important; margin-top: 0 !important; }
+            .intro-card p, #reading-result, .chat-bubble-user, .chat-bubble-ai { font-size: 1.1rem !important; line-height: 1.75; overflow-wrap: break-word; word-wrap: break-word; }
+            .card-label { font-size: 0.8rem !important; min-width: 100px; bottom: calc(100% + 12px); }
+            #reading-result { padding: 20px 15px !important; }
+            .radio-wrapper { flex-direction: column; }
         }
     </style>
 </head>
 <body>
     
+    <div class="bg-universe">
+        <div id="stars"></div>
+        <div id="stars2"></div>
+        <div id="stars3"></div>
+    </div>
+
     <header id="app-header" class="intro-mode">
         <div class="title-tab-group">
-            <h1>🔮 Trạm Lắng Nghe Vũ Trụ 🔮</h1>
+            <h1 id="main-title" class="animate__animated animate__fadeInDown">🔮 Trạm Lắng Nghe Vũ Trụ 🔮</h1>
             <div class="tabs-container">
                 <button class="tab-btn active" onclick="switchTab('tab-intro')">💌 Giới Thiệu</button>
                 <button class="tab-btn" onclick="switchTab('tab-reading')">✨ Bốc Bài</button>
@@ -557,17 +294,26 @@
         </div>
         
         <div class="controls-group" id="controls-group">
-            <div class="controls-inner">
-                <input type="text" id="user-question" placeholder="💭 Bạn băn khoăn điều gì lúc này?">
+            <div class="controls-inner" id="controls-inner-box">
+                <input type="text" id="user-question" placeholder="Nhập điều bạn băn khoăn vào đây...">
                 
-                <!-- DROPDOWN CHỌN 3 READER & MENTOR -->
-                <select id="reader-persona">
+                <div class="radio-wrapper" id="ui-reader-group">
+                    <label class="radio-label"><input type="radio" name="ui-reader" value="amelia" checked class="radio-input"><span class="radio-text">Amelia</span></label>
+                    <label class="radio-label"><input type="radio" name="ui-reader" value="michael" class="radio-input"><span class="radio-text">Michael</span></label>
+                    <label class="radio-label"><input type="radio" name="ui-reader" value="joey" class="radio-input"><span class="radio-text">Joey</span></label>
+                </div>
+                <select id="reader-persona" style="display:none;">
                     <option value="amelia">🌸 Reader Amelia (Thấu Cảm & Chữa Lành)</option>
                     <option value="michael">🧙‍♂️ Reader Michael (Huyền Học & Chuyên Sâu)</option>
                     <option value="joey">📚 Mentor Joey (Học & Giải Mã Chiêm Tinh - Tarot)</option>
                 </select>
 
-                <select id="reading-style">
+                <div class="radio-wrapper" id="ui-style-group">
+                    <label class="radio-label"><input type="radio" name="ui-style" value="modern" checked class="radio-input"><span class="radio-text">Hiện Đại</span></label>
+                    <label class="radio-label"><input type="radio" name="ui-style" value="classical" class="radio-input"><span class="radio-text">Cổ Điển</span></label>
+                    <label class="radio-label"><input type="radio" name="ui-style" value="mystic" class="radio-input"><span class="radio-text">Huyền Học</span></label>
+                </div>
+                <select id="reading-style" style="display:none;">
                     <option value="modern" selected>✨ Hiện Đại ✨</option>
                     <option value="classical">⚜️ Cổ Điển Pháp ⚜️</option>
                     <option value="mystic">🌌 Huyền Học 🌌</option>
@@ -585,7 +331,8 @@
     </header>
 
     <div id="tab-intro" class="tab-content active">
-        <div id="intro-container">
+        <!-- Khung giới thiệu bài được set fadeInUp -->
+        <div id="intro-container" class="animate__animated animate__fadeInUp">
             <div id="loading-intro" style="text-align: center; color: var(--text-muted); font-style: italic; padding: 20px;">
                 ⏳ ... ⏳
             </div>
@@ -615,12 +362,11 @@
                         </button>
                     </div>
 
-                    <!-- KHUNG CHAT HỎI ĐÁP TIẾP NỐI VỚI READER -->
                     <div id="chat-followup-container">
                         <div id="chat-history"></div>
                         <div style="display: flex; gap: 8px; align-items: center;">
-                            <input type="text" id="followup-input" placeholder="💭 Hỏi thêm về tụ bài (nhấn Enter để gửi)..." style="flex: 1;">
-                            <button id="btn-followup-send" class="mystic-btn" style="flex: 0 0 auto; min-width: 80px;">Gửi ✨</button>
+                            <input type="text" id="followup-input" placeholder="Nhập điều bạn muốn hỏi thêm vào đây..." style="flex: 1;">
+                            <button id="btn-followup-send" class="mystic-btn" style="flex: 0 0 auto; min-width: 80px; padding: 12px;">Gửi ✨</button>
                         </div>
                     </div>
                 </div>
@@ -629,24 +375,53 @@
         </div>
     </div>
 
-    <!-- TẢI THƯ VIỆN PROMPT TỪ FILE RIÊNG -->
     <script src="prompts.js"></script>
 
     <script>
-        // --- LOGIC CHUYỂN TABS & ĐIỀU KHIỂN HEADER ---
+        document.querySelectorAll('input[name="ui-reader"]').forEach(radio => {
+            radio.addEventListener('change', (e) => {
+                const originalSelect = document.getElementById('reader-persona');
+                originalSelect.value = e.target.value;
+                originalSelect.dispatchEvent(new Event('change'));
+            });
+        });
+
+        document.querySelectorAll('input[name="ui-style"]').forEach(radio => {
+            radio.addEventListener('change', (e) => {
+                const originalSelect = document.getElementById('reading-style');
+                originalSelect.value = e.target.value;
+                originalSelect.dispatchEvent(new Event('change'));
+            });
+        });
+
         function switchTab(tabId) {
             const currentActive = document.querySelector('.tab-content.active') || document.querySelector('.tab-content[style*="display: block"]') || document.getElementById('tab-intro');
             const nextActive = document.getElementById(tabId);
             const header = document.getElementById('app-header');
+            const mainTitle = document.getElementById('main-title');
+            const controlsInner = document.getElementById('controls-inner-box');
             
             if (currentActive === nextActive) return;
 
             if (tabId === 'tab-reading') {
                 header.classList.remove('intro-mode');
                 header.classList.add('reading-mode');
+                
+                // Mất Emoji, cắt dòng, bay cực nhanh từ phải qua
+                mainTitle.innerHTML = "Trạm Lắng Nghe<br>Vũ Trụ";
+                mainTitle.className = "animate__animated animate__lightSpeedInRight";
+                
+                // Các control bay vào góc trên bên phải
+                controlsInner.classList.remove('animate__fadeInTopRight');
+                void controlsInner.offsetWidth; 
+                controlsInner.classList.add('animate__animated', 'animate__fadeInTopRight');
             } else {
                 header.classList.remove('reading-mode');
                 header.classList.add('intro-mode');
+                
+                // Trả về mặc định
+                mainTitle.innerHTML = "🔮 Trạm Lắng Nghe Vũ Trụ 🔮";
+                mainTitle.className = "animate__animated animate__fadeInDown";
             }
 
             document.querySelectorAll('.tab-btn').forEach(btn => {
@@ -670,7 +445,6 @@
             }, 280); 
         }
 
-        // --- GỌI API GOOGLE SHEETS LẤY DỮ LIỆU GIỚI THIỆU ---
         async function fetchIntroData() {
             const contentDiv = document.getElementById('sheets-content');
             const loadingDiv = document.getElementById('loading-intro');
@@ -713,7 +487,6 @@
 
         document.addEventListener("DOMContentLoaded", fetchIntroData);
 
-        // ================= DỮ LIỆU BÀI & ENGINE =================
         const tarotDeck = [
             "0thefool", "1themagician", "2thehighpriestess", "3theempress", "4theemperor", 
             "5thehierophant", "6thelovers", "7thechariot", "8strength", "9thehermit", 
@@ -750,10 +523,8 @@
         let isProcessing = false, cooldownTimer = null; 
         const REVERSAL_THRESHOLD = 30; 
 
-        // -- BIẾN LƯU NGỮ CẢNH HỎI ĐÁP TIẾP NỐI --
         let currentSessionContext = "";
 
-        // --- DOM Elements ---
         const btnShuffle = document.getElementById("btn-shuffle");
         const btnDraw = document.getElementById("btn-draw");
         const board = document.getElementById("tarot-board");
@@ -770,32 +541,31 @@
         const followupInput = document.getElementById("followup-input");
         const btnFollowupSend = document.getElementById("btn-followup-send");
 
-        // --- OPTIONS SPREAD ---
         const modernSpreadsHTML = `
-            <option value="intent_all">💌 TOÀN DIỆN (What, Why, How, When, Who?) 💌</option>
-            <option value="intent_what">💌 WHAT / YES-NO 💌</option>
-            <option value="intent_why">💌 WHY / HOW (Gốc rễ, nhân quả) 💌</option>
-            <option value="intent_when">💌 WHEN / WHO (Thời gian & Nhân vật) 💌</option>
-            <option value="intent_mbs">💖 M.B.S (Tâm linh - Tâm lý - Đời thực) 💖</option>
-            <option value="intent_healing">💖 CHỮA LÀNH (Điểm nghẽn năng lượng) 💖</option>
-            <option value="intent_relationship">💖 NHÂN DUYÊN (Sự kiện & Bài học) 💖</option>
-            <option value="intent_dream">🔮 GIẢI MÃ TIỀM THỨC 🔮</option>
-            <option value="intent_mirror">🔮 BẢN NGÃ (Vị thế thực tế) 🔮</option>
-            <option value="intent_crossroads">🔮 NGÃ RẼ (Hướng A hay B?)🔮</option>
-            <option value="intent_flow">🔮 DÒNG CHẢY SỰ KIỆN 🔮</option>
+            <option value="intent_all">TOÀN DIỆN (What, Why, How, When, Who?)</option>
+            <option value="intent_what">WHAT / YES-NO</option>
+            <option value="intent_why">WHY / HOW (Gốc rễ, nhân quả)</option>
+            <option value="intent_when">WHEN / WHO (Thời gian & Nhân vật)</option>
+            <option value="intent_mbs">M.B.S (Tâm linh - Tâm lý - Đời thực)</option>
+            <option value="intent_healing">CHỮA LÀNH (Điểm nghẽn năng lượng)</option>
+            <option value="intent_relationship">NHÂN DUYÊN (Sự kiện & Bài học)</option>
+            <option value="intent_dream">GIẢI MÃ TIỀM THỨC</option>
+            <option value="intent_mirror">BẢN NGÃ (Vị thế thực tế)</option>
+            <option value="intent_crossroads">NGÃ RẼ (Hướng A hay B?)</option>
+            <option value="intent_flow">DÒNG CHẢY SỰ KIỆN</option>
         `;
         const classicalSpreadsHTML = `
-            <option value="classic_croix">⚜️ Chữ Thập (Croix) ⚜️</option>
-            <option value="classic_ligne">⚜️ Thẳng Hàng (Ligne) ⚜️</option>
-            <option value="classic_grand_ourse">⚜️ Đại Hùng Tinh (Ourse) ⚜️</option>
-            <option value="classic_astrologique">⚜️ Thiên Văn (Tirage astrologique) ⚜️</option>
-            <option value="classic_celtique">⚜️ Celtic Cross (Celtique) ⚜️</option>
+            <option value="classic_croix">Chữ Thập (Croix)</option>
+            <option value="classic_ligne">Thẳng Hàng (Ligne)</option>
+            <option value="classic_grand_ourse">Đại Hùng Tinh (Ourse)</option>
+            <option value="classic_astrologique">Thiên Văn (Tirage astrologique)</option>
+            <option value="classic_celtique">Celtic Cross (Celtique)</option>
         `;
         const mysticSpreadsHTML = `
-            <option value="mystic_tree">🌳 Tree of Life (Kabbalah)🌳</option>
-            <option value="mystic_shadow">🌑 Shadow Work (Jungian)🌑</option>
-            <option value="mystic_johari">😈 Blind Spot (Cửa sổ Johari)😈</option>
-            <option value="mystic_karmic">♾️ Duyên Nợ Tiền Kiếp ♾️</option>
+            <option value="mystic_tree">Tree of Life (Kabbalah)</option>
+            <option value="mystic_shadow">Shadow Work (Jungian)</option>
+            <option value="mystic_johari">Blind Spot (Cửa sổ Johari)</option>
+            <option value="mystic_karmic">Duyên Nợ Tiền Kiếp</option>
         `;
 
         function updateSpreadOptions() {
@@ -811,8 +581,16 @@
             btnDraw.disabled = true;
             board.className = "tarot-board"; 
             
-            const introText = SPREAD_DESCRIPTIONS[spreadSelect.value] || "<strong>✨ Sẵn sàng kết nối</strong><br>Hãy chọn Reader, nhấn 'Xào Bài' để khởi động trường năng lượng.";
-            board.innerHTML = `<div class="spread-intro-popup">${introText}</div>`;
+            const spreadHTML = SPREAD_DESCRIPTIONS[spreadSelect.value] || "<strong>✨ Sẵn sàng kết nối</strong><br><em>Chọn trải bài</em><br>Nhấn 'Xào Bài' để khởi động trường năng lượng.";
+
+            // INFO CARD SẼ BAY VÀO TỪ BÊN TRÁI (fadeInLeft)
+            board.innerHTML = `
+                <div class="info-card-wrap animate__animated animate__fadeInLeft">
+                    <div class="info-card-inner">
+                        ${spreadHTML}
+                    </div>
+                </div>
+            `;
             
             hideReading();
             statusMsg.innerText = "Cấu trúc đã thay đổi. Hãy xào bài lại!";
@@ -821,7 +599,6 @@
         readingStyleSelect.addEventListener("change", updateSpreadOptions);
         spreadSelect.addEventListener("change", resetBoardState);
         
-        // --- LOGIC ĐỔI READER: ĐỌC LẠI NGAY TỤ BÀI ĐANG MỞ KHÔNG CẦN XÀO LẠI ---
         readerSelect.addEventListener("change", () => {
             if (flippedCount === totalCardsToDraw && totalCardsToDraw > 0 && !isProcessing) {
                 const selectedOptionText = readerSelect.options[readerSelect.selectedIndex].text.split(" (")[0];
@@ -871,12 +648,11 @@
                     clearInterval(cooldownTimer);
                     btnShuffle.textContent = "🔀 Xào Bài";
                     btnShuffle.disabled = false; 
-                    statusMsg.innerText = "✨ Bạn có thể đặt câu hỏi mới!";
+                    statusMsg.innerText = "Sẵn sàng! Bạn có thể đặt câu hỏi mới.";
                 }
             }, 1000);
         }
 
-        // ================= HỆ THỐNG GỌI API GEMINI (SỬ DỤNG FILE PROMPTS.JS) =================
         async function getFullTarotReading() {
             if (isProcessing) return;
             const question = document.getElementById("user-question").value.trim() || "Vũ trụ muốn gửi gắm thông điệp gì cho mình?";
@@ -891,7 +667,6 @@
             chatContainer.style.display = "none";
             chatHistory.innerHTML = "";
 
-            // Gọi hàm sinh Prompt từ file prompts.js
             const promptText = buildMainReadingPrompt(selectedReader, question, spreadMode, drawnCardsList);
             const apiUrl = "https://tarotreading-eight.vercel.app/api/gemini";
 
@@ -918,7 +693,6 @@
                     
                     readingContent.innerHTML = `${readerInfo.displayName}<br><br>${aiResponse}`;
 
-                    // LƯU NGỮ CẢNH CHO CHAT FOLLOW-UP
                     currentSessionContext = `
                     [NGỮ CẢNH TỤ BÀI ĐÃ BỐC]
                     - Reader đang tư vấn: ${readerInfo.title}
@@ -936,7 +710,6 @@
             }
         }
 
-        // ================= HỆ THỐNG CHAT FOLLOW-UP VỚI READER ĐÃ CHỌN =================
         async function sendFollowupQuestion() {
             const userMsg = followupInput.value.trim();
             if (!userMsg || isProcessing) return;
@@ -957,7 +730,6 @@
             isProcessing = true;
             btnFollowupSend.disabled = true;
 
-            // Gọi hàm sinh Prompt hỏi đáp từ file prompts.js
             const followUpPrompt = buildFollowupPrompt(selectedReader, currentSessionContext, userMsg);
 
             try {
@@ -997,12 +769,19 @@
             if (e.key === "Enter") sendFollowupQuestion();
         });
 
-        // ================= ENGINE XÀO BÀI & RÚT BÀI =================
         function shuffleDeck() {
             if (isProcessing || btnShuffle.disabled) return;
             
-            const introText = SPREAD_DESCRIPTIONS[spreadSelect.value] || "<strong>✨ Sẵn sàng kết nối</strong><br>Đang xào bài và đồng bộ năng lượng...";
-            board.innerHTML = `<div class="spread-intro-popup">${introText}</div>`; 
+            const spreadHTML = SPREAD_DESCRIPTIONS[spreadSelect.value] || "<strong>✨ Sẵn sàng kết nối</strong><br><em>Đang đồng bộ năng lượng...</em><br>Vui lòng chờ đợi.";
+
+            board.innerHTML = `
+                <div class="info-card-wrap animate__animated animate__fadeInLeft">
+                    <div class="info-card-inner">
+                        ${spreadHTML}
+                        <br><span class="loading-dots" style="color: var(--p6); font-style: italic;">Đang đồng bộ năng lượng với các vì sao</span>
+                    </div>
+                </div>
+            `;
             board.className = "tarot-board"; 
 
             hideReading();
@@ -1012,17 +791,40 @@
             currentLenormandDeck = [...lenormandDeck].sort(() => Math.random() - 0.5);
             currentChakraDeck = [...chakraDeck].sort(() => Math.random() - 0.5);
             
-            statusMsg.innerText = "✨ Đang kết nối dòng chảy... Hãy thả lỏng tâm trí! ✨";
+            statusMsg.innerText = "Đang kết nối dòng chảy... Hãy thả lỏng tâm trí!";
             drawnCardsList = []; 
             flippedCount = 0;    
             
             setTimeout(() => {
                 btnDraw.disabled = false; 
                 statusMsg.innerText = "Đã đồng điệu. Hãy ấn Bốc Bài!";
+                
+                const loadingSpan = board.querySelector(".loading-dots");
+                if(loadingSpan) loadingSpan.style.display = "none";
             }, 1000);
         }
 
         function drawCards() {
+            if (isProcessing) return;
+            
+            // XỬ LÝ HIỆU ỨNG RỤNG THẺ THÔNG TIN KHI BẤM BỐC BÀI
+            const infoCard = board.querySelector('.info-card-wrap');
+            if (infoCard) {
+                // Xóa hiệu ứng cũ và gán hiệu ứng HINGE (Rụng rơi cuống)
+                infoCard.classList.remove('animate__fadeInLeft');
+                void infoCard.offsetWidth; // reset frame
+                infoCard.classList.add('animate__animated', 'animate__hinge');
+                
+                // Đợi 2 giây cho thẻ rụng hẳn mới xuất hiện các lá bài
+                setTimeout(() => {
+                    executeDrawSequence();
+                }, 2000);
+            } else {
+                executeDrawSequence();
+            }
+        }
+
+        function executeDrawSequence() {
             board.innerHTML = ""; 
             hideReading();
             drawnCardsList = [];
@@ -1037,6 +839,7 @@
             const lenormandPop = () => ({ type: 'lenormand', name: currentLenormandDeck.pop(), reversed: false });
             const chakraPop = () => ({ type: 'chakra', name: currentChakraDeck.pop(), reversed: false });
 
+            // Logic lấy bài (Giữ nguyên)
             if (spreadMode === "intent_what") { setupPlan.push(tarotPop()); }
             else if (spreadMode === "intent_why") { setupPlan.push(tarotPop(), tarotPop(), tarotPop()); }
             else if (spreadMode === "intent_when") { setupPlan.push(lenormandPop(), lenormandPop(), lenormandPop()); }
@@ -1065,7 +868,10 @@
 
             setupPlan.forEach((cardObj, index) => {
                 const cardSlot = document.createElement("div");
-                cardSlot.classList.add("card-slot");
+                
+                // HIỆU ỨNG CÁC LÁ BÀI ROLLIN LẦN LƯỢT
+                cardSlot.className = "card-slot animate__animated animate__rollIn";
+                cardSlot.style.animationDelay = `${index * 0.2}s`; // Mỗi lá trễ 0.2s so với lá trước
                 
                 let backImg = backTarot, frontImg = '';
                 if (cardObj.type === 'tarot') { backImg = backTarot; frontImg = `${pathTarot}${cardObj.name}.PNG`; }
