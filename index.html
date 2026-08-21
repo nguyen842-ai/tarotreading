@@ -56,7 +56,8 @@
         #stars3:after { content: " "; position: absolute; top: 2000px; width: 3px; height: 3px; box-shadow: inherit; }
 
         /* ================= HEADER ĐỘNG ================= */
-        #app-header { display: flex; flex-direction: column; align-items: center; width: 100%; margin-bottom: 25px; } 
+        /* FIX LỖI Z-INDEX CHÈN MENU: Thêm position relative và z-index 999 để header nổi lên trên cùng */
+        #app-header { display: flex; flex-direction: column; align-items: center; width: 100%; margin-bottom: 25px; position: relative; z-index: 999; } 
         .title-tab-group { display: flex; flex-direction: column; align-items: center; width: 100%; }
         
         h1 { 
@@ -69,7 +70,7 @@
         #app-header.intro-mode .controls-group { display: none; }
         #app-header.reading-mode .controls-group { display: block; width: 100%; max-width: 900px; }
 
-        /* ================= NÚT GLITCH TABS (GIỚI THIỆU / BỐC BÀI) ================= */
+        /* ================= NÚT GLITCH (ÁP DỤNG CHUNG) ================= */
         .glitch-btn, .glitch-btn::after {
             padding: 16px 30px; font-size: 18px; font-weight: bold; background: linear-gradient(45deg, transparent 5%, var(--p4) 5%);
             border: 0; color: #fff; letter-spacing: 3px; line-height: 1; box-shadow: 6px 0px 0px var(--p6); outline: transparent; position: relative; cursor: pointer;
@@ -83,8 +84,17 @@
         }
         .glitch-btn:hover::after { animation: 1s glitch-btn-anim; animation-timing-function: steps(2, end); }
         
-        .glitch-btn.active::after { background: linear-gradient(45deg, transparent 3%, var(--p9) 3%, var(--p9) 5%, var(--p8) 5%); color: #000; text-shadow: none; box-shadow: 6px 0px 0px var(--p1); }
-        .glitch-btn.active { box-shadow: 6px 0px 0px var(--p2); }
+        /* === Trạng thái Active cho Tab Buttons === */
+        .glitch-btn.active::after {
+            background: linear-gradient(45deg, transparent 3%, var(--p9) 3%, var(--p9) 5%, var(--p8) 5%);
+            color: #000;
+            text-shadow: none;
+            box-shadow: 6px 0px 0px var(--p1);
+        }
+        /* Mất bóng đổ cũ khi active */
+        .glitch-btn.active {
+            box-shadow: 6px 0px 0px var(--p2);
+        }
 
         @keyframes glitch-btn-anim {
             0% { clip-path: var(--slice-1); transform: translate(-20px, -10px); } 10% { clip-path: var(--slice-3); transform: translate(10px, 10px); }
@@ -102,6 +112,8 @@
             gap: 12px; background: rgba(0, 0, 0, 0.5); padding: 14px 18px; border-radius: 12px;
             border: 1px solid var(--border-color); width: 100%; box-shadow: 0 8px 32px rgba(0,0,0,0.3);
             animation-duration: 0.8s;
+            /* FIX LỖI Z-INDEX CHÈN MENU: Bổ sung z-index */
+            position: relative; z-index: 1000;
         }
         #user-question { grid-area: q; } #ui-reader-group { grid-area: reader; } #ui-style-group { grid-area: sys; }
         #custom-spread-wrapper { grid-area: spread; } .btn-group { grid-area: btns; display: flex; gap: 8px; }
@@ -136,7 +148,7 @@
         @media (hover: hover) { .mystic-btn:hover:not(:disabled) { transform: translate(-2px, -2px); box-shadow: 6px 6px 0 var(--p2); background-color: var(--p4); } }
         .mystic-btn:disabled { background-color: #444; border-color: #222; color: #888; box-shadow: none; cursor: not-allowed; }
 
-        /* ================= DROP DOWN (TÙY CHỈNH) MỚI ================= */
+        /* ================= DROP DOWN (TÙY CHỈNH) ================= */
         .custom-select {
             width: 100%; position: relative; cursor: pointer; color: var(--p9); font-family: 'Courier New', monospace;
             z-index: 100; /* Quan trọng để đổ danh sách đè lên nút bên dưới */
@@ -155,14 +167,13 @@
             position: absolute; top: calc(100% + 5px); left: 0; width: 100%; background-color: #000;
             border: 2px solid var(--p5); border-radius: 8px; box-shadow: 4px 4px 0 var(--p4);
             display: flex; flex-direction: column; opacity: 0; visibility: hidden; transform: translateY(-10px);
-            transition: all 0.3s ease; max-height: 220px; overflow-y: auto; z-index: 101;
+            transition: all 0.3s ease; max-height: 220px; overflow-y: auto; z-index: 1001; /* FIX LỖI Z-INDEX: Tăng giá trị lên cao hơn lá bài */
         }
         .custom-select.active .options-list { opacity: 1; visibility: visible; transform: translateY(0); }
         
         .option-item { padding: 12px 15px; color: var(--p7); font-size: 0.85rem; font-weight: bold; transition: all 0.2s; border-bottom: 1px dashed var(--p3); }
         .option-item:last-child { border-bottom: none; }
         
-        /* HIỆU ỨNG RÊ CHUỘT VÀO LÀ MÀU TÍM HỒNG (PANTONE) */
         .option-item:hover { background: linear-gradient(to right, var(--p4), var(--p6)); color: #fff; padding-left: 20px; }
         
         .options-list::-webkit-scrollbar { width: 6px; }
@@ -424,15 +435,14 @@
                 div.textContent = opt.text;
                 div.dataset.value = opt.value;
                 div.addEventListener('click', function(e) {
-                    e.stopPropagation(); // Ngăn sự kiện bấm vào wrapper
+                    e.stopPropagation(); 
                     spreadSelect.value = this.dataset.value;
                     selectedItemText.textContent = this.textContent;
                     customSelectWrapper.classList.remove('active');
-                    spreadSelect.dispatchEvent(new Event('change')); // Kích hoạt sự kiện change gốc
+                    spreadSelect.dispatchEvent(new Event('change')); 
                 });
                 optionsList.appendChild(div);
             });
-            // Hiển thị lựa chọn mặc định
             if(spreadSelect.options.length > 0) {
                 selectedItemText.textContent = spreadSelect.options[spreadSelect.selectedIndex].text;
             }
@@ -616,6 +626,7 @@
         const statusMsg = document.getElementById("status-message");
         const readerSelect = document.getElementById("reader-persona");
         const readingStyleSelect = document.getElementById("reading-style");
+        const spreadSelect = document.getElementById("spread-type");
         const readingBox = document.getElementById("reading-result");
         const readingContent = document.getElementById("reading-content");
         const btnCopy = document.getElementById("btn-copy");
@@ -657,7 +668,6 @@
             else if (readingStyleSelect.value === "classical") spreadSelect.innerHTML = classicalSpreadsHTML;
             else if (readingStyleSelect.value === "mystic") spreadSelect.innerHTML = mysticSpreadsHTML;
             
-            // Cập nhật lại list cho Custom Dropdown
             syncCustomDropdown();
             resetBoardState();
         }
@@ -1007,7 +1017,6 @@
         btnShuffle.addEventListener("click", shuffleDeck);
         btnDraw.addEventListener("click", drawCards);
 
-        // Chạy lần đầu để đồng bộ danh sách trải bài
         updateSpreadOptions();
     </script>
 </body>
