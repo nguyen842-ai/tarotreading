@@ -36,7 +36,8 @@
         body {
             background-color: var(--bg-main); color: var(--text-main);
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            padding: 10px 16px; min-height: 100vh; overflow-x: hidden; -webkit-text-size-adjust: 100%;
+            padding: 15px 25px; min-height: 100vh; overflow-x: hidden; -webkit-text-size-adjust: 100%;
+            display: flex; flex-direction: column;
         }
 
         /* ================= BACKGROUND BÀN TRẢI BÀI ================= */
@@ -55,36 +56,56 @@
         #stars3:after { content: " "; position: absolute; top: 2000px; width: 3px; height: 3px; box-shadow: inherit; }
 
         /* ================= HEADER ĐỘNG ================= */
-        #app-header { display: flex; flex-direction: column; align-items: center; width: 100%; margin-bottom: 15px; }
-        .title-tab-group { display: flex; flex-direction: column; align-items: center; width: 100%; transition: all 0.5s ease; }
+        #app-header { display: flex; flex-direction: column; align-items: center; width: 100%; margin-bottom: 25px; } /* Tăng khoảng cách tổng */
+        .title-tab-group { display: flex; flex-direction: column; align-items: center; width: 100%; }
         
         h1 { 
-            margin-bottom: 10px; font-size: clamp(1.3rem, 2.5vw, 1.8rem); 
+            margin-bottom: 20px; font-size: clamp(1.5rem, 3vw, 2.2rem); 
             text-shadow: 0 0 15px var(--accent-gold); line-height: 1.2; color: #fff; text-align: center;
         }
-        .tabs-container { display: flex; gap: 8px; justify-content: center; margin-bottom: 15px; }
         
-        .tab-btn {
-            background: var(--bg-panel); color: var(--text-muted); border: 1px solid var(--border-color);
-            padding: 8px 16px; border-radius: 20px; cursor: pointer; font-size: 0.85rem; font-weight: bold;
-            transition: all 0.3s ease; box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-        }
-        .tab-btn:hover { color: var(--accent-gold-hover); border-color: var(--accent-gold); background: rgba(76, 0, 176, 0.6); }
-        .tab-btn.active { background: var(--accent-gold); color: #fff; border-color: var(--accent-gold); box-shadow: 0 0 10px var(--accent-gold); }
+        /* Tăng margin-bottom để dãn khoảng cách với box điều khiển */
+        .tabs-container { display: flex; gap: 15px; justify-content: center; margin-bottom: 25px; } 
 
-        /* --- TRẠNG THÁI INTRO --- */
         #app-header.intro-mode .controls-group { display: none; }
-        
-        /* --- TRẠNG THÁI READING (Đã fix mượt mà và căn giữa) --- */
-        #app-header.reading-mode h1 { 
-            font-size: clamp(1.8rem, 4vw, 2.8rem); /* To hơn */
-            margin-top: -10px; /* Xích lên trên */
+        #app-header.reading-mode .controls-group { display: block; width: 100%; max-width: 900px; }
+
+        /* ================= NÚT GLITCH (ÁP DỤNG CHUNG) ================= */
+        .glitch-btn, .glitch-btn::after {
+            padding: 16px 30px; font-size: 18px; font-weight: bold; background: linear-gradient(45deg, transparent 5%, var(--p4) 5%);
+            border: 0; color: #fff; letter-spacing: 3px; line-height: 1; box-shadow: 6px 0px 0px var(--p6); outline: transparent; position: relative; cursor: pointer;
+            transition: all 0.3s ease;
         }
-        #app-header.reading-mode .controls-group { 
-            display: block; width: 100%; max-width: 900px; /* Khống chế độ rộng để UI gọn gàng */
+        .glitch-btn::after {
+            --slice-0: inset(50% 50% 50% 50%); --slice-1: inset(80% -6px 0 0); --slice-2: inset(50% -6px 30% 0); --slice-3: inset(10% -6px 85% 0); --slice-4: inset(40% -6px 43% 0); --slice-5: inset(80% -6px 5% 0);
+            content: attr(data-text); display: block; position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+            background: linear-gradient(45deg, transparent 3%, var(--p6) 3%, var(--p6) 5%, var(--p3) 5%);
+            text-shadow: -3px -3px 0px var(--p8), 3px 3px 0px var(--p2); clip-path: var(--slice-0);
+        }
+        .glitch-btn:hover::after { animation: 1s glitch-btn-anim; animation-timing-function: steps(2, end); }
+        
+        /* === Trạng thái Active cho Tab Buttons === */
+        .glitch-btn.active::after {
+            background: linear-gradient(45deg, transparent 3%, var(--p9) 3%, var(--p9) 5%, var(--p8) 5%);
+            color: #000;
+            text-shadow: none;
+            box-shadow: 6px 0px 0px var(--p1);
+        }
+        /* Mất bóng đổ cũ khi active */
+        .glitch-btn.active {
+            box-shadow: 6px 0px 0px var(--p2);
         }
 
-        /* ================= BẢNG ĐIỀU KHIỂN ================= */
+        @keyframes glitch-btn-anim {
+            0% { clip-path: var(--slice-1); transform: translate(-20px, -10px); } 10% { clip-path: var(--slice-3); transform: translate(10px, 10px); }
+            20% { clip-path: var(--slice-1); transform: translate(-10px, 10px); } 30% { clip-path: var(--slice-3); transform: translate(0px, 5px); }
+            40% { clip-path: var(--slice-2); transform: translate(-5px, 0px); } 50% { clip-path: var(--slice-3); transform: translate(5px, 0px); }
+            60% { clip-path: var(--slice-4); transform: translate(5px, 10px); } 70% { clip-path: var(--slice-2); transform: translate(-10px, 10px); }
+            80% { clip-path: var(--slice-5); transform: translate(20px, -10px); } 90% { clip-path: var(--slice-1); transform: translate(-10px, 0px); }
+            100% { clip-path: var(--slice-1); transform: translate(0); }
+        }
+
+        /* ================= BẢNG ĐIỀU KHIỂN BỐC BÀI ================= */
         .controls-inner {
             display: grid; grid-template-columns: 1fr 1fr; 
             grid-template-areas: "q q" "reader sys" "spread btns" "status status";
@@ -92,15 +113,10 @@
             border: 1px solid var(--border-color); width: 100%; box-shadow: 0 8px 32px rgba(0,0,0,0.3);
             animation-duration: 0.8s;
         }
-
-        #user-question { grid-area: q; }
-        #ui-reader-group { grid-area: reader; }
-        #ui-style-group { grid-area: sys; }
-        #spread-type { grid-area: spread; }
-        .btn-group { grid-area: btns; display: flex; gap: 8px; }
+        #user-question { grid-area: q; } #ui-reader-group { grid-area: reader; } #ui-style-group { grid-area: sys; }
+        #spread-type { grid-area: spread; } .btn-group { grid-area: btns; display: flex; gap: 8px; }
         #status-message { grid-area: status; margin: 0; font-size: 0.85rem; font-style: italic; color: var(--text-muted); text-align: center; }
 
-        /* ── NEO-BRUTALISM INPUT ── */
         input[type="text"], select {
             width: 100%; padding: 12px; font-size: 0.95rem; font-family: 'Courier New', monospace;
             color: var(--p7); background-color: #000; border: 2px solid var(--p5); border-radius: 0;
@@ -110,34 +126,16 @@
         input[type="text"]:hover, select:hover { transform: translate(-2px, -2px); box-shadow: 6px 6px 0 var(--p3); }
         input[type="text"]:focus, select:focus { border-color: var(--p7); box-shadow: 4px 4px 0 var(--p6); color: var(--p9); animation: shake 0.5s ease-in-out; }
         
-        @keyframes shake {
-            0% { transform: translateX(0); } 25% { transform: translateX(-4px) rotate(-2deg); }
-            50% { transform: translateX(4px) rotate(2deg); } 75% { transform: translateX(-4px) rotate(-2deg); }
-            100% { transform: translateX(0); }
-        }
-        @keyframes glitch {
-            0%, 10%, 27%, 35%, 50%, 72%, 80%, 100% { transform: none; opacity: 1; }
-            7% { transform: skew(-0.5deg, -0.9deg); opacity: 0.75; }
-            30% { transform: skew(0.8deg, -0.1deg); opacity: 0.75; }
-            55% { transform: skew(-1deg, 0.2deg); opacity: 0.75; }
-            75% { transform: skew(0.4deg, 1deg); opacity: 0.75; }
-        }
+        @keyframes shake { 0%, 100% { transform: translateX(0); } 25%, 75% { transform: translateX(-4px) rotate(-2deg); } 50% { transform: translateX(4px) rotate(2deg); } }
+        @keyframes glitch { 0%, 10%, 27%, 35%, 50%, 72%, 80%, 100% { transform: none; opacity: 1; } 7% { transform: skew(-0.5deg, -0.9deg); opacity: 0.75; } 30% { transform: skew(0.8deg, -0.1deg); opacity: 0.75; } 55% { transform: skew(-1deg, 0.2deg); opacity: 0.75; } 75% { transform: skew(0.4deg, 1deg); opacity: 0.75; } }
         input[type="text"]:not(:placeholder-shown) { font-weight: bold; letter-spacing: 1px; animation: glitch 1.5s linear infinite; }
 
-        /* ── KHUNG LỰA CHỌN GRADIENT RADIO ── */
         .radio-wrapper { display: flex; gap: 4px; border: 2px solid var(--p4); border-radius: 10px; background: #000; padding: 4px; user-select: none; }
         .radio-label { flex: 1; display: flex; cursor: pointer; }
         .radio-input { display: none; }
-        .radio-text {
-            flex: 1; text-align: center; font-weight: bold; font-size: 0.85rem;
-            color: var(--p6); padding: 8px; border-radius: 8px; transition: 0.2s ease-in-out;
-        }
-        .radio-input:checked + .radio-text {
-            background: linear-gradient(to right, var(--p4), var(--p6)); color: white;
-            box-shadow: 0 2px 10px rgba(138, 0, 194, 0.5); letter-spacing: 1px;
-        }
+        .radio-text { flex: 1; text-align: center; font-weight: bold; font-size: 0.85rem; color: var(--p6); padding: 8px; border-radius: 8px; transition: 0.2s ease-in-out; }
+        .radio-input:checked + .radio-text { background: linear-gradient(to right, var(--p4), var(--p6)); color: white; box-shadow: 0 2px 10px rgba(138, 0, 194, 0.5); letter-spacing: 1px; }
 
-        /* ── BUTTONS ── */
         .mystic-btn {
             padding: 10px 12px; font-size: 0.85rem; font-weight: bold; color: #fff; font-family: 'Courier New', monospace;
             background-color: var(--p3); border: 3px solid #000; border-radius: 0;
@@ -147,47 +145,49 @@
         @media (hover: hover) { .mystic-btn:hover:not(:disabled) { transform: translate(-2px, -2px); box-shadow: 6px 6px 0 var(--p2); background-color: var(--p4); } }
         .mystic-btn:disabled { background-color: #444; border-color: #222; color: #888; box-shadow: none; cursor: not-allowed; }
 
-        /* ================= THẺ THÔNG TIN TRẢI BÀI (GLOWING CARD) ================= */
-        .info-card-wrap {
-            width: 100%; max-width: 400px; min-height: 200px;
-            background-image: linear-gradient(163deg, var(--p3) 0%, var(--p7) 100%);
-            border-radius: 20px; transition: all .3s; padding: 3px; margin: 40px auto;
-            animation-duration: 0.8s; 
+        /* ================= TABS NỘI DUNG ================= */
+        .tab-content { width: 100%; margin: 0 auto; flex-grow: 1; display: none; }
+        .tab-content.active { display: flex; flex-direction: column; }
+        
+        #intro-container { width: 100%; flex-grow: 1; display: flex; flex-direction: column; align-items: center; margin: 0 auto; }
+        
+        /* TEXT CHÀO MỪNG SANG TRỌNG NẰM TRÊN NỀN VŨ TRỤ */
+        .elegant-welcome-title {
+            font-size: clamp(1.6rem, 4vw, 2.5rem); font-weight: 300; letter-spacing: 3px; 
+            text-transform: uppercase; color: var(--p9); text-shadow: 0 0 25px var(--p5); 
+            text-align: center; margin-bottom: 15px; margin-top: 10px; line-height: 1.4;
         }
-        /* Fix cho hiệu ứng hinge */
-        .animate__hinge { animation-duration: 2s; transform-origin: top left; }
+        .elegant-welcome-desc {
+            font-size: 1.1rem; line-height: 1.8; color: #e2d1f9; max-width: 900px; 
+            text-align: center; text-shadow: 0 2px 5px #000; margin-bottom: 40px;
+        }
 
+        #intro-dynamic-content { margin-top: 30px; width: 100%; display: none; }
+        .intro-card { background: var(--bg-panel); border: 1px solid var(--border-color); border-radius: 12px; padding: 25px; text-align: left; box-shadow: 0 6px 15px rgba(0,0,0,0.5); backdrop-filter: blur(5px); width: 100%;}
+        .intro-card h2 { color: var(--accent-gold); margin-bottom: 15px; font-size: 1.3rem; border-bottom: 1px dashed rgba(190, 46, 214, 0.4); padding-bottom: 8px; text-align: center;}
+        .intro-card p { color: var(--text-main); line-height: 1.8; font-size: 0.95rem; }
+
+        /* ================= BỐ CỤC TRẢI BÀI TỰ ĐỘNG GIÃN ================= */
+        .app-layout { display: flex; gap: 20px; align-items: stretch; flex-grow: 1; width: 100%; }
+        .panel-left { flex: 1 1 50%; display: flex; flex-direction: column; border-right: 1px solid rgba(138, 0, 194, 0.3); padding-right: 15px; }
+        .panel-right { flex: 1 1 50%; display: flex; flex-direction: column; position: relative; }
+
+        /* THẺ THÔNG TIN TRẢI BÀI (GLOWING CARD) */
+        .info-card-wrap {
+            width: 100%; max-width: 400px; min-height: 200px; background-image: linear-gradient(163deg, var(--p3) 0%, var(--p7) 100%);
+            border-radius: 20px; transition: all .3s; padding: 3px; margin: 40px auto; animation-duration: 0.8s; 
+        }
+        .animate__hinge { animation-duration: 2s; transform-origin: top left; }
         .info-card-inner {
-            width: 100%; height: 100%; min-height: 194px;
-            background-color: #1a1a1a; border-radius: 17px; transition: all .2s;
-            display: flex; flex-direction: column; justify-content: center; align-items: center;
-            padding: 25px 20px; text-align: center; color: #ccc; font-size: 0.9rem; line-height: 1.5;
+            width: 100%; height: 100%; min-height: 194px; background-color: #1a1a1a; border-radius: 17px; transition: all .2s; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 25px 20px; text-align: center; color: #ccc; font-size: 0.9rem; line-height: 1.5;
         }
         .info-card-inner:hover { transform: scale(0.98); border-radius: 17px; }
         .info-card-wrap:hover { box-shadow: 0px 0px 30px 1px rgba(190, 46, 214, 0.4); }
-        
         .info-card-inner strong { color: var(--p8); font-size: 1.1rem; font-weight: bold; margin-bottom: 12px; text-transform: uppercase; letter-spacing: 1px; display: block; }
         .info-card-inner em { color: var(--p6); font-size: 0.95rem; font-weight: bold; margin-bottom: 12px; border-bottom: 1px dashed var(--p4); padding-bottom: 8px; display: inline-block; font-style: normal; }
 
-        /* ================= TABS NỘI DUNG & GRID GIỚI THIỆU ================= */
-        .tab-content { width: 100%; margin: 0 auto; }
-        #tab-reading { display: none; }
-        .tab-content.active { display: block; }
-
-        #intro-container { width: 100%; max-width: 100%; min-height: calc(100vh - 120px); display: flex; flex-direction: column; margin: 0 auto; }
-        #sheets-content { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; width: 100%; flex-grow: 1; }
-        .intro-card { background: var(--bg-panel); border: 1px solid var(--border-color); border-radius: 12px; padding: 18px; text-align: left; display: flex; flex-direction: column; box-shadow: 0 6px 15px rgba(0,0,0,0.5); backdrop-filter: blur(5px); }
-        .intro-card h2 { color: var(--accent-gold); margin-bottom: 10px; font-size: 1.1rem; border-bottom: 1px solid rgba(190, 46, 214, 0.3); padding-bottom: 8px; }
-        .intro-card p { color: var(--text-main); line-height: 1.6; font-size: 0.9rem; flex-grow: 1; }
-        .btn-jump { margin-top: 15px; width: 100%; font-size: 0.9rem; padding: 10px; border-radius: 8px; }
-
-        /* ================= BỐ CỤC TRẢI BÀI ================= */
-        .app-layout { display: flex; gap: 15px; align-items: stretch; min-height: calc(100vh - 150px); }
-        .panel-left { flex: 0 0 50%; max-width: 50%; display: flex; flex-direction: column; border-right: 1px solid rgba(138, 0, 194, 0.3); padding-right: 15px; }
-        .panel-right { flex: 1 1 50%; display: flex; flex-direction: column; position: relative; }
-
+        /* THIẾT KẾ LÁ BÀI & GRID */
         .tarot-board { display: flex; flex-wrap: wrap; justify-content: center; gap: 45px 12px; margin: 25px 0; width: 100%; }
-        
         .tarot-board.classic_croix { display: grid; grid-template-columns: 1fr 1fr 1fr; grid-template-rows: auto auto auto; gap: 45px 15px; justify-items: center; align-items: center; }
         .classic_croix .card-slot:nth-child(1) { grid-area: 2 / 1; } .classic_croix .card-slot:nth-child(2) { grid-area: 2 / 3; } .classic_croix .card-slot:nth-child(3) { grid-area: 1 / 2; } .classic_croix .card-slot:nth-child(4) { grid-area: 3 / 2; } .classic_croix .card-slot:nth-child(5) { grid-area: 2 / 2; } 
         .tarot-board.classic_celtique { display: grid; grid-template-columns: 1fr 1.2fr 1fr 1fr; grid-template-rows: repeat(4, 1fr); gap: 40px 10px; justify-items: center; align-items: center; }
@@ -195,61 +195,34 @@
         .tarot-board.mystic_tree { display: grid; grid-template-columns: 1fr 1fr 1fr; grid-template-rows: repeat(7, auto); gap: 45px 15px; justify-items: center; align-items: center; margin: 25px 0; width: 100%; }
         .mystic_tree .card-slot:nth-child(1) { grid-area: 1 / 2; } .mystic_tree .card-slot:nth-child(2) { grid-area: 2 / 3; } .mystic_tree .card-slot:nth-child(3) { grid-area: 2 / 1; } .mystic_tree .card-slot:nth-child(4) { grid-area: 3 / 3; } .mystic_tree .card-slot:nth-child(5) { grid-area: 3 / 1; } .mystic_tree .card-slot:nth-child(6) { grid-area: 4 / 2; } .mystic_tree .card-slot:nth-child(7) { grid-area: 5 / 3; } .mystic_tree .card-slot:nth-child(8) { grid-area: 5 / 1; } .mystic_tree .card-slot:nth-child(9) { grid-area: 6 / 2; } .mystic_tree .card-slot:nth-child(10) { grid-area: 7 / 2; }
 
-        /* ================= THIẾT KẾ LÁ BÀI ================= */
-        .card-slot { 
-            perspective: 1000px; width: clamp(65px, 9vw, 95px); height: clamp(113px, 15vw, 166px); 
-            cursor: pointer; position: relative; touch-action: manipulation; 
-        }
-        
+        .card-slot { perspective: 1000px; width: clamp(65px, 9vw, 95px); height: clamp(113px, 15vw, 166px); cursor: pointer; position: relative; touch-action: manipulation; }
         .card-slot:not(.flipped):hover { transform: scale(1.05) rotate(-2deg); }
         .card-slot:not(.flipped):hover .card-inner { box-shadow: 0 0 20px var(--p6); }
-
-        .card-label {
-            position: absolute; bottom: calc(100% + 8px); left: 50%; transform: translateX(-50%); width: 120%; min-width: 90px;
-            white-space: normal; font-size: 0.65rem; color: var(--p9); font-weight: bold; text-transform: uppercase; 
-            letter-spacing: 0.5px; text-shadow: 0 0 5px #000, 0 0 10px var(--p4); text-align: center; line-height: 1.4; 
-            z-index: 10; opacity: 0; transition: 0.3s ease; pointer-events: none;
-        }
+        .card-label { position: absolute; bottom: calc(100% + 8px); left: 50%; transform: translateX(-50%); width: 120%; min-width: 90px; white-space: normal; font-size: 0.65rem; color: var(--p9); font-weight: bold; text-transform: uppercase; letter-spacing: 0.5px; text-shadow: 0 0 5px #000, 0 0 10px var(--p4); text-align: center; line-height: 1.4; z-index: 10; opacity: 0; transition: 0.3s ease; pointer-events: none; }
         .card-slot:hover .card-label, .card-slot.flipped .card-label { opacity: 1; bottom: calc(100% + 15px); }
-
         .card-inner { width: 100%; height: 100%; position: relative; transition: transform 0.8s cubic-bezier(0.4, 0.2, 0.2, 1); transform-style: preserve-3d; border-radius: 8px;}
         .card-slot.flipped .card-inner { transform: rotateY(180deg); }
-        
-        .card-front, .card-back {
-            width: 100%; height: 100%; position: absolute; backface-visibility: hidden; -webkit-backface-visibility: hidden;
-            border-radius: 8px; box-shadow: 0 8px 14px 0 rgba(0,0,0,0.4); border: 2px solid var(--p6);
-            display: flex; flex-direction: column; justify-content: center; align-items: center;
-        }
-        
+        .card-front, .card-back { width: 100%; height: 100%; position: absolute; backface-visibility: hidden; -webkit-backface-visibility: hidden; border-radius: 8px; box-shadow: 0 8px 14px 0 rgba(0,0,0,0.4); border: 2px solid var(--p6); display: flex; flex-direction: column; justify-content: center; align-items: center; }
         .card-front { background: linear-gradient(120deg, var(--p1) 20%, var(--p3) 88%, var(--p2) 40%, var(--p5) 48%); }
         .card-back { transform: rotateY(180deg); background-color: #fff; border: 2px solid var(--p8); }
-        
         .card-front img, .card-back img { width: 100%; height: 100%; object-fit: cover; border-radius: 6px; pointer-events: none; }
         .card-slot .card-inner .card-back img.card-reversed { transform: rotate(180deg); }
 
-        /* ================= VÙNG HIỂN THỊ KẾT QUẢ ================= */
+        /* VÙNG HIỂN THỊ KẾT QUẢ */
         .loading-dots::after { content: ''; animation: dots 1.4s infinite; }
         @keyframes dots { 0% {content:'';} 25% {content:'.';} 50% {content:'..';} 75% {content:'...';} }
 
         .reading-placeholder { display: flex; flex-direction: column; align-items: center; justify-content: center; flex: 1; color: var(--p4); font-size: 0.9rem; font-style: italic; gap: 10px; padding: 20px; min-height: 200px; }
         .placeholder-icon { font-size: 2.5rem; opacity: 0.4; }
-
-        #reading-result {
-            background: var(--bg-panel); border: 1px solid var(--p5); padding: 16px; border-radius: 10px;
-            text-align: left; line-height: 1.7; font-size: 0.9rem; display: none; box-shadow: 0 0 20px rgba(138,0,194,0.2); 
-            flex: 1; overflow-y: auto; max-height: calc(100vh - 160px); backdrop-filter: blur(5px);
-        }
-
+        #reading-result { background: var(--bg-panel); border: 1px solid var(--p5); padding: 16px; border-radius: 10px; text-align: left; line-height: 1.7; font-size: 0.9rem; display: none; box-shadow: 0 0 20px rgba(138,0,194,0.2); flex: 1; overflow-y: auto; max-height: calc(100vh - 160px); backdrop-filter: blur(5px); }
         .copy-btn-wrap { display: flex; justify-content: flex-end; margin-top: 15px; padding-top: 10px; border-top: 1px dashed var(--p4); }
-        #btn-copy { display: flex; align-items: center; gap: 4px; padding: 6px 12px; font-size: 0.8rem; font-weight: bold; color: #fff; background-color: var(--p3); border: 2px solid #000; border-radius: 0; cursor: pointer; transition: 0.2s; box-shadow: 2px 2px 0 #000;}
+        #btn-copy { display: flex; align-items: center; gap: 4px; padding: 6px 12px; font-size: 0.8rem; font-weight: bold; color: #fff; background: var(--p3); border: 2px solid #000; border-radius: 0; cursor: pointer; transition: 0.2s; box-shadow: 2px 2px 0 #000;}
         #btn-copy:active { transform: translate(1px, 1px); box-shadow: 1px 1px 0 #000; }
         #btn-copy.copied { background-color: var(--p6); color: #000; }
-
         #reading-result::-webkit-scrollbar { width: 4px; }
         #reading-result::-webkit-scrollbar-track { background: rgba(255,255,255,0.02); }
         #reading-result::-webkit-scrollbar-thumb { background: var(--p5); border-radius: 4px; }
 
-        /* --- STYLE CHO KHUNG CHAT FOLLOW-UP --- */
         #chat-followup-container { display: none; margin-top: 20px; border-top: 1px dashed var(--p4); padding-top: 18px; }
         #chat-history { display: flex; flex-direction: column; gap: 12px; margin-bottom: 15px; }
         .chat-bubble-user { background: rgba(0, 0, 0, 0.6); padding: 12px 14px; border-radius: 10px; border-left: 3px solid var(--p6); font-size: 0.9rem; line-height: 1.6; }
@@ -257,22 +230,18 @@
 
         /* ================= RESPONSIVE ================= */
         @media (max-width: 992px) {
-            #sheets-content { grid-template-columns: 1fr !important; gap: 20px; }
-            .controls-inner { grid-template-areas: "q" "reader" "sys" "spread" "btns" "status" !important; grid-template-columns: 1fr !important; width: 100% !important; padding: 12px; }
+            .controls-inner { grid-template-areas: "q" "reader" "sys" "spread" "btns" "status" !important; grid-template-columns: 1fr !important; padding: 12px; }
             .btn-group { width: 100% !important; }
+            .app-layout { flex-direction: column; }
+            .panel-left, .panel-right { max-width: 100%; border: none; padding-right: 0;}
         }
-
         @media (max-width: 768px) {
-            .app-layout { flex-direction: column !important; min-height: unset !important; gap: 25px; }
-            .panel-left { flex: unset !important; max-width: 100% !important; border-right: none !important; border-bottom: 1px dashed var(--border-color); padding-right: 0 !important; padding-bottom: 25px; margin-bottom: 10px; }
-            .panel-right { flex: unset !important; width: 100% !important; }
-            #reading-result { max-height: unset !important; }
             .tarot-board.classic_croix, .tarot-board.classic_celtique, .tarot-board.mystic_tree { display: flex !important; flex-wrap: wrap !important; justify-content: center !important; gap: 52px 16px !important; padding-top: 15px; }
             .classic_celtique .card-slot:nth-child(2) { transform: none !important; margin-top: 0 !important; }
-            .intro-card p, #reading-result, .chat-bubble-user, .chat-bubble-ai { font-size: 1.1rem !important; line-height: 1.75; overflow-wrap: break-word; word-wrap: break-word; }
-            .card-label { font-size: 0.8rem !important; min-width: 100px; bottom: calc(100% + 12px); }
-            #reading-result { padding: 20px 15px !important; }
             .radio-wrapper { flex-direction: column; }
+            .glitch-btn { padding: 12px 20px; font-size: 14px; }
+            .elegant-welcome-title { font-size: 1.8rem; }
+            .tabs-container { flex-direction: row; flex-wrap: wrap; }
         }
     </style>
 </head>
@@ -284,12 +253,14 @@
         <div id="stars3"></div>
     </div>
 
+    <!-- HEADER -->
     <header id="app-header" class="intro-mode">
         <div class="title-tab-group">
             <h1 id="main-title" class="animate__animated animate__fadeInDown">🔮 Trạm Lắng Nghe Vũ Trụ 🔮</h1>
+            
             <div class="tabs-container">
-                <button class="tab-btn active" onclick="switchTab('tab-intro')">💌 Giới Thiệu</button>
-                <button class="tab-btn" onclick="switchTab('tab-reading')">✨ Bốc Bài</button>
+                <button class="glitch-btn tab-btn active" onclick="switchTab('tab-intro')" data-text="GIỚI THIỆU">GIỚI THIỆU</button>
+                <button class="glitch-btn tab-btn" onclick="switchTab('tab-reading')" data-text="BỐC BÀI">BỐC BÀI</button>
             </div>
         </div>
         
@@ -330,19 +301,37 @@
         </div>
     </header>
 
+    <!-- TAB GIỚI THIỆU -->
     <div id="tab-intro" class="tab-content active">
-        <!-- Khung giới thiệu bài được set fadeInUp -->
-        <div id="intro-container" class="animate__animated animate__fadeInUp">
+        <div id="intro-container">
             <div id="loading-intro" style="text-align: center; color: var(--text-muted); font-style: italic; padding: 20px;">
                 ⏳ ... ⏳
             </div>
-            <div id="sheets-content"></div>
+            
+            <div id="welcome-section" class="animate__animated animate__fadeInUp" style="display:none; flex-direction:column; align-items:center; width:100%;">
+                
+                <!-- TEXT CHÀO MỪNG NẰM TRỰC TIẾP TRÊN NỀN -->
+                <h2 id="welcome-card-title" class="elegant-welcome-title"></h2>
+                <p id="welcome-card-desc" class="elegant-welcome-desc"></p>
+
+                <h3 style="margin-top: 20px; margin-bottom: 25px; color: var(--p8); font-size: 1.2rem; text-transform: uppercase; letter-spacing: 1px;">Tìm hiểu thêm về các dạng bài</h3>
+                
+                <!-- NÚT GLITCH TÌM HIỂU -->
+                <div id="intro-buttons" style="display: flex; gap: 20px; flex-wrap: wrap; justify-content: center; margin-bottom: 10px;">
+                    <button class="glitch-btn" onclick="showIntroContent(0)" data-text="TAROT">TAROT</button>
+                    <button class="glitch-btn" onclick="showIntroContent(1)" data-text="LENORMAND">LENORMAND</button>
+                    <button class="glitch-btn" onclick="showIntroContent(2)" data-text="CHAKRA ORACLE">CHAKRA ORACLE</button>
+                </div>
+
+                <div id="intro-dynamic-content"></div>
+                
+            </div>
         </div>
     </div>
 
+    <!-- TAB BỐC BÀI -->
     <div id="tab-reading" class="tab-content">
         <div class="app-layout">
-            
             <div class="panel-left">
                 <div id="tarot-board" class="tarot-board"></div>
             </div>
@@ -371,7 +360,6 @@
                     </div>
                 </div>
             </div>
-            
         </div>
     </div>
 
@@ -407,11 +395,11 @@
                 header.classList.remove('intro-mode');
                 header.classList.add('reading-mode');
                 
-                // Mất Emoji, cắt dòng, bay cực nhanh từ phải qua
-                mainTitle.innerHTML = "Trạm Lắng Nghe<br>Vũ Trụ";
-                mainTitle.className = "animate__animated animate__lightSpeedInRight";
+                // Đồng bộ tiêu đề không thay đổi nội dung/kích thước, chỉ reset animation
+                mainTitle.classList.remove('animate__fadeInDown');
+                void mainTitle.offsetWidth; 
+                mainTitle.classList.add('animate__fadeInDown');
                 
-                // Các control bay vào góc trên bên phải
                 controlsInner.classList.remove('animate__fadeInTopRight');
                 void controlsInner.offsetWidth; 
                 controlsInner.classList.add('animate__animated', 'animate__fadeInTopRight');
@@ -419,9 +407,9 @@
                 header.classList.remove('reading-mode');
                 header.classList.add('intro-mode');
                 
-                // Trả về mặc định
-                mainTitle.innerHTML = "🔮 Trạm Lắng Nghe Vũ Trụ 🔮";
-                mainTitle.className = "animate__animated animate__fadeInDown";
+                mainTitle.classList.remove('animate__fadeInDown');
+                void mainTitle.offsetWidth; 
+                mainTitle.classList.add('animate__fadeInDown');
             }
 
             document.querySelectorAll('.tab-btn').forEach(btn => {
@@ -432,21 +420,17 @@
                 }
             });
 
-            currentActive.style.animation = "slideOutLeft 0.3s cubic-bezier(0.77, 0, 0.175, 1) forwards";
+            currentActive.style.display = 'none';
+            currentActive.classList.remove('active');
             
-            setTimeout(() => {
-                currentActive.style.display = 'none';
-                currentActive.classList.remove('active');
-                currentActive.style.animation = ""; 
-                
-                nextActive.style.display = 'block';
-                nextActive.classList.add('active');
-                nextActive.style.animation = "slideInRight 0.5s cubic-bezier(0.77, 0, 0.175, 1) forwards";
-            }, 280); 
+            nextActive.style.display = 'flex';
+            nextActive.classList.add('active');
         }
 
+        let dynamicIntroData = []; 
+        let isAnimatingIntro = false;
+
         async function fetchIntroData() {
-            const contentDiv = document.getElementById('sheets-content');
             const loadingDiv = document.getElementById('loading-intro');
             const apiUrl = 'https://tarotreading-eight.vercel.app/api/sheets';
 
@@ -456,32 +440,60 @@
 
                 if (data.valueRanges && data.valueRanges.length > 0) {
                     loadingDiv.style.display = 'none';
-                    let htmlOutput = '';
-                    const totalSheets = data.valueRanges.length;
 
-                    data.valueRanges.forEach((sheet, index) => {
-                        const values = sheet.values || [];
-                        const title = (values[0] && values[0][0]) ? values[0][0] : `Mục ${index + 1}`;
-                        const content = (values[1] && values[1][0]) ? values[1][0] : `Nội dung đang được cập nhật...`;
-                        const formattedContent = content.replace(/\n/g, '<br>');
+                    let welcomeTitleRaw = data.valueRanges[0].values[0][0] || "Trạm Lắng Nghe";
+                    let welcomeDescRaw = data.valueRanges[0].values[1][0] || "";
+                    
+                    const emojiRegex = /([\u2700-\u27BF]|[\uE000-\uF8FF]|\uD83C[\uDC00-\uDFFF]|\uD83D[\uDC00-\uDFFF]|[\u2011-\u26FF]|\uD83E[\uDD10-\uDDFF])/g;
+                    
+                    let cleanTitle = welcomeTitleRaw.replace(emojiRegex, '').trim();
+                    // Xuống dòng cụm TRẠM LẮNG NGHE VŨ TRỤ
+                    cleanTitle = cleanTitle.replace(/(TRẠM LẮNG NGHE VŨ TRỤ)/i, "<br>$1");
+                    document.getElementById('welcome-card-title').innerHTML = cleanTitle;
+                    
+                    document.getElementById('welcome-card-desc').innerHTML = welcomeDescRaw.replace(emojiRegex, '').trim().replace(/\n/g, '<br>');
 
-                        let btnHtml = '';
-                        if (index === totalSheets - 1 || index === 3) {
-                            btnHtml = `<button class="mystic-btn btn-jump" onclick="switchTab('tab-reading')">🔮 Bốc Bài Ngay</button>`;
+                    for(let i=1; i<=3; i++) {
+                        if(data.valueRanges[i]) {
+                            let title = data.valueRanges[i].values[0][0];
+                            let desc = data.valueRanges[i].values[1][0].replace(/\n/g, '<br>');
+                            let btnHtml = `<button class="mystic-btn btn-jump" style="margin-top: 20px; width: auto; padding: 15px 30px;" onclick="switchTab('tab-reading')">Bốc Bài Ngay</button>`;
+                            
+                            dynamicIntroData.push(`
+                                <div class="intro-card" style="animation:none; transform:none; opacity:1;">
+                                    <h2>${title}</h2>
+                                    <p>${desc}</p>
+                                    <div style="text-align:center;">${btnHtml}</div>
+                                </div>
+                            `);
                         }
-
-                        htmlOutput += `
-                            <div class="intro-card">
-                                <h2>${title}</h2>
-                                <p>${formattedContent}</p>
-                                ${btnHtml}
-                            </div>
-                        `;
-                    });
-                    contentDiv.innerHTML = htmlOutput;
-                } else { throw new Error("Lỗi mảng dữ liệu."); }
+                    }
+                    
+                    document.getElementById('welcome-section').style.display = 'flex';
+                }
             } catch (error) {
                 loadingDiv.innerHTML = "📡 Mất kết nối đến Trạm. Vui lòng thử lại sau!";
+            }
+        }
+
+        function showIntroContent(index) {
+            const container = document.getElementById('intro-dynamic-content');
+            if (isAnimatingIntro || !dynamicIntroData[index]) return;
+
+            if (container.style.display === 'none' || container.innerHTML.trim() === '') {
+                container.innerHTML = dynamicIntroData[index];
+                container.style.display = 'block';
+                container.className = 'animate__animated animate__slideInUp';
+            } else {
+                isAnimatingIntro = true;
+                container.className = 'animate__animated animate__rotateOut';
+                
+                container.onanimationend = () => {
+                    container.innerHTML = dynamicIntroData[index];
+                    container.className = 'animate__animated animate__slideInUp';
+                    isAnimatingIntro = false;
+                    container.onanimationend = null; 
+                };
             }
         }
 
@@ -583,7 +595,6 @@
             
             const spreadHTML = SPREAD_DESCRIPTIONS[spreadSelect.value] || "<strong>✨ Sẵn sàng kết nối</strong><br><em>Chọn trải bài</em><br>Nhấn 'Xào Bài' để khởi động trường năng lượng.";
 
-            // INFO CARD SẼ BAY VÀO TỪ BÊN TRÁI (fadeInLeft)
             board.innerHTML = `
                 <div class="info-card-wrap animate__animated animate__fadeInLeft">
                     <div class="info-card-inner">
@@ -807,15 +818,12 @@
         function drawCards() {
             if (isProcessing) return;
             
-            // XỬ LÝ HIỆU ỨNG RỤNG THẺ THÔNG TIN KHI BẤM BỐC BÀI
             const infoCard = board.querySelector('.info-card-wrap');
             if (infoCard) {
-                // Xóa hiệu ứng cũ và gán hiệu ứng HINGE (Rụng rơi cuống)
                 infoCard.classList.remove('animate__fadeInLeft');
-                void infoCard.offsetWidth; // reset frame
+                void infoCard.offsetWidth; 
                 infoCard.classList.add('animate__animated', 'animate__hinge');
                 
-                // Đợi 2 giây cho thẻ rụng hẳn mới xuất hiện các lá bài
                 setTimeout(() => {
                     executeDrawSequence();
                 }, 2000);
@@ -839,7 +847,6 @@
             const lenormandPop = () => ({ type: 'lenormand', name: currentLenormandDeck.pop(), reversed: false });
             const chakraPop = () => ({ type: 'chakra', name: currentChakraDeck.pop(), reversed: false });
 
-            // Logic lấy bài (Giữ nguyên)
             if (spreadMode === "intent_what") { setupPlan.push(tarotPop()); }
             else if (spreadMode === "intent_why") { setupPlan.push(tarotPop(), tarotPop(), tarotPop()); }
             else if (spreadMode === "intent_when") { setupPlan.push(lenormandPop(), lenormandPop(), lenormandPop()); }
@@ -869,9 +876,8 @@
             setupPlan.forEach((cardObj, index) => {
                 const cardSlot = document.createElement("div");
                 
-                // HIỆU ỨNG CÁC LÁ BÀI ROLLIN LẦN LƯỢT
                 cardSlot.className = "card-slot animate__animated animate__rollIn";
-                cardSlot.style.animationDelay = `${index * 0.2}s`; // Mỗi lá trễ 0.2s so với lá trước
+                cardSlot.style.animationDelay = `${index * 0.2}s`; 
                 
                 let backImg = backTarot, frontImg = '';
                 if (cardObj.type === 'tarot') { backImg = backTarot; frontImg = `${pathTarot}${cardObj.name}.PNG`; }
