@@ -56,7 +56,7 @@
         #stars3:after { content: " "; position: absolute; top: 2000px; width: 3px; height: 3px; box-shadow: inherit; }
 
         /* ================= HEADER ĐỘNG ================= */
-        #app-header { display: flex; flex-direction: column; align-items: center; width: 100%; margin-bottom: 25px; } /* Tăng khoảng cách tổng */
+        #app-header { display: flex; flex-direction: column; align-items: center; width: 100%; margin-bottom: 25px; } 
         .title-tab-group { display: flex; flex-direction: column; align-items: center; width: 100%; }
         
         h1 { 
@@ -64,13 +64,12 @@
             text-shadow: 0 0 15px var(--accent-gold); line-height: 1.2; color: #fff; text-align: center;
         }
         
-        /* Tăng margin-bottom để dãn khoảng cách với box điều khiển */
         .tabs-container { display: flex; gap: 15px; justify-content: center; margin-bottom: 25px; } 
 
         #app-header.intro-mode .controls-group { display: none; }
         #app-header.reading-mode .controls-group { display: block; width: 100%; max-width: 900px; }
 
-        /* ================= NÚT GLITCH (ÁP DỤNG CHUNG) ================= */
+        /* ================= NÚT GLITCH TABS (GIỚI THIỆU / BỐC BÀI) ================= */
         .glitch-btn, .glitch-btn::after {
             padding: 16px 30px; font-size: 18px; font-weight: bold; background: linear-gradient(45deg, transparent 5%, var(--p4) 5%);
             border: 0; color: #fff; letter-spacing: 3px; line-height: 1; box-shadow: 6px 0px 0px var(--p6); outline: transparent; position: relative; cursor: pointer;
@@ -84,17 +83,8 @@
         }
         .glitch-btn:hover::after { animation: 1s glitch-btn-anim; animation-timing-function: steps(2, end); }
         
-        /* === Trạng thái Active cho Tab Buttons === */
-        .glitch-btn.active::after {
-            background: linear-gradient(45deg, transparent 3%, var(--p9) 3%, var(--p9) 5%, var(--p8) 5%);
-            color: #000;
-            text-shadow: none;
-            box-shadow: 6px 0px 0px var(--p1);
-        }
-        /* Mất bóng đổ cũ khi active */
-        .glitch-btn.active {
-            box-shadow: 6px 0px 0px var(--p2);
-        }
+        .glitch-btn.active::after { background: linear-gradient(45deg, transparent 3%, var(--p9) 3%, var(--p9) 5%, var(--p8) 5%); color: #000; text-shadow: none; box-shadow: 6px 0px 0px var(--p1); }
+        .glitch-btn.active { box-shadow: 6px 0px 0px var(--p2); }
 
         @keyframes glitch-btn-anim {
             0% { clip-path: var(--slice-1); transform: translate(-20px, -10px); } 10% { clip-path: var(--slice-3); transform: translate(10px, 10px); }
@@ -114,17 +104,18 @@
             animation-duration: 0.8s;
         }
         #user-question { grid-area: q; } #ui-reader-group { grid-area: reader; } #ui-style-group { grid-area: sys; }
-        #spread-type { grid-area: spread; } .btn-group { grid-area: btns; display: flex; gap: 8px; }
+        #custom-spread-wrapper { grid-area: spread; } .btn-group { grid-area: btns; display: flex; gap: 8px; }
         #status-message { grid-area: status; margin: 0; font-size: 0.85rem; font-style: italic; color: var(--text-muted); text-align: center; }
 
-        input[type="text"], select {
+        /* ── NEO-BRUTALISM INPUT ── */
+        input[type="text"] {
             width: 100%; padding: 12px; font-size: 0.95rem; font-family: 'Courier New', monospace;
             color: var(--p7); background-color: #000; border: 2px solid var(--p5); border-radius: 0;
             outline: none; transition: all 0.3s ease; box-shadow: 4px 4px 0 var(--p4); -webkit-appearance: none; appearance: none;
         }
         input::placeholder { color: var(--p4); }
-        input[type="text"]:hover, select:hover { transform: translate(-2px, -2px); box-shadow: 6px 6px 0 var(--p3); }
-        input[type="text"]:focus, select:focus { border-color: var(--p7); box-shadow: 4px 4px 0 var(--p6); color: var(--p9); animation: shake 0.5s ease-in-out; }
+        input[type="text"]:hover { transform: translate(-2px, -2px); box-shadow: 6px 6px 0 var(--p3); }
+        input[type="text"]:focus { border-color: var(--p7); box-shadow: 4px 4px 0 var(--p6); color: var(--p9); animation: shake 0.5s ease-in-out; }
         
         @keyframes shake { 0%, 100% { transform: translateX(0); } 25%, 75% { transform: translateX(-4px) rotate(-2deg); } 50% { transform: translateX(4px) rotate(2deg); } }
         @keyframes glitch { 0%, 10%, 27%, 35%, 50%, 72%, 80%, 100% { transform: none; opacity: 1; } 7% { transform: skew(-0.5deg, -0.9deg); opacity: 0.75; } 30% { transform: skew(0.8deg, -0.1deg); opacity: 0.75; } 55% { transform: skew(-1deg, 0.2deg); opacity: 0.75; } 75% { transform: skew(0.4deg, 1deg); opacity: 0.75; } }
@@ -145,13 +136,44 @@
         @media (hover: hover) { .mystic-btn:hover:not(:disabled) { transform: translate(-2px, -2px); box-shadow: 6px 6px 0 var(--p2); background-color: var(--p4); } }
         .mystic-btn:disabled { background-color: #444; border-color: #222; color: #888; box-shadow: none; cursor: not-allowed; }
 
+        /* ================= DROP DOWN (TÙY CHỈNH) MỚI ================= */
+        .custom-select {
+            width: 100%; position: relative; cursor: pointer; color: var(--p9); font-family: 'Courier New', monospace;
+            z-index: 100; /* Quan trọng để đổ danh sách đè lên nút bên dưới */
+        }
+        .selected-item {
+            background-color: #000; border: 2px solid var(--p5); padding: 12px; font-size: 0.85rem;
+            display: flex; align-items: center; justify-content: space-between; box-shadow: 4px 4px 0 var(--p4);
+            transition: all 0.3s ease; font-weight: bold; color: var(--p7); height: 100%;
+        }
+        .custom-select:hover .selected-item { transform: translate(-2px, -2px); box-shadow: 6px 6px 0 var(--p3); }
+        .arrow-icon { width: 16px; height: 16px; fill: var(--p6); transition: transform 0.3s ease; }
+        .custom-select.active .arrow-icon { transform: rotate(180deg); }
+        .custom-select.active .selected-item { border-color: var(--p8); box-shadow: 4px 4px 0 var(--p6); color: var(--p9); }
+        
+        .options-list {
+            position: absolute; top: calc(100% + 5px); left: 0; width: 100%; background-color: #000;
+            border: 2px solid var(--p5); border-radius: 8px; box-shadow: 4px 4px 0 var(--p4);
+            display: flex; flex-direction: column; opacity: 0; visibility: hidden; transform: translateY(-10px);
+            transition: all 0.3s ease; max-height: 220px; overflow-y: auto; z-index: 101;
+        }
+        .custom-select.active .options-list { opacity: 1; visibility: visible; transform: translateY(0); }
+        
+        .option-item { padding: 12px 15px; color: var(--p7); font-size: 0.85rem; font-weight: bold; transition: all 0.2s; border-bottom: 1px dashed var(--p3); }
+        .option-item:last-child { border-bottom: none; }
+        
+        /* HIỆU ỨNG RÊ CHUỘT VÀO LÀ MÀU TÍM HỒNG (PANTONE) */
+        .option-item:hover { background: linear-gradient(to right, var(--p4), var(--p6)); color: #fff; padding-left: 20px; }
+        
+        .options-list::-webkit-scrollbar { width: 6px; }
+        .options-list::-webkit-scrollbar-track { background: #000; border-radius: 8px; }
+        .options-list::-webkit-scrollbar-thumb { background: var(--p5); border-radius: 8px; }
+
         /* ================= TABS NỘI DUNG ================= */
         .tab-content { width: 100%; margin: 0 auto; flex-grow: 1; display: none; }
         .tab-content.active { display: flex; flex-direction: column; }
-        
         #intro-container { width: 100%; flex-grow: 1; display: flex; flex-direction: column; align-items: center; margin: 0 auto; }
         
-        /* TEXT CHÀO MỪNG SANG TRỌNG NẰM TRÊN NỀN VŨ TRỤ */
         .elegant-welcome-title {
             font-size: clamp(1.6rem, 4vw, 2.5rem); font-weight: 300; letter-spacing: 3px; 
             text-transform: uppercase; color: var(--p9); text-shadow: 0 0 25px var(--p5); 
@@ -290,7 +312,16 @@
                     <option value="mystic">🌌 Huyền Học 🌌</option>
                 </select>
                 
-                <select id="spread-type"></select>
+                <!-- CUSTOM DROPDOWN SELECT ĐẸP MẮT -->
+                <div id="custom-spread-wrapper" class="custom-select">
+                    <div class="selected-item" id="selected-item-text">
+                        <span>Đang kết nối...</span>
+                        <svg class="arrow-icon" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>
+                    </div>
+                    <div class="options-list" id="options-list"></div>
+                </div>
+                <!-- SELECT GỐC CHỨA LOGIC ĐƯỢC ẨN -->
+                <select id="spread-type" style="display:none;"></select>
                 
                 <div class="btn-group">
                     <button id="btn-shuffle" class="mystic-btn">🔀 Xào Bài</button>
@@ -366,6 +397,48 @@
     <script src="prompts.js"></script>
 
     <script>
+        // ================= XỬ LÝ SỰ KIỆN CUSTOM DROPDOWN MỚI =================
+        const customSelectWrapper = document.getElementById('custom-spread-wrapper');
+        const selectedItemText = document.querySelector('#selected-item-text span');
+        const optionsList = document.getElementById('options-list');
+        const spreadSelect = document.getElementById("spread-type");
+
+        // Toggle mở danh sách
+        customSelectWrapper.addEventListener('click', function(e) {
+            this.classList.toggle('active');
+        });
+
+        // Bấm ra ngoài thì đóng danh sách
+        document.addEventListener('click', function(e) {
+            if (!customSelectWrapper.contains(e.target)) {
+                customSelectWrapper.classList.remove('active');
+            }
+        });
+
+        // Hàm cập nhật danh sách Custom Dropdown dựa vào select gốc
+        function syncCustomDropdown() {
+            optionsList.innerHTML = '';
+            Array.from(spreadSelect.options).forEach(opt => {
+                const div = document.createElement('div');
+                div.className = 'option-item';
+                div.textContent = opt.text;
+                div.dataset.value = opt.value;
+                div.addEventListener('click', function(e) {
+                    e.stopPropagation(); // Ngăn sự kiện bấm vào wrapper
+                    spreadSelect.value = this.dataset.value;
+                    selectedItemText.textContent = this.textContent;
+                    customSelectWrapper.classList.remove('active');
+                    spreadSelect.dispatchEvent(new Event('change')); // Kích hoạt sự kiện change gốc
+                });
+                optionsList.appendChild(div);
+            });
+            // Hiển thị lựa chọn mặc định
+            if(spreadSelect.options.length > 0) {
+                selectedItemText.textContent = spreadSelect.options[spreadSelect.selectedIndex].text;
+            }
+        }
+
+        // ================= GIAO DIỆN RADIO THEO STYLE =================
         document.querySelectorAll('input[name="ui-reader"]').forEach(radio => {
             radio.addEventListener('change', (e) => {
                 const originalSelect = document.getElementById('reader-persona');
@@ -441,7 +514,7 @@
                 if (data.valueRanges && data.valueRanges.length > 0) {
                     loadingDiv.style.display = 'none';
 
-                    let welcomeTitleRaw = data.valueRanges[0].values[0][0] || "Trạm Lắng Nghe";
+                    let welcomeTitleRaw = data.valueRanges[0].values[0][0] || "Trạm Lắng Nghe Vũ Trụ";
                     let welcomeDescRaw = data.valueRanges[0].values[1][0] || "";
                     
                     const emojiRegex = /([\u2700-\u27BF]|[\uE000-\uF8FF]|\uD83C[\uDC00-\uDFFF]|\uD83D[\uDC00-\uDFFF]|[\u2011-\u26FF]|\uD83E[\uDD10-\uDDFF])/g;
@@ -543,7 +616,6 @@
         const statusMsg = document.getElementById("status-message");
         const readerSelect = document.getElementById("reader-persona");
         const readingStyleSelect = document.getElementById("reading-style");
-        const spreadSelect = document.getElementById("spread-type");
         const readingBox = document.getElementById("reading-result");
         const readingContent = document.getElementById("reading-content");
         const btnCopy = document.getElementById("btn-copy");
@@ -585,6 +657,8 @@
             else if (readingStyleSelect.value === "classical") spreadSelect.innerHTML = classicalSpreadsHTML;
             else if (readingStyleSelect.value === "mystic") spreadSelect.innerHTML = mysticSpreadsHTML;
             
+            // Cập nhật lại list cho Custom Dropdown
+            syncCustomDropdown();
             resetBoardState();
         }
 
@@ -933,6 +1007,7 @@
         btnShuffle.addEventListener("click", shuffleDeck);
         btnDraw.addEventListener("click", drawCards);
 
+        // Chạy lần đầu để đồng bộ danh sách trải bài
         updateSpreadOptions();
     </script>
 </body>
