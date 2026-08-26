@@ -248,7 +248,38 @@
         #chat-history { display: flex; flex-direction: column; gap: 12px; margin-bottom: 15px; }
         .chat-bubble-user { background: rgba(0, 0, 0, 0.6); padding: 12px 14px; border-radius: 10px; border-left: 3px solid var(--p6); font-size: 0.9rem; line-height: 1.6; }
         .chat-bubble-ai { background: rgba(190, 46, 214, 0.15); padding: 14px; border-radius: 10px; border-left: 3px solid var(--p8); font-size: 0.9rem; line-height: 1.7; }
-
+    /* ================= CARD GIỚI THIỆU READER ================= */
+.reader-card {
+    background: rgba(0, 0, 0, 0.4);
+    border: 1px dashed var(--p4);
+    border-radius: 15px;
+    padding: 30px 25px;
+    text-align: center;
+    max-width: 90%;
+    box-shadow: inset 0 0 20px rgba(138, 0, 194, 0.1);
+    backdrop-filter: blur(5px);
+    transition: all 0.3s ease;
+}
+.reader-avatar {
+    font-size: 3.5rem;
+    margin-bottom: 15px;
+    filter: drop-shadow(0 0 15px var(--p6));
+}
+.reader-name {
+    color: var(--accent-gold);
+    font-size: 1.2rem;
+    margin-bottom: 15px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    border-bottom: 1px solid rgba(190, 46, 214, 0.3);
+    padding-bottom: 12px;
+}
+.reader-desc {
+    color: var(--p9);
+    font-size: 0.95rem;
+    line-height: 1.8;
+    font-style: italic;
+}
         /* ================= RESPONSIVE ================= */
         @media (max-width: 992px) {
             .controls-inner { grid-template-areas: "q" "reader" "sys" "spread" "btns" "status" !important; grid-template-columns: 1fr !important; padding: 12px; }
@@ -368,9 +399,12 @@
 
             <div class="panel-right">
                 <div class="reading-placeholder" id="reading-placeholder">
-                    <div class="placeholder-icon">🔮</div>
-                    <div>Thông điệp vũ trụ sẽ hiện ra ở đây...</div>
-                </div>
+    <div id="reader-profile-card" class="reader-card animate__animated">
+        <div id="reader-avatar" class="reader-avatar">🌸</div>
+        <h3 id="reader-name" class="reader-name">Amelia</h3>
+        <p id="reader-desc" class="reader-desc">Đang kết nối tâm thức...</p>
+    </div>
+</div>
 
                 <div id="reading-result">
                     <div id="reading-content"></div>
@@ -462,7 +496,46 @@
             "grief", "growth", "guilt", "impartiality", "impasse", "impatience", "insecurity", "instinct", "isolation", "joy", "miracle", "mysticism", "passion", "perception",
             "perfection", "perseverance", "prayer", "quest", "recovery", "rejection", "release", "renewal", "selfworth", "service", "soulmate", "trickery", "vanity", "victim", "wisdom", "workaholic"
         ];
+            // Dữ liệu giới thiệu của các Reader
+const readerProfiles = {
+    amelia: {
+        icon: "🌸",
+        title: "Amelia - Thấu Cảm & Chữa Lành",
+        desc: "Chào bạn, mình là Amelia. Thế mạnh của mình là nghiên cứu sâu về cảm xúc, tâm lý học. Mình sẵn sàng giải đáp cho bạn các câu hỏi với tâm thế cởi mở, nhẹ nhàng, tích cực về vấn đề."
+    },
+    michael: {
+        icon: "🧙‍♂️",
+        title: "Michael - Huyền Học & Chuyên Sâu",
+        desc: "Chào bạn, tôi là Michael. Tôi là reader kiêm nhà huyền học với tính cách thẳng thắn và góc nhìn thực tế, khách quan. Tôi sẽ giúp bạn đi sâu vào gốc rễ tâm linh, tìm hiểu sự kiện một cách khách quan nhất thông qua sự kết hợp của các lá bài và huyền học."
+    },
+    joey: {
+        icon: "📚",
+        title: "Joey - Tarot & Chiêm Tinh",
+        desc: "Chào bạn, mình là Joey. Nếu bạn không chỉ muốn tìm hiểu câu chuyện của chính mình thông qua những lá bài mà còn muốn một cộng sự cùng bạn nghiên cứu về nội dung lá bài, về chiêm tinh học và những mối liên quan, logic giữa chúng thì cứ chọn mình nhé!"
+    }
+};
 
+// Hàm cập nhật giao diện Reader
+function updateReaderProfile(readerKey) {
+    const profile = readerProfiles[readerKey];
+    if (!profile) return;
+    
+    const card = document.getElementById("reader-profile-card");
+    const avatar = document.getElementById("reader-avatar");
+    const name = document.getElementById("reader-name");
+    const desc = document.getElementById("reader-desc");
+
+    // Xóa class cũ để ép trình duyệt chạy lại animation
+    card.classList.remove("animate__fadeIn");
+    void card.offsetWidth; // Kích hoạt reflow
+    
+    avatar.textContent = profile.icon;
+    name.textContent = profile.title;
+    desc.textContent = profile.desc;
+    
+    // Thêm lại class animation
+    card.classList.add("animate__fadeIn");
+}
         const modernSpreadsHTML = `
             <option value="intent_all">TOÀN DIỆN (What, Why, How, When, Who?)</option>
             <option value="intent_what">WHAT / YES-NO</option>
@@ -527,6 +600,7 @@
             radio.addEventListener('change', (e) => {
                 readerSelect.value = e.target.value;
                 readerSelect.dispatchEvent(new Event('change'));
+                updateReaderProfile(e.target.value);
             });
         });
 
@@ -1026,6 +1100,8 @@
         document.addEventListener("DOMContentLoaded", () => {
             fetchIntroData();
             updateSpreadOptions();
+            updateReaderProfile(document.querySelector('input[name="ui-reader"]:checked').value); 
+});
         });
 
     </script>
