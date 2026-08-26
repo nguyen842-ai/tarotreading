@@ -25,7 +25,24 @@ const SPREAD_DESCRIPTIONS = {
     "mystic_johari": "<strong>😈 Blind Spot (Cửa sổ Johari - 4 vùng lăng kính) 😈</strong><br><em>Sử dụng 4 lá Tarot</em><br>Phơi bày 4 lăng kính nhận thức: Điều ai cũng thấy (Vùng Mở), Điều người khác thấy nhưng bạn không hay biết (Vùng Mù), Điều bạn giấu kín (Vùng Ẩn) và Tiềm thức sâu thẳm (Vùng Đóng).",
     "mystic_karmic": "<strong>♾️ Duyên Nợ Tiền Kiếp (Karmic Connections) ♾️</strong><br><em>Sử dụng 5 lá Tarot</em><br>Hé lộ các khế ước linh hồn, nợ nghiệp tiền kiếp, nguyên nhân sâu xa của những vòng lặp liên tục ở hiện tại và bài học linh hồn bạn cần tốt nghiệp."
 };
-
+// ================= DỮ LIỆU CÁC READER =================
+        const readerProfiles = {
+            amelia: {
+                icon: "🌸",
+                title: "Amelia - Thấu Cảm & Chữa Lành",
+                desc: "Chào bạn, mình là Amelia. Thế mạnh của mình là nghiên cứu sâu về cảm xúc, tâm lý học. Mình sẵn sàng giải đáp cho bạn các câu hỏi với tâm thế cởi mở, nhẹ nhàng, tích cực về vấn đề."
+            },
+            michael: {
+                icon: "🧙‍♂️",
+                title: "Michael - Huyền Học & Chuyên Sâu",
+                desc: "Chào bạn, tôi là Michael. Tôi là reader kiêm nhà huyền học với tính cách thẳng thắn và góc nhìn thực tế, khách quan. Tôi sẽ giúp bạn đi sâu vào gốc rễ tâm linh, tìm hiểu sự kiện một cách khách quan nhất thông qua sự kết hợp của các lá bài và huyền học."
+            },
+            joey: {
+                icon: "📚",
+                title: "Joey - Tarot & Chiêm Tinh",
+                desc: "Chào bạn, mình là Joey. Nếu bạn không chỉ muốn tìm hiểu câu chuyện của chính mình thông qua những lá bài mà còn muốn một cộng sự cùng bạn nghiên cứu về nội dung lá bài, về chiêm tinh học và những mối liên quan, logic giữa chúng thì cứ chọn mình nhé!"
+            }
+        };
 // 2. CHÂN DUNG 3 READER / MENTOR
 const READER_PERSONAS = {
     "amelia": {
